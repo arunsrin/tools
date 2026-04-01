@@ -15,8 +15,76 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.hub-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  color: #888;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.tool-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: inherit;
+  width: 100%;
+}
+
+.tool-card:hover:not(.coming-soon) {
+  border-color: #3b82f6;
+  transform: translateY(-5px);
+  background: #161616;
+}
+
+.tool-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.tool-card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.tool-card p {
+  color: #888;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.coming-soon {
+  opacity: 0.5;
+  cursor: default;
+}
+
+footer {
+  margin-top: 5rem;
+  color: #444;
+  font-size: 0.8rem;
 }

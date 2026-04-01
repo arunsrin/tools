@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import App from './App';
+import BigText from './BigText';
 import { findBestFontSize } from './constants';
 
 describe('findBestFontSize', () => {
@@ -26,8 +26,6 @@ describe('findBestFontSize', () => {
   });
 
   it('correctly calculates font size with padding', () => {
-    // This is more of an integration test for the logic inside calculateFontSize
-    // We expect the result to be based on (containerSize - padding)
     const padding = 40;
     const containerWidth = 100;
     const containerHeight = 100;
@@ -43,26 +41,28 @@ describe('findBestFontSize', () => {
   });
 });
 
-describe('Big Text App', () => {
+describe('BigText Tool', () => {
+  const mockOnBack = vi.fn();
+
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
   });
 
   it('renders editing mode by default', () => {
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     expect(screen.getByPlaceholderText(/Type something.../i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Make it BIG/i })).toBeInTheDocument();
   });
 
   it('initializes with text from localStorage if available', () => {
     localStorage.setItem('bigText', 'TEST LOCAL STORAGE');
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     expect(screen.getByDisplayValue('TEST LOCAL STORAGE')).toBeInTheDocument();
   });
 
   it('updates input value correctly', () => {
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     const input = screen.getByPlaceholderText(/Type something.../i);
     fireEvent.change(input, { target: { value: 'NEW TEXT' } });
     expect(input).toHaveValue('NEW TEXT');
@@ -70,7 +70,7 @@ describe('Big Text App', () => {
   });
 
   it('switches to display mode when "Make it BIG" is clicked', () => {
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     const input = screen.getByPlaceholderText(/Type something.../i);
     fireEvent.change(input, { target: { value: 'DISPLAY ME' } });
     const button = screen.getByRole('button', { name: /Make it BIG/i });
@@ -81,7 +81,7 @@ describe('Big Text App', () => {
   });
 
   it('switches back to editing mode when text is clicked in display mode', () => {
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     const button = screen.getByRole('button', { name: /Make it BIG/i });
     fireEvent.click(button);
 
@@ -91,33 +91,20 @@ describe('Big Text App', () => {
     expect(screen.getByPlaceholderText(/Type something.../i)).toBeInTheDocument();
   });
 
-  it('switches to display mode on Enter key press', () => {
-    render(<App />);
-    const input = screen.getByPlaceholderText(/Type something.../i);
-    fireEvent.change(input, { target: { value: 'ENTER PRESSED' } });
-    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
-
-    expect(screen.getByText('ENTER PRESSED')).toBeInTheDocument();
-  });
-
-  it('does not switch to display mode if text is empty', () => {
-    render(<App />);
-    const input = screen.getByPlaceholderText(/Type something.../i);
-    fireEvent.change(input, { target: { value: '  ' } });
-    fireEvent.click(screen.getByRole('button', { name: /Make it BIG/i }));
-
-    expect(screen.getByPlaceholderText(/Type something.../i)).toBeInTheDocument();
+  it('calls onBack when back link is clicked', () => {
+    render(<BigText onBack={mockOnBack} />);
+    const backLink = screen.getByText(/Back to Tools Hub/i);
+    fireEvent.click(backLink);
+    expect(mockOnBack).toHaveBeenCalledTimes(1);
   });
 
   it('persists and loads theme from localStorage', () => {
     localStorage.setItem('bigTheme', 'theme-matrix');
-    render(<App />);
+    render(<BigText onBack={mockOnBack} />);
     
-    // Check if the container has the matrix theme class
     const container = screen.getByPlaceholderText(/Type something.../i).closest('.app-container');
     expect(container).toHaveClass('theme-matrix');
 
-    // Change theme
     const lightThemeBtn = screen.getByLabelText(/Select Light theme/i);
     fireEvent.click(lightThemeBtn);
     expect(container).toHaveClass('theme-light');

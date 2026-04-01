@@ -1,56 +1,43 @@
-# Big Text
+# Tools Hub
 
-A simple, visually appealing, self-contained static website that displays large text filling the whole screen. Useful for showing short messages or ordering in noisy environments.
+A centralized static hub for hosting multiple small, self-contained utilities. Built with React, TypeScript, and Vite, and optimized for deployment on Cloudflare Workers.
 
-## 🚀 Features
-- **Dynamic Font Sizing**: Text automatically scales to fill the entire viewport.
-- **Minimalist Design**: Zero distractions in "Displaying" mode.
-- **Persistence**: Remembers your last entered text.
-- **Fully Static**: No backend, fast, and secure.
+## 🚀 Featured Tools
+- **Big Text**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments or at a distance.
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [Node.js](https://nodejs.org/) (v18 or higher)
 - [npm](https://www.npmjs.com/)
 
 ### Local Development
-To start the development server with Hot Module Replacement (HMR):
+To start the development server:
 ```bash
 npm install
 npm run dev
 ```
 Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## 🏗️ Building for Production
-To generate the production-ready static files in the `dist/` directory:
+## 🏗️ Building & Testing
+- **Test**: `npm test`
+- **Build**: `npm run build` (outputs to `dist/`)
+- **Lint**: `npm run lint`
+
+## ☁️ Deployment (Cloudflare Workers Assets)
+This project is designed to be hosted as a static-only Worker using **Cloudflare Workers Assets**.
+
+1. Ensure your `wrangler.json` is configured correctly (points to `./dist`).
+2. Deploy using:
 ```bash
-npm run build
-```
-
-## ☁️ Deployment (Cloudflare Pages)
-
-This project is optimized for [Cloudflare Pages](https://pages.cloudflare.com/).
-
-### Option 1: Git Integration (Recommended)
-1. Push this repository to GitHub or GitLab.
-2. Connect your repository in the Cloudflare Pages dashboard.
-3. Configure the build settings:
-   - **Framework Preset**: Vite
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-
-### Option 2: Manual Deployment (Wrangler)
-If you have the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-setup/) installed:
-```bash
-npx wrangler pages deploy dist
+npm run build && npx wrangler deploy
 ```
 
 ## 📖 Project Structure
-- `SPEC.md`: The source of truth for requirements and design.
-- `src/App.tsx`: Core application logic and dynamic sizing calculation.
-- `src/App.css`: Minimalist, high-contrast styling.
-- `dist/`: Static output folder (generated after `npm run build`).
+- `SPEC.md`: Master specification for the hub.
+- `src/App.tsx`: Hub dashboard and view switcher.
+- `src/tools/`: Directory containing individual modular tools.
+  - `src/tools/big/`: The Big Text tool module.
 
-## ⚖️ Specification
-This project follows a **Spec-Driven Development** (SDD) approach. Please refer to [SPEC.md](./SPEC.md) for detailed functional and technical requirements.
+## ⚖️ License
+GPLv3 - See [LICENSE](./LICENSE) for details.
