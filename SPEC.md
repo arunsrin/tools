@@ -18,12 +18,12 @@ A simple, visually appealing, self-contained static website for displaying large
 
 ## 3. Technical Constraints
 - **Self-Contained**: No backend, no external dependencies outside of the final build bundle.
-- **Static Output**: Must be deployable as a simple set of static files (HTML, CSS, JS) to Cloudflare Pages.
+- **Static Output**: Must be deployable as a simple set of static files (HTML, CSS, JS) to Cloudflare Workers using Workers Assets.
 - **Technology Stack**:
     - **Framework**: React (TypeScript)
     - **Build Tool**: Vite
     - **Styling**: Vanilla CSS
-    - **Hosting**: Cloudflare Pages
+    - **Hosting**: Cloudflare Workers
 
 ## 4. Testing Requirements
 - **Unit Testing**: Core logic like font size calculation should be testable.
