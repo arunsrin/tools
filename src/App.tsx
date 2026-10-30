@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import BigText from './tools/big/BigText';
+import TimezoneConverter from './tools/timezone/TimezoneConverter';
 import './index.css';
 
-type View = 'hub' | 'big';
+type View = 'hub' | 'big' | 'timezone';
 
 function App() {
   const [view, setView] = useState<View>('hub');
 
   if (view === 'big') {
     return <BigText onBack={() => setView('hub')} />;
+  }
+
+  if (view === 'timezone') {
+    return <TimezoneConverter onBack={() => setView('hub')} />;
   }
 
   return (
@@ -23,6 +28,12 @@ function App() {
           <div className="tool-icon">🔠</div>
           <h2>Big Text</h2>
           <p>Display large text to fill your entire screen. Perfect for noisy places.</p>
+        </button>
+
+        <button className="tool-card" onClick={() => setView('timezone')}>
+          <div className="tool-icon">🌐</div>
+          <h2>Timezone Converter</h2>
+          <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
         </button>
         
         {/* Placeholder for future tools */}

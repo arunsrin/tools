@@ -22,3 +22,4 @@ A centralized static hub for hosting multiple small, self-contained tools.
 
 ## 4. Current Tools
 1. **[Big Text](./src/tools/big/SPEC.md)**: A high-visibility full-screen text display.
+2. **[Timezone Converter](./src/tools/timezone/SPEC.md)**: A visual 3-day world clock, overlapping working hours & meeting planner.
