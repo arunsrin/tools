@@ -1,0 +1,23 @@
+# Auto-detect text files and handle line endings
+* text=auto
+
+# Explicitly set line endings for specific file types
+*.md text eol=lf
+*.txt text eol=crlf
+*.sh text eol=lf
+*.bash text eol=lf
+*.py text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=crlf
+
+# Treat binary files as binary (no line ending conversion)
+*.jpg binary
+*.png binary
+*.ico binary
+*.wasm binary
+*.exe binary
