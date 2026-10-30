@@ -8,7 +8,22 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
     expect(screen.getByText(/simple, self-contained utilities/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /big text/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /timezone converter/i })).toBeInTheDocument();
     expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
+  });
+
+  it('navigates to Timezone Converter tool and back to hub', () => {
+    render(<App />);
+    const tzCard = screen.getByRole('button', { name: /timezone converter/i });
+    fireEvent.click(tzCard);
+
+    // In TimezoneConverter tool
+    expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
   it('navigates to Big Text tool when its card is clicked', () => {
