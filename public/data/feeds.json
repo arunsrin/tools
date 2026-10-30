@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-30T17:00:00.000Z",
+  "lastUpdated": "2026-10-30T18:05:53.553839+00:00",
   "sources": [
     {
       "id": "hacker-news",
@@ -8,30 +8,7 @@
       "icon": "🟧",
       "description": "Tech, startups, and hacking discussions",
       "color": "#ff6600",
-      "enabled": true,
-      "fetchType": "hn"
-    },
-    {
-      "id": "reddit-tech",
-      "name": "Reddit /r/technology",
-      "category": "tech",
-      "icon": "🤖",
-      "description": "Major technology developments and industry news",
-      "color": "#ff4500",
-      "enabled": true,
-      "fetchType": "reddit",
-      "fetchUrl": "https://www.reddit.com/r/technology/top.json?limit=15"
-    },
-    {
-      "id": "reddit-prog",
-      "name": "Reddit /r/programming",
-      "category": "dev",
-      "icon": "💻",
-      "description": "Computer programming discussions and articles",
-      "color": "#0079d3",
-      "enabled": true,
-      "fetchType": "reddit",
-      "fetchUrl": "https://www.reddit.com/r/programming/top.json?limit=15"
+      "enabled": true
     },
     {
       "id": "lobsters",
@@ -40,17 +17,6 @@
       "icon": "🦞",
       "description": "Computing-focused community news and discussions",
       "color": "#8b1e0f",
-      "enabled": true,
-      "fetchType": "lobsters",
-      "fetchUrl": "https://lobste.rs/hottest.json"
-    },
-    {
-      "id": "github-trending",
-      "name": "GitHub Trending",
-      "category": "dev",
-      "icon": "🐙",
-      "description": "Top trending open source projects and repositories",
-      "color": "#6e40c9",
       "enabled": true
     },
     {
@@ -63,12 +29,48 @@
       "enabled": true
     },
     {
+      "id": "quanta",
+      "name": "Quanta Magazine",
+      "category": "news",
+      "icon": "🔬",
+      "description": "Illuminating mathematics, physics, and computer science",
+      "color": "#0099cc",
+      "enabled": true
+    },
+    {
       "id": "bbc-news",
       "name": "BBC News",
       "category": "news",
       "icon": "🌍",
       "description": "Global breaking news and international affairs",
       "color": "#bb1919",
+      "enabled": true
+    },
+    {
+      "id": "colossal",
+      "name": "Colossal",
+      "category": "design",
+      "icon": "🎨",
+      "description": "Visual culture, art, design, craft, and photography",
+      "color": "#e056fd",
+      "enabled": true
+    },
+    {
+      "id": "aldaily",
+      "name": "Arts & Letters Daily",
+      "category": "news",
+      "icon": "📚",
+      "description": "Philosophy, literature, ideas, criticism, and debate",
+      "color": "#d97706",
+      "enabled": true
+    },
+    {
+      "id": "github-trending",
+      "name": "GitHub Trending",
+      "category": "dev",
+      "icon": "🐙",
+      "description": "Top trending open source projects and repositories",
+      "color": "#6e40c9",
       "enabled": true
     },
     {
@@ -83,28 +85,590 @@
   ],
   "items": [
     {
-      "id": "hn-1",
-      "title": "SQLite in the browser with WebAssembly and OPFS",
-      "url": "https://sqlite.org/wasm/doc/trunk/index.md",
+      "id": "hn-50300683",
+      "title": "Backdoor in Claude Code for VS Code extension on the Cursor Marketplace",
+      "url": "https://phorion.io/blog/offical-claude-code-vsx-compromise/",
       "source": "Hacker News",
       "sourceId": "hacker-news",
       "category": "tech",
-      "publishedAt": "2026-10-30T16:30:00.000Z",
-      "points": 412,
-      "comments": 184,
-      "domain": "sqlite.org"
+      "publishedAt": "2026-10-30T07:09:12Z",
+      "points": 453,
+      "comments": 370,
+      "domain": "phorion.io"
     },
     {
-      "id": "hn-2",
-      "title": "Show HN: A minimalist local-first text editor built in Rust",
-      "url": "https://news.ycombinator.com/item?id=40000002",
+      "id": "hn-50298436",
+      "title": "Herdr has released native app",
+      "url": "https://github.com/herdrdev/herdr-app",
       "source": "Hacker News",
       "sourceId": "hacker-news",
       "category": "tech",
-      "publishedAt": "2026-10-30T15:45:00.000Z",
-      "points": 298,
-      "comments": 87,
+      "publishedAt": "2026-10-30T00:42:41Z",
+      "points": 325,
+      "comments": 217,
       "domain": "github.com"
+    },
+    {
+      "id": "hn-50305693",
+      "title": "AI isn't replacing SREs, it's deskilling them",
+      "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:52:18Z",
+      "points": 258,
+      "comments": 195,
+      "domain": "newsletter.signoz.io"
+    },
+    {
+      "id": "hn-50303172",
+      "title": "The $6.3B Binance hack was pulled off in just 20 minutes",
+      "url": "https://www.wired.com/story/the-dollar63-billion-binance-hack-was-pulled-off-in-just-20-minutes/",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T12:50:01Z",
+      "points": 216,
+      "comments": 154,
+      "domain": "wired.com"
+    },
+    {
+      "id": "hn-50301854",
+      "title": "Azure's Weakest Link – Five Full Cross-Tenant Compromises",
+      "url": "https://www.binarysecurity.no/posts/2026/10/one-root-case",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T10:06:15Z",
+      "points": 200,
+      "comments": 35,
+      "domain": "binarysecurity.no"
+    },
+    {
+      "id": "hn-50304419",
+      "title": "Medicare Will Pay $50k for Your Heart Attack. It Should Pay $100 to Prevent It",
+      "url": "https://www.medpagetoday.com/opinion/second-opinions/123553?trw=no",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T14:27:44Z",
+      "points": 195,
+      "comments": 186,
+      "domain": "medpagetoday.com"
+    },
+    {
+      "id": "hn-50263127",
+      "title": "Gilgamesh by Simon Armitage review – an ancient epic is brilliantly translated",
+      "url": "https://www.theguardian.com/books/2026/oct/20/gilgamesh-by-simon-armitage-review-an-ancient-epic-is-brilliantly-translated-for-our-times",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-27T17:54:57Z",
+      "points": 158,
+      "comments": 46,
+      "domain": "theguardian.com"
+    },
+    {
+      "id": "hn-50305025",
+      "title": "Northflank Breached",
+      "url": "https://status.northflank.com",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:10:31Z",
+      "points": 156,
+      "comments": 88,
+      "domain": "status.northflank.com"
+    },
+    {
+      "id": "hn-50306008",
+      "title": "US tech stocks see sharp falls over AI cost fears",
+      "url": "https://www.bbc.co.uk/news/articles/cvwy72e0n72yo",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T16:13:02Z",
+      "points": 133,
+      "comments": 88,
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "hn-50251070",
+      "title": "Why a program doesn't work when run from a batch file, but works when clicked",
+      "url": "https://devblogs.microsoft.com/oldnewthing/20261026-00/?p=112797/",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-26T21:14:43Z",
+      "points": 99,
+      "comments": 54,
+      "domain": "devblogs.microsoft.com"
+    },
+    {
+      "id": "lob-ttp7aq",
+      "title": "Backdoors in Claude Code for VS, Cursor official extensions",
+      "url": "https://cyberplace.social/@GossiTheDog/117528831681803563",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T06:04:55.168-05:00",
+      "points": 104,
+      "comments": 31,
+      "domain": "cyberplace.social"
+    },
+    {
+      "id": "lob-htgcuc",
+      "title": "Do At-Proto Users Know This Is Public?",
+      "url": "https://melaniekat.com/blog/public-on-pds/",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T06:22:43.498-05:00",
+      "points": 47,
+      "comments": 14,
+      "domain": "melaniekat.com"
+    },
+    {
+      "id": "lob-xudbqx",
+      "title": "No, npm, “estee” is not a typo of “testem”",
+      "url": "https://smoores.dev/post/no_npm_estee_is_not_a_typo/",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T10:01:56.550-05:00",
+      "points": 11,
+      "comments": 6,
+      "domain": "smoores.dev"
+    },
+    {
+      "id": "lob-f4aqog",
+      "title": "How curl was accidentally Turing-complete for nine months",
+      "url": "https://seriot.ch/computation/curl.html",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T02:24:01.170-05:00",
+      "points": 45,
+      "comments": 5,
+      "domain": "seriot.ch"
+    },
+    {
+      "id": "lob-6ole9g",
+      "title": "If you love a website, back it up",
+      "url": "http://blog.mistys-internet.website/post/2026/10/29/if-you-love-a-website-back-it-up/",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-29T20:29:00.653-05:00",
+      "points": 57,
+      "comments": 16,
+      "domain": "blog.mistys-internet.website"
+    },
+    {
+      "id": "lob-yu5k5y",
+      "title": "Update on AO3 Downtime, October 30, 2026",
+      "url": "https://www.transformativeworks.org/update-on-ao3-downtime-october-30-2026/",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T08:54:17.523-05:00",
+      "points": 18,
+      "comments": 1,
+      "domain": "transformativeworks.org"
+    },
+    {
+      "id": "lob-u7dsbx",
+      "title": "What are you doing this weekend?",
+      "url": "https://lobste.rs/s/u7dsbx/what_are_you_doing_this_weekend",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T04:55:20.859-05:00",
+      "points": 13,
+      "comments": 21,
+      "domain": "lobste.rs"
+    },
+    {
+      "id": "lob-dsrruj",
+      "title": "London meetup",
+      "url": "https://lobste.rs/s/dsrruj/london_meetup",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-29T15:56:43.483-05:00",
+      "points": 52,
+      "comments": 41,
+      "domain": "lobste.rs"
+    },
+    {
+      "id": "ars-technica-a4df15e2",
+      "title": "Fujifilm to boost tape production 5x as AI fuels archiving demand",
+      "url": "https://arstechnica.com/gadgets/2026/10/fujifilm-to-boost-tape-production-5x-as-ai-fuels-archiving-demand/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836071+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-45464663",
+      "title": "Thousands of “ghost students” use AI to steal millions in student loans, DOJ says",
+      "url": "https://arstechnica.com/tech-policy/2026/10/doj-exposes-ghost-students-using-ai-to-complete-courses-steal-student-loans/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836713+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-6c467998",
+      "title": "Analysts find looming launch crisis is \"more severe\" than anticipated",
+      "url": "https://arstechnica.com/space/2026/10/analysts-find-looming-launch-crisis-is-more-severe-than-anticipated/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836810+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-2a54c726",
+      "title": "GM to pay $220 million after selling customer Smart Driver data",
+      "url": "https://arstechnica.com/cars/2026/10/gm-to-pay-220-million-after-selling-customer-smart-driver-data/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836848+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-68b8e12e",
+      "title": "Hackers steal $6.3 billion from Binance in record crypto heist",
+      "url": "https://arstechnica.com/security/2026/10/hackers-steal-6-3-billion-from-binance-in-record-crypto-heist/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836878+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-e93120fb",
+      "title": "2027 Nissan Rogue Hybrid: Drives like an EV, but there's no plug involved",
+      "url": "https://arstechnica.com/cars/2026/10/2027-nissan-rogue-hybrid-drives-like-an-ev-but-theres-no-plug-involved/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836902+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-4c741e77",
+      "title": "Review: You Can See Everything blurs the view of Elizabeth Holmes' deceit",
+      "url": "https://arstechnica.com/culture/2026/10/review-you-can-see-everything-blurs-the-view-of-elizabeth-holmes-deceit/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836925+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-1b81bf5a",
+      "title": "Rocket Report: Winter is coming for Themis; Cowboy Space adds iron to the fire",
+      "url": "https://arstechnica.com/space/2026/10/rocket-report-winter-is-coming-for-themis-cowboy-space-adds-iron-to-the-fire/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:05:49.836946+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "quanta-1b2e1a9d",
+      "title": "A New Map of ‘Empty’ Space Challenges a Tranquil Picture of the Galaxy",
+      "url": "https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/",
+      "source": "Quanta Magazine",
+      "sourceId": "quanta",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:49.943812+00:00",
+      "domain": "quantamagazine.org"
+    },
+    {
+      "id": "quanta-bed6c99e",
+      "title": "How Do You Take a Picture of a Black Hole?",
+      "url": "https://www.quantamagazine.org/how-do-you-take-a-picture-of-a-black-hole-20261029/",
+      "source": "Quanta Magazine",
+      "sourceId": "quanta",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:49.943913+00:00",
+      "domain": "quantamagazine.org"
+    },
+    {
+      "id": "quanta-ea7be901",
+      "title": "How Spiders Spin ‘Silk Dope’ Into Nature’s Toughest Material",
+      "url": "https://www.quantamagazine.org/how-spiders-spin-silk-dope-into-natures-toughest-material-20261028/",
+      "source": "Quanta Magazine",
+      "sourceId": "quanta",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:49.943937+00:00",
+      "domain": "quantamagazine.org"
+    },
+    {
+      "id": "quanta-ac838e94",
+      "title": "How Voting Is Like a Klein Bottle",
+      "url": "https://www.quantamagazine.org/how-voting-is-like-a-klein-bottle-20261026/",
+      "source": "Quanta Magazine",
+      "sourceId": "quanta",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:49.943957+00:00",
+      "domain": "quantamagazine.org"
+    },
+    {
+      "id": "quanta-801a35ac",
+      "title": "Malaria Parasite Caught in the Act of Breaking and Entering",
+      "url": "https://www.quantamagazine.org/malaria-parasite-caught-in-the-act-of-breaking-and-entering-20261023/",
+      "source": "Quanta Magazine",
+      "sourceId": "quanta",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:49.943974+00:00",
+      "domain": "quantamagazine.org"
+    },
+    {
+      "id": "bbc-news-db231a97",
+      "title": "Crypto giant Binance attempting to recover $6.3bn stolen in hack linked to North Korea",
+      "url": "https://www.bbc.co.uk/news/articles/cwe8lp7zy07zo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.079645+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-70539447",
+      "title": "US inmate Christa Pike says she woke up 'confused and in pain' after failed execution",
+      "url": "https://www.bbc.co.uk/news/articles/ck62ydn7dj9eo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.079826+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-cb92f772",
+      "title": "Hundreds evacuated from Russian-occupied Oleshky during rare Ukraine ceasefire",
+      "url": "https://www.bbc.co.uk/news/articles/c60me298k1yeo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.079889+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-94448e1d",
+      "title": "Prominent Russian newspaper shuts down under pressure from authorities",
+      "url": "https://www.bbc.co.uk/news/articles/cmewepdr109do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.079937+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-5144038c",
+      "title": "Spain transport minister says he won't resign over high-speed rail disaster",
+      "url": "https://www.bbc.co.uk/news/articles/c6zxj2e5qlxxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.079976+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-b5c580b7",
+      "title": "Pope Leo XIV becomes first pontiff to vote in a US election",
+      "url": "https://www.bbc.co.uk/news/articles/ckwyq2509p7xo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.080017+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-dd4041fd",
+      "title": "US tech stocks see sharp falls as AI spending nears $1tn",
+      "url": "https://www.bbc.co.uk/news/articles/cvwy72e0n72yo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.080068+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "bbc-news-11db944d",
+      "title": "G20 'family photo' cancelled after protests over presence of Russian minister",
+      "url": "https://www.bbc.co.uk/news/articles/cmd6dp2y576do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:50.080106+00:00",
+      "domain": "bbc.co.uk"
+    },
+    {
+      "id": "colossal-e61edae9",
+      "title": "A Rare Disease and Analog Photography Merge in a Portrait of Self-Discovery",
+      "url": "https://www.thisiscolossal.com/2026/10/everything-twice-cy-kuckenbaker-film/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.298451+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-d9d15bf3",
+      "title": "17th-Century Embroidery Meets Hand-Carved Wooden Vessels by Aspen Golann",
+      "url": "https://www.thisiscolossal.com/2026/10/aspen-golann-woodworking-embroidery-vessels-sculpture/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.298630+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-903dc90b",
+      "title": "November 2026 Opportunities: Open Calls, Residencies, and Grants for Artists",
+      "url": "https://www.thisiscolossal.com/2026/10/november-2026-opportunities-open-calls-residencies-and-grants-for-artists/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.298683+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-5865dd89",
+      "title": "Escape into Gretchen Scherer’s Maximalist Paintings of Palatial, Art-Filled Spaces",
+      "url": "https://www.thisiscolossal.com/2026/10/gretchen-scherer-in-time-paintings-art-history-interiors/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.298737+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-e912cc87",
+      "title": "‘The Encyclopedia of Movie Cats’ Is an Exhaustive Index of Every Feline to Prowl on Screen",
+      "url": "https://www.thisiscolossal.com/2026/10/the-encyclopedia-of-movie-cats-a24/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.306366+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-1e3ff08f",
+      "title": "Found Object Masks by Romuald Hazoumè Counter Sorrow with Sympathy",
+      "url": "https://www.thisiscolossal.com/2026/10/romuald-hazoume-plastic-jug-mask-sculptures/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.306530+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-f9cd1226",
+      "title": "A Macro Journey Underwater Reveals the Radiant Geometries of Coral",
+      "url": "https://www.thisiscolossal.com/2026/10/iteration-coral-reef-film/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.306582+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "colossal-25a80ee9",
+      "title": "Playfully Vibrant Abstract Murals by Zebu Enliven Urban Walls",
+      "url": "https://www.thisiscolossal.com/2026/10/zebu-vibrant-abstract-murals/",
+      "source": "Colossal",
+      "sourceId": "colossal",
+      "category": "design",
+      "publishedAt": "2026-10-30T18:05:52.306618+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "aldaily-76770389",
+      "title": "The life of a Capitol Hill intern involves bamboozling policyspeak, hellacious heat, free food at AEI, and a parade of utterly charmless Tattes",
+      "url": "https://www.thenewcritic.com/p/city-of-magnificent-intentions?utm_source=post-email-title&publication_id=4883084&post_id=222548047&utm_campaign=email-post-title&isFreemail=true&r=3vx0z&triedRedirect=t",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551058+00:00",
+      "domain": "thenewcritic.com"
+    },
+    {
+      "id": "aldaily-b2935324",
+      "title": "The femininization of the deathcare industry. Advances in cosmetics, among other things, are pushing women into the mortuary arts",
+      "url": "https://lareviewofbooks.org/article/death-industry-mortuary-programs-women-andie-eisen-quarterly/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551255+00:00",
+      "domain": "lareviewofbooks.org"
+    },
+    {
+      "id": "aldaily-0636ec57",
+      "title": "The Guide for the Perplexed is a perplexing work — its difficulty is, in part, the point. Can fluent English do it justice?",
+      "url": "https://jewishreviewofbooks.com/rabbinics/20353/turning-hills-into-plains-and-mountains-into-valleys-on-translating-maimonidess-guide/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551330+00:00",
+      "domain": "jewishreviewofbooks.com"
+    },
+    {
+      "id": "aldaily-5f7b7d33",
+      "title": "Drunk or sober, but especially drunk, Edgar Allan Poe acted against his own interests. He turned the mystery of why into art",
+      "url": "https://slate.com/culture/2026/10/edgar-allan-poe-poems-stories-most-influential-american-writer-death-horror-detective.html",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551382+00:00",
+      "domain": "slate.com"
+    },
+    {
+      "id": "aldaily-896b67d2",
+      "title": "The hottest class at Harvard? Humanities 10, where phones are banned, attendance is mandatory, and the readings are dense",
+      "url": "https://www.wsj.com/lifestyle/harvard-class-humanities-32e06366?st=DoqM7q&reflink=desktopwebshare_permalink",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551434+00:00",
+      "domain": "wsj.com"
+    },
+    {
+      "id": "aldaily-faf475a5",
+      "title": "Fields of lilies, fractal landscapes, idioms, DNA, Renoir’s orange, human anatomy: Why is the world full of so much beauty?",
+      "url": "https://thereader.mitpress.mit.edu/beauty-is-everywhere-but-what-is-it-for/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551524+00:00",
+      "domain": "thereader.mitpress.mit.edu"
+    },
+    {
+      "id": "aldaily-46cbead6",
+      "title": "Is the book business distressed? Anxious? Optimistic? All of the above",
+      "url": "https://www.gq.com/story/state-of-books-2026",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551568+00:00",
+      "domain": "gq.com"
+    },
+    {
+      "id": "aldaily-4840e106",
+      "title": "Eric Hobsbawm against the identitarians. Centering gender, race, and sexuality was not his “kind of history.” Nor was it Karl Marx’s",
+      "url": "https://jacobin.substack.com/p/eric-hobsbawm-historian-of-defeat",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "news",
+      "publishedAt": "2026-10-30T18:05:53.551605+00:00",
+      "domain": "jacobin.substack.com"
     },
     {
       "id": "rt-1",
@@ -131,18 +695,6 @@
       "domain": "microsoft.com"
     },
     {
-      "id": "lob-1",
-      "title": "PostgreSQL: Hidden index optimizations you might not know about",
-      "url": "https://lobste.rs/s/pg_indexes",
-      "source": "Lobste.rs",
-      "sourceId": "lobsters",
-      "category": "dev",
-      "publishedAt": "2026-10-30T16:20:00.000Z",
-      "points": 68,
-      "comments": 24,
-      "domain": "brandur.org"
-    },
-    {
       "id": "gh-1",
       "title": "astral-sh/uv: An extremely fast Python package and project manager",
       "url": "https://github.com/astral-sh/uv",
@@ -153,27 +705,6 @@
       "points": 38200,
       "comments": 890,
       "domain": "github.com"
-    },
-    {
-      "id": "ars-1",
-      "title": "James Webb Space Telescope discovers earliest complex galaxy cluster",
-      "url": "https://arstechnica.com/science/2026/galaxy-cluster/",
-      "source": "Ars Technica",
-      "sourceId": "ars-technica",
-      "category": "tech",
-      "publishedAt": "2026-10-30T15:40:00.000Z",
-      "comments": 64,
-      "domain": "arstechnica.com"
-    },
-    {
-      "id": "bbc-1",
-      "title": "Renewable energy generation surpasses 40% of global electricity capacity",
-      "url": "https://www.bbc.com/news/world-renewable-milestone",
-      "source": "BBC News",
-      "sourceId": "bbc-news",
-      "category": "news",
-      "publishedAt": "2026-10-30T16:10:00.000Z",
-      "domain": "bbc.com"
     },
     {
       "id": "ph-1",

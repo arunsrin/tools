@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
 Feed scraper for News River (Tools Hub).
-Fetches headlines from Hacker News, Reddit, Lobste.rs, and curated feeds
-from the author's subscriptions (Quanta Magazine, Latent Space, Ahead of AI,
-Arts & Letters Daily, Colossal, SMBC, Eurogamer, Chess.com, Ars Technica),
+Fetches real, live headlines from Hacker News, Lobste.rs, Ars Technica,
+Quanta Magazine, BBC News, Colossal, and Arts & Letters Daily,
 normalizes them into FeedItem format, and writes to public/data/feeds.json.
 Uses exclusively Python standard library (urllib, json, xml.etree.ElementTree, hashlib).
 """
@@ -23,7 +22,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-USER_AGENT = "ToolsHub-NewsRiver/1.0 (https://github.com/arunsrin/tools)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (ToolsHub-NewsRiver)"
 
 
 def fetch_url(url: str, timeout: int = 10) -> Optional[bytes]:
@@ -75,40 +74,6 @@ def fetch_hacker_news() -> List[Dict[str, Any]]:
     return items
 
 
-def fetch_reddit(subreddit: str, source_id: str, source_name: str, category: str) -> List[Dict[str, Any]]:
-    print(f"Fetching Reddit /r/{subreddit}...")
-    items = []
-    url = f"https://www.reddit.com/r/{subreddit}/top.json?limit=10&t=day"
-    data_bytes = fetch_url(url)
-    if not data_bytes:
-        return items
-    try:
-        data = json.loads(data_bytes.decode("utf-8"))
-        children = data.get("data", {}).get("children", [])
-        for post in children[:8]:
-            d = post.get("data", {})
-            post_id = d.get("id")
-            title = d.get("title", "")
-            post_url = d.get("url", f"https://reddit.com{d.get('permalink')}")
-            created_utc = d.get("created_utc", datetime.datetime.now(datetime.timezone.utc).timestamp())
-            iso_time = datetime.datetime.fromtimestamp(created_utc, tz=datetime.timezone.utc).isoformat()
-            items.append({
-                "id": f"reddit-{post_id}",
-                "title": title,
-                "url": post_url,
-                "source": source_name,
-                "sourceId": source_id,
-                "category": category,
-                "publishedAt": iso_time,
-                "points": d.get("score", 0),
-                "comments": d.get("num_comments", 0),
-                "domain": extract_domain(post_url, "reddit.com"),
-            })
-    except Exception as e:
-        print(f"Error parsing Reddit /r/{subreddit}: {e}", file=sys.stderr)
-    return items
-
-
 def fetch_lobsters() -> List[Dict[str, Any]]:
     print("Fetching Lobste.rs...")
     items = []
@@ -147,22 +112,32 @@ def fetch_rss_feed(feed_url: str, source_id: str, source_name: str, category: st
         root = ET.fromstring(data_bytes)
         channel = root.find("channel")
         if channel is None:
-            # Handle Atom feeds
             channel = root
-        
-        # Look for both RSS <item> and Atom <entry>
-        elements = channel.findall("item") or channel.findall("{http://www.w3.org/2005/Atom}entry") or []
+
+        elements = channel.findall("item")
+        if not elements:
+            elements = channel.findall("{http://www.w3.org/2005/Atom}entry")
+        if not elements:
+            elements = root.findall(".//item")
+
         for item in elements[:8]:
-            title_elem = item.find("title") or item.find("{http://www.w3.org/2005/Atom}title")
+            title_elem = item.find("title")
+            if title_elem is None:
+                title_elem = item.find("{http://www.w3.org/2005/Atom}title")
             title = title_elem.text.strip() if title_elem is not None and title_elem.text else ""
 
-            link_elem = item.find("link") or item.find("{http://www.w3.org/2005/Atom}link")
+            link_elem = item.find("link")
+            if link_elem is None:
+                link_elem = item.find("{http://www.w3.org/2005/Atom}link")
+
             link = ""
             if link_elem is not None:
                 link = link_elem.get("href") or link_elem.text or ""
                 link = link.strip()
 
-            # Hash-based stable item ID (avoiding index collisions)
+            if not title:
+                continue
+
             item_hash = hashlib.md5((link or title).encode("utf-8")).hexdigest()[:8]
 
             items.append({
@@ -187,17 +162,16 @@ def main():
 
     all_items: List[Dict[str, Any]] = []
 
-    # Curated feeds from user's subscriptions and popular channels
+    # Fetch live feeds from popular channels & author subscriptions
     all_items.extend(fetch_hacker_news())
-    all_items.extend(fetch_reddit("technology", "reddit-tech", "Reddit /r/technology", "tech"))
-    all_items.extend(fetch_reddit("programming", "reddit-prog", "Reddit /r/programming", "dev"))
     all_items.extend(fetch_lobsters())
     all_items.extend(fetch_rss_feed("https://feeds.arstechnica.com/arstechnica/index", "ars-technica", "Ars Technica", "tech", "arstechnica.com"))
     all_items.extend(fetch_rss_feed("https://www.quantamagazine.org/feed/", "quanta", "Quanta Magazine", "news", "quantamagazine.org"))
     all_items.extend(fetch_rss_feed("https://feeds.bbci.co.uk/news/world/rss.xml", "bbc-news", "BBC News", "news", "bbc.com"))
     all_items.extend(fetch_rss_feed("https://feeds.feedburner.com/colossal", "colossal", "Colossal", "design", "thisiscolossal.com"))
+    all_items.extend(fetch_rss_feed("https://www.aldaily.com/feed/", "aldaily", "Arts & Letters Daily", "news", "aldaily.com"))
 
-    # Preserve any existing items from feeds.json if a source failed
+    # If any feed had an issue or for initial seed items (like GitHub trending or Product Hunt), retain existing
     if os.path.exists(output_path):
         try:
             with open(output_path, "r", encoding="utf-8") as f:
@@ -220,24 +194,6 @@ def main():
                 "icon": "🟧",
                 "description": "Tech, startups, and hacking discussions",
                 "color": "#ff6600",
-                "enabled": True,
-            },
-            {
-                "id": "reddit-tech",
-                "name": "Reddit /r/technology",
-                "category": "tech",
-                "icon": "🤖",
-                "description": "Major technology developments and industry news",
-                "color": "#ff4500",
-                "enabled": True,
-            },
-            {
-                "id": "reddit-prog",
-                "name": "Reddit /r/programming",
-                "category": "dev",
-                "icon": "💻",
-                "description": "Computer programming discussions and articles",
-                "color": "#0079d3",
                 "enabled": True,
             },
             {
@@ -286,6 +242,15 @@ def main():
                 "enabled": True,
             },
             {
+                "id": "aldaily",
+                "name": "Arts & Letters Daily",
+                "category": "news",
+                "icon": "📚",
+                "description": "Philosophy, literature, ideas, criticism, and debate",
+                "color": "#d97706",
+                "enabled": True,
+            },
+            {
                 "id": "github-trending",
                 "name": "GitHub Trending",
                 "category": "dev",
@@ -310,7 +275,7 @@ def main():
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-    print(f"✓ Successfully wrote {len(all_items)} headlines across feeds to {output_path}")
+    print(f"✓ Successfully wrote {len(all_items)} real live headlines across feeds to {output_path}")
 
 
 if __name__ == "__main__":
