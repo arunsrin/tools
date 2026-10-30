@@ -13,7 +13,7 @@ As a user working across distributed global teams, I want a visual world clock a
   - Colombia / Bogotá (`America/Bogota`)
   - Edmonton (`America/Edmonton`)
   - UTC (`UTC`)
-- **AC-2 (Search & Add Timezones):** An accessible search input allows users to search timezones by city name, country, region, or UTC offset with fuzzy/substring matching. Selecting an item adds it to the active list.
+- **AC-2 (Search & Add Timezones):** An accessible search input allows users to search timezones by city name, country, region, UTC offset, and common timezone abbreviations and conventions (e.g. `PST`, `PDT`, `Pacific`, `EST`, `EDT`, `Eastern`, `CST`, `CDT`, `Central`, `MST`, `MDT`, `Mountain`, `IST`, `GMT`, `BST`, `CET`, `JST`, `AEST`) with fuzzy/substring matching. Selecting an item adds it to the active list.
 - **AC-3 (Remove & Set Reference):** Each timezone row has controls to remove the timezone (unless only one remains) and designate a timezone as the primary reference / home base (pinned to top or flagged).
 - **AC-4 (Local Storage Persistence):** Active timezones and user preferences (format toggle) persist in `localStorage` under a dedicated key (`tools_hub_timezone_prefs`). Failures or private browsing restrictions are safely caught.
 

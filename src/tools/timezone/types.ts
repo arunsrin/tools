@@ -6,6 +6,7 @@ export interface TimezoneItem {
   country: string;
   iana: string;
   label?: string;
+  aliases?: string[];
 }
 
 export interface TimezonePreferences {

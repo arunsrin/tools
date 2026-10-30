@@ -7,6 +7,7 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'India',
     iana: 'Asia/Kolkata',
     label: 'Bangalore (IST)',
+    aliases: ['IST', 'India', 'India Standard Time', 'Bengaluru'],
   },
   {
     id: 'america-los-angeles-san-francisco',
@@ -14,6 +15,7 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'United States',
     iana: 'America/Los_Angeles',
     label: 'San Francisco (PT)',
+    aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time', 'West Coast', 'SF', 'Bay Area'],
   },
   {
     id: 'asia-tokyo-tokyo',
@@ -21,6 +23,7 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'Japan',
     iana: 'Asia/Tokyo',
     label: 'Tokyo (JST)',
+    aliases: ['JST', 'Japan', 'Japan Standard Time'],
   },
   {
     id: 'america-bogota-colombia',
@@ -28,6 +31,7 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'Colombia',
     iana: 'America/Bogota',
     label: 'Colombia (COT)',
+    aliases: ['COT', 'Colombia', 'Bogota', 'Medellin'],
   },
   {
     id: 'america-edmonton-edmonton',
@@ -35,6 +39,7 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'Canada',
     iana: 'America/Edmonton',
     label: 'Edmonton (MT)',
+    aliases: ['MST', 'MDT', 'MT', 'Mountain', 'Mountain Time', 'Alberta', 'Calgary'],
   },
   {
     id: 'etc-utc',
@@ -42,95 +47,219 @@ export const DEFAULT_TIMEZONES: TimezoneItem[] = [
     country: 'Coordinated Universal Time',
     iana: 'UTC',
     label: 'UTC (Universal)',
+    aliases: ['GMT', 'Zulu', 'Z', 'Universal Time'],
+  },
+];
+
+export const TIMEZONE_CONVENTIONS: Omit<TimezoneItem, 'id'>[] = [
+  {
+    city: 'Pacific Time (PT)',
+    country: 'US & Canada (PST/PDT)',
+    iana: 'America/Los_Angeles',
+    aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time', 'Pacific Standard Time', 'Pacific Daylight Time'],
+  },
+  {
+    city: 'Eastern Time (ET)',
+    country: 'US & Canada (EST/EDT)',
+    iana: 'America/New_York',
+    aliases: ['EST', 'EDT', 'ET', 'Eastern', 'Eastern Time', 'Eastern Standard Time', 'Eastern Daylight Time'],
+  },
+  {
+    city: 'Central Time (CT)',
+    country: 'US & Canada (CST/CDT)',
+    iana: 'America/Chicago',
+    aliases: ['CST', 'CDT', 'CT', 'Central', 'Central Time', 'Central Standard Time', 'Central Daylight Time'],
+  },
+  {
+    city: 'Mountain Time (MT)',
+    country: 'US & Canada (MST/MDT)',
+    iana: 'America/Denver',
+    aliases: ['MST', 'MDT', 'MT', 'Mountain', 'Mountain Time', 'Mountain Standard Time', 'Mountain Daylight Time'],
+  },
+  {
+    city: 'Alaska Time (AKT)',
+    country: 'United States (AKST/AKDT)',
+    iana: 'America/Anchorage',
+    aliases: ['AKST', 'AKDT', 'AKT', 'Alaska', 'Alaska Time'],
+  },
+  {
+    city: 'Hawaii Time (HST)',
+    country: 'United States (HST)',
+    iana: 'Pacific/Honolulu',
+    aliases: ['HST', 'HDT', 'Hawaii', 'Hawaii Time', 'Honolulu'],
+  },
+  {
+    city: 'Greenwich Mean Time (GMT / BST)',
+    country: 'United Kingdom (London)',
+    iana: 'Europe/London',
+    aliases: ['GMT', 'BST', 'Greenwich', 'British Summer Time', 'UK', 'London'],
+  },
+  {
+    city: 'Central European Time (CET / CEST)',
+    country: 'Central Europe (Paris, Berlin, Rome)',
+    iana: 'Europe/Paris',
+    aliases: ['CET', 'CEST', 'Central European', 'Central European Time', 'Europe'],
+  },
+  {
+    city: 'Eastern European Time (EET / EEST)',
+    country: 'Eastern Europe (Athens, Helsinki)',
+    iana: 'Europe/Athens',
+    aliases: ['EET', 'EEST', 'Eastern European', 'Eastern European Time'],
+  },
+  {
+    city: 'India Standard Time (IST)',
+    country: 'India (IST)',
+    iana: 'Asia/Kolkata',
+    aliases: ['IST', 'India', 'India Standard Time'],
+  },
+  {
+    city: 'Japan Standard Time (JST)',
+    country: 'Japan (JST)',
+    iana: 'Asia/Tokyo',
+    aliases: ['JST', 'Japan', 'Japan Standard Time'],
+  },
+  {
+    city: 'Korea Standard Time (KST)',
+    country: 'South Korea (KST)',
+    iana: 'Asia/Seoul',
+    aliases: ['KST', 'Korea', 'Korea Standard Time', 'Seoul'],
+  },
+  {
+    city: 'China Standard Time (CST)',
+    country: 'China (Beijing, Shanghai)',
+    iana: 'Asia/Shanghai',
+    aliases: ['CST', 'China', 'China Standard Time', 'Beijing', 'Shanghai'],
+  },
+  {
+    city: 'Singapore Time (SGT)',
+    country: 'Singapore (SGT)',
+    iana: 'Asia/Singapore',
+    aliases: ['SGT', 'Singapore', 'Singapore Time'],
+  },
+  {
+    city: 'Hong Kong Time (HKT)',
+    country: 'Hong Kong (HKT)',
+    iana: 'Asia/Hong_Kong',
+    aliases: ['HKT', 'Hong Kong', 'Hong Kong Time'],
+  },
+  {
+    city: 'Australian Eastern Time (AEST / AEDT)',
+    country: 'Australia (Sydney, Melbourne)',
+    iana: 'Australia/Sydney',
+    aliases: ['AEST', 'AEDT', 'Sydney', 'Melbourne', 'Australian Eastern Time'],
+  },
+  {
+    city: 'Australian Central Time (ACST / ACDT)',
+    country: 'Australia (Adelaide, Darwin)',
+    iana: 'Australia/Adelaide',
+    aliases: ['ACST', 'ACDT', 'Adelaide', 'Darwin', 'Australian Central Time'],
+  },
+  {
+    city: 'Australian Western Time (AWST)',
+    country: 'Australia (Perth)',
+    iana: 'Australia/Perth',
+    aliases: ['AWST', 'Perth', 'Australian Western Time'],
+  },
+  {
+    city: 'New Zealand Time (NZST / NZDT)',
+    country: 'New Zealand (Auckland, Wellington)',
+    iana: 'Pacific/Auckland',
+    aliases: ['NZST', 'NZDT', 'New Zealand', 'Auckland', 'Wellington'],
+  },
+  {
+    city: 'Gulf Standard Time (GST)',
+    country: 'United Arab Emirates (Dubai, Abu Dhabi)',
+    iana: 'Asia/Dubai',
+    aliases: ['GST', 'Gulf', 'Dubai', 'Abu Dhabi'],
   },
 ];
 
 export const POPULAR_CITIES: Omit<TimezoneItem, 'id'>[] = [
-  { city: 'Bangalore', country: 'India', iana: 'Asia/Kolkata' },
-  { city: 'Mumbai', country: 'India', iana: 'Asia/Kolkata' },
-  { city: 'New Delhi', country: 'India', iana: 'Asia/Kolkata' },
-  { city: 'San Francisco', country: 'United States', iana: 'America/Los_Angeles' },
-  { city: 'Los Angeles', country: 'United States', iana: 'America/Los_Angeles' },
-  { city: 'Seattle', country: 'United States', iana: 'America/Los_Angeles' },
-  { city: 'New York', country: 'United States', iana: 'America/New_York' },
-  { city: 'Boston', country: 'United States', iana: 'America/New_York' },
-  { city: 'Chicago', country: 'United States', iana: 'America/Chicago' },
-  { city: 'Austin', country: 'United States', iana: 'America/Chicago' },
-  { city: 'Denver', country: 'United States', iana: 'America/Denver' },
-  { city: 'Phoenix', country: 'United States', iana: 'America/Phoenix' },
-  { city: 'Edmonton', country: 'Canada', iana: 'America/Edmonton' },
-  { city: 'Calgary', country: 'Canada', iana: 'America/Edmonton' },
-  { city: 'Toronto', country: 'Canada', iana: 'America/Toronto' },
-  { city: 'Vancouver', country: 'Canada', iana: 'America/Vancouver' },
-  { city: 'Montreal', country: 'Canada', iana: 'America/Toronto' },
-  { city: 'Tokyo', country: 'Japan', iana: 'Asia/Tokyo' },
-  { city: 'Kyoto', country: 'Japan', iana: 'Asia/Tokyo' },
-  { city: 'Osaka', country: 'Japan', iana: 'Asia/Tokyo' },
-  { city: 'Bogotá (Colombia)', country: 'Colombia', iana: 'America/Bogota' },
-  { city: 'Medellín', country: 'Colombia', iana: 'America/Bogota' },
-  { city: 'UTC', country: 'Universal Time Coordinated', iana: 'UTC' },
-  { city: 'London', country: 'United Kingdom', iana: 'Europe/London' },
-  { city: 'Dublin', country: 'Ireland', iana: 'Europe/Dublin' },
-  { city: 'Paris', country: 'France', iana: 'Europe/Paris' },
-  { city: 'Berlin', country: 'Germany', iana: 'Europe/Berlin' },
-  { city: 'Frankfurt', country: 'Germany', iana: 'Europe/Berlin' },
-  { city: 'Amsterdam', country: 'Netherlands', iana: 'Europe/Amsterdam' },
-  { city: 'Zurich', country: 'Switzerland', iana: 'Europe/Zurich' },
-  { city: 'Geneva', country: 'Switzerland', iana: 'Europe/Zurich' },
-  { city: 'Madrid', country: 'Spain', iana: 'Europe/Madrid' },
-  { city: 'Barcelona', country: 'Spain', iana: 'Europe/Madrid' },
-  { city: 'Rome', country: 'Italy', iana: 'Europe/Rome' },
-  { city: 'Milan', country: 'Italy', iana: 'Europe/Rome' },
-  { city: 'Stockholm', country: 'Sweden', iana: 'Europe/Stockholm' },
-  { city: 'Oslo', country: 'Norway', iana: 'Europe/Oslo' },
-  { city: 'Copenhagen', country: 'Denmark', iana: 'Europe/Copenhagen' },
-  { city: 'Helsinki', country: 'Finland', iana: 'Europe/Helsinki' },
-  { city: 'Warsaw', country: 'Poland', iana: 'Europe/Warsaw' },
-  { city: 'Prague', country: 'Czech Republic', iana: 'Europe/Prague' },
-  { city: 'Vienna', country: 'Austria', iana: 'Europe/Vienna' },
-  { city: 'Brussels', country: 'Belgium', iana: 'Europe/Brussels' },
-  { city: 'Lisbon', country: 'Portugal', iana: 'Europe/Lisbon' },
-  { city: 'Athens', country: 'Greece', iana: 'Europe/Athens' },
-  { city: 'Istanbul', country: 'Turkey', iana: 'Europe/Istanbul' },
-  { city: 'Dubai', country: 'United Arab Emirates', iana: 'Asia/Dubai' },
-  { city: 'Abu Dhabi', country: 'United Arab Emirates', iana: 'Asia/Dubai' },
-  { city: 'Riyadh', country: 'Saudi Arabia', iana: 'Asia/Riyadh' },
-  { city: 'Doha', country: 'Qatar', iana: 'Asia/Qatar' },
-  { city: 'Tel Aviv', country: 'Israel', iana: 'Asia/Jerusalem' },
-  { city: 'Singapore', country: 'Singapore', iana: 'Asia/Singapore' },
-  { city: 'Hong Kong', country: 'Hong Kong', iana: 'Asia/Hong_Kong' },
-  { city: 'Seoul', country: 'South Korea', iana: 'Asia/Seoul' },
-  { city: 'Beijing', country: 'China', iana: 'Asia/Shanghai' },
-  { city: 'Shanghai', country: 'China', iana: 'Asia/Shanghai' },
-  { city: 'Taipei', country: 'Taiwan', iana: 'Asia/Taipei' },
-  { city: 'Bangkok', country: 'Thailand', iana: 'Asia/Bangkok' },
-  { city: 'Jakarta', country: 'Indonesia', iana: 'Asia/Jakarta' },
-  { city: 'Kuala Lumpur', country: 'Malaysia', iana: 'Asia/Kuala_Lumpur' },
-  { city: 'Manila', country: 'Philippines', iana: 'Asia/Manila' },
-  { city: 'Sydney', country: 'Australia', iana: 'Australia/Sydney' },
-  { city: 'Melbourne', country: 'Australia', iana: 'Australia/Melbourne' },
-  { city: 'Brisbane', country: 'Australia', iana: 'Australia/Brisbane' },
-  { city: 'Perth', country: 'Australia', iana: 'Australia/Perth' },
-  { city: 'Adelaide', country: 'Australia', iana: 'Australia/Adelaide' },
-  { city: 'Auckland', country: 'New Zealand', iana: 'Pacific/Auckland' },
-  { city: 'Wellington', country: 'New Zealand', iana: 'Pacific/Auckland' },
-  { city: 'Honolulu', country: 'United States', iana: 'Pacific/Honolulu' },
-  { city: 'Anchorage', country: 'United States', iana: 'America/Anchorage' },
-  { city: 'São Paulo', country: 'Brazil', iana: 'America/Sao_Paulo' },
-  { city: 'Rio de Janeiro', country: 'Brazil', iana: 'America/Sao_Paulo' },
-  { city: 'Buenos Aires', country: 'Argentina', iana: 'America/Argentina/Buenos_Aires' },
-  { city: 'Santiago', country: 'Chile', iana: 'America/Santiago' },
-  { city: 'Lima', country: 'Peru', iana: 'America/Lima' },
-  { city: 'Mexico City', country: 'Mexico', iana: 'America/Mexico_City' },
-  { city: 'Cairo', country: 'Egypt', iana: 'Africa/Cairo' },
-  { city: 'Johannesburg', country: 'South Africa', iana: 'Africa/Johannesburg' },
-  { city: 'Cape Town', country: 'South Africa', iana: 'Africa/Johannesburg' },
-  { city: 'Lagos', country: 'Nigeria', iana: 'Africa/Lagos' },
-  { city: 'Nairobi', country: 'Kenya', iana: 'Africa/Nairobi' },
-  { city: 'Kathmandu', country: 'Nepal', iana: 'Asia/Kathmandu' },
-  { city: 'Dhaka', country: 'Bangladesh', iana: 'Asia/Dhaka' },
-  { city: 'Colombo', country: 'Sri Lanka', iana: 'Asia/Colombo' },
-  { city: 'Karachi', country: 'Pakistan', iana: 'Asia/Karachi' },
+  { city: 'Bangalore', country: 'India', iana: 'Asia/Kolkata', aliases: ['IST', 'India', 'Bengaluru'] },
+  { city: 'Mumbai', country: 'India', iana: 'Asia/Kolkata', aliases: ['IST', 'India', 'Bombay'] },
+  { city: 'New Delhi', country: 'India', iana: 'Asia/Kolkata', aliases: ['IST', 'India', 'Delhi'] },
+  { city: 'San Francisco', country: 'United States', iana: 'America/Los_Angeles', aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time', 'West Coast', 'SF', 'Bay Area'] },
+  { city: 'Los Angeles', country: 'United States', iana: 'America/Los_Angeles', aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time', 'LA'] },
+  { city: 'Seattle', country: 'United States', iana: 'America/Los_Angeles', aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time'] },
+  { city: 'New York', country: 'United States', iana: 'America/New_York', aliases: ['EST', 'EDT', 'ET', 'Eastern', 'Eastern Time', 'NYC', 'East Coast'] },
+  { city: 'Boston', country: 'United States', iana: 'America/New_York', aliases: ['EST', 'EDT', 'ET', 'Eastern', 'Eastern Time'] },
+  { city: 'Chicago', country: 'United States', iana: 'America/Chicago', aliases: ['CST', 'CDT', 'CT', 'Central', 'Central Time', 'Midwest'] },
+  { city: 'Austin', country: 'United States', iana: 'America/Chicago', aliases: ['CST', 'CDT', 'CT', 'Central', 'Central Time', 'Texas'] },
+  { city: 'Denver', country: 'United States', iana: 'America/Denver', aliases: ['MST', 'MDT', 'MT', 'Mountain', 'Mountain Time', 'Colorado'] },
+  { city: 'Phoenix', country: 'United States', iana: 'America/Phoenix', aliases: ['MST', 'Mountain', 'Arizona', 'AZ'] },
+  { city: 'Edmonton', country: 'Canada', iana: 'America/Edmonton', aliases: ['MST', 'MDT', 'MT', 'Mountain', 'Mountain Time', 'Alberta'] },
+  { city: 'Calgary', country: 'Canada', iana: 'America/Edmonton', aliases: ['MST', 'MDT', 'MT', 'Mountain', 'Mountain Time', 'Alberta'] },
+  { city: 'Toronto', country: 'Canada', iana: 'America/Toronto', aliases: ['EST', 'EDT', 'ET', 'Eastern', 'Eastern Time', 'Ontario'] },
+  { city: 'Vancouver', country: 'Canada', iana: 'America/Vancouver', aliases: ['PST', 'PDT', 'PT', 'Pacific', 'Pacific Time', 'BC'] },
+  { city: 'Montreal', country: 'Canada', iana: 'America/Toronto', aliases: ['EST', 'EDT', 'ET', 'Eastern', 'Eastern Time', 'Quebec'] },
+  { city: 'Tokyo', country: 'Japan', iana: 'Asia/Tokyo', aliases: ['JST', 'Japan', 'Japan Standard Time'] },
+  { city: 'Kyoto', country: 'Japan', iana: 'Asia/Tokyo', aliases: ['JST', 'Japan'] },
+  { city: 'Osaka', country: 'Japan', iana: 'Asia/Tokyo', aliases: ['JST', 'Japan'] },
+  { city: 'Bogotá (Colombia)', country: 'Colombia', iana: 'America/Bogota', aliases: ['COT', 'Colombia', 'Bogota'] },
+  { city: 'Medellín', country: 'Colombia', iana: 'America/Bogota', aliases: ['COT', 'Colombia'] },
+  { city: 'UTC', country: 'Universal Time Coordinated', iana: 'UTC', aliases: ['GMT', 'Zulu', 'Z'] },
+  { city: 'London', country: 'United Kingdom', iana: 'Europe/London', aliases: ['GMT', 'BST', 'Greenwich', 'British Summer Time', 'UK'] },
+  { city: 'Dublin', country: 'Ireland', iana: 'Europe/Dublin', aliases: ['GMT', 'IST', 'Irish Standard Time', 'Ireland'] },
+  { city: 'Paris', country: 'France', iana: 'Europe/Paris', aliases: ['CET', 'CEST', 'Central European Time', 'France'] },
+  { city: 'Berlin', country: 'Germany', iana: 'Europe/Berlin', aliases: ['CET', 'CEST', 'Central European Time', 'Germany'] },
+  { city: 'Frankfurt', country: 'Germany', iana: 'Europe/Berlin', aliases: ['CET', 'CEST', 'Central European Time', 'Germany'] },
+  { city: 'Amsterdam', country: 'Netherlands', iana: 'Europe/Amsterdam', aliases: ['CET', 'CEST', 'Central European Time', 'Netherlands'] },
+  { city: 'Zurich', country: 'Switzerland', iana: 'Europe/Zurich', aliases: ['CET', 'CEST', 'Central European Time', 'Switzerland'] },
+  { city: 'Geneva', country: 'Switzerland', iana: 'Europe/Zurich', aliases: ['CET', 'CEST', 'Central European Time', 'Switzerland'] },
+  { city: 'Madrid', country: 'Spain', iana: 'Europe/Madrid', aliases: ['CET', 'CEST', 'Central European Time', 'Spain'] },
+  { city: 'Barcelona', country: 'Spain', iana: 'Europe/Madrid', aliases: ['CET', 'CEST', 'Central European Time', 'Spain'] },
+  { city: 'Rome', country: 'Italy', iana: 'Europe/Rome', aliases: ['CET', 'CEST', 'Central European Time', 'Italy'] },
+  { city: 'Milan', country: 'Italy', iana: 'Europe/Rome', aliases: ['CET', 'CEST', 'Central European Time', 'Italy'] },
+  { city: 'Stockholm', country: 'Sweden', iana: 'Europe/Stockholm', aliases: ['CET', 'CEST', 'Sweden'] },
+  { city: 'Oslo', country: 'Norway', iana: 'Europe/Oslo', aliases: ['CET', 'CEST', 'Norway'] },
+  { city: 'Copenhagen', country: 'Denmark', iana: 'Europe/Copenhagen', aliases: ['CET', 'CEST', 'Denmark'] },
+  { city: 'Helsinki', country: 'Finland', iana: 'Europe/Helsinki', aliases: ['EET', 'EEST', 'Finland'] },
+  { city: 'Warsaw', country: 'Poland', iana: 'Europe/Warsaw', aliases: ['CET', 'CEST', 'Poland'] },
+  { city: 'Prague', country: 'Czech Republic', iana: 'Europe/Prague', aliases: ['CET', 'CEST', 'Czech'] },
+  { city: 'Vienna', country: 'Austria', iana: 'Europe/Vienna', aliases: ['CET', 'CEST', 'Austria'] },
+  { city: 'Brussels', country: 'Belgium', iana: 'Europe/Brussels', aliases: ['CET', 'CEST', 'Belgium'] },
+  { city: 'Lisbon', country: 'Portugal', iana: 'Europe/Lisbon', aliases: ['WET', 'WEST', 'Portugal'] },
+  { city: 'Athens', country: 'Greece', iana: 'Europe/Athens', aliases: ['EET', 'EEST', 'Greece'] },
+  { city: 'Istanbul', country: 'Turkey', iana: 'Europe/Istanbul', aliases: ['TRT', 'Turkey'] },
+  { city: 'Dubai', country: 'United Arab Emirates', iana: 'Asia/Dubai', aliases: ['GST', 'Gulf', 'UAE'] },
+  { city: 'Abu Dhabi', country: 'United Arab Emirates', iana: 'Asia/Dubai', aliases: ['GST', 'Gulf', 'UAE'] },
+  { city: 'Riyadh', country: 'Saudi Arabia', iana: 'Asia/Riyadh', aliases: ['AST', 'Arabia', 'Saudi'] },
+  { city: 'Doha', country: 'Qatar', iana: 'Asia/Qatar', aliases: ['AST', 'Qatar'] },
+  { city: 'Tel Aviv', country: 'Israel', iana: 'Asia/Jerusalem', aliases: ['IDT', 'IST', 'Israel'] },
+  { city: 'Singapore', country: 'Singapore', iana: 'Asia/Singapore', aliases: ['SGT', 'Singapore'] },
+  { city: 'Hong Kong', country: 'Hong Kong', iana: 'Asia/Hong_Kong', aliases: ['HKT', 'Hong Kong'] },
+  { city: 'Seoul', country: 'South Korea', iana: 'Asia/Seoul', aliases: ['KST', 'Korea', 'South Korea'] },
+  { city: 'Beijing', country: 'China', iana: 'Asia/Shanghai', aliases: ['CST', 'China', 'China Standard Time'] },
+  { city: 'Shanghai', country: 'China', iana: 'Asia/Shanghai', aliases: ['CST', 'China', 'China Standard Time'] },
+  { city: 'Taipei', country: 'Taiwan', iana: 'Asia/Taipei', aliases: ['CST', 'Taiwan'] },
+  { city: 'Bangkok', country: 'Thailand', iana: 'Asia/Bangkok', aliases: ['ICT', 'Thailand'] },
+  { city: 'Jakarta', country: 'Indonesia', iana: 'Asia/Jakarta', aliases: ['WIB', 'Indonesia'] },
+  { city: 'Kuala Lumpur', country: 'Malaysia', iana: 'Asia/Kuala_Lumpur', aliases: ['MYT', 'Malaysia'] },
+  { city: 'Manila', country: 'Philippines', iana: 'Asia/Manila', aliases: ['PHT', 'Philippines'] },
+  { city: 'Sydney', country: 'Australia', iana: 'Australia/Sydney', aliases: ['AEST', 'AEDT', 'Australian Eastern Time', 'Australia'] },
+  { city: 'Melbourne', country: 'Australia', iana: 'Australia/Melbourne', aliases: ['AEST', 'AEDT', 'Australian Eastern Time', 'Australia'] },
+  { city: 'Brisbane', country: 'Australia', iana: 'Australia/Brisbane', aliases: ['AEST', 'Queensland', 'Australia'] },
+  { city: 'Perth', country: 'Australia', iana: 'Australia/Perth', aliases: ['AWST', 'Western Australia', 'Australia'] },
+  { city: 'Adelaide', country: 'Australia', iana: 'Australia/Adelaide', aliases: ['ACST', 'ACDT', 'South Australia', 'Australia'] },
+  { city: 'Auckland', country: 'New Zealand', iana: 'Pacific/Auckland', aliases: ['NZST', 'NZDT', 'New Zealand'] },
+  { city: 'Wellington', country: 'New Zealand', iana: 'Pacific/Auckland', aliases: ['NZST', 'NZDT', 'New Zealand'] },
+  { city: 'Honolulu', country: 'United States', iana: 'Pacific/Honolulu', aliases: ['HST', 'Hawaii', 'Hawaii Time'] },
+  { city: 'Anchorage', country: 'United States', iana: 'America/Anchorage', aliases: ['AKST', 'AKDT', 'Alaska', 'Alaska Time'] },
+  { city: 'São Paulo', country: 'Brazil', iana: 'America/Sao_Paulo', aliases: ['BRT', 'BRST', 'Brazil'] },
+  { city: 'Rio de Janeiro', country: 'Brazil', iana: 'America/Sao_Paulo', aliases: ['BRT', 'BRST', 'Brazil'] },
+  { city: 'Buenos Aires', country: 'Argentina', iana: 'America/Argentina/Buenos_Aires', aliases: ['ART', 'Argentina'] },
+  { city: 'Santiago', country: 'Chile', iana: 'America/Santiago', aliases: ['CLT', 'CLST', 'Chile'] },
+  { city: 'Lima', country: 'Peru', iana: 'America/Lima', aliases: ['PET', 'Peru'] },
+  { city: 'Mexico City', country: 'Mexico', iana: 'America/Mexico_City', aliases: ['CST', 'CDT', 'Mexico'] },
+  { city: 'Cairo', country: 'Egypt', iana: 'Africa/Cairo', aliases: ['EET', 'Egypt'] },
+  { city: 'Johannesburg', country: 'South Africa', iana: 'Africa/Johannesburg', aliases: ['SAST', 'South Africa'] },
+  { city: 'Cape Town', country: 'South Africa', iana: 'Africa/Johannesburg', aliases: ['SAST', 'South Africa'] },
+  { city: 'Lagos', country: 'Nigeria', iana: 'Africa/Lagos', aliases: ['WAT', 'Nigeria'] },
+  { city: 'Nairobi', country: 'Kenya', iana: 'Africa/Nairobi', aliases: ['EAT', 'Kenya'] },
+  { city: 'Kathmandu', country: 'Nepal', iana: 'Asia/Kathmandu', aliases: ['NPT', 'Nepal Time', 'Nepal'] },
+  { city: 'Dhaka', country: 'Bangladesh', iana: 'Asia/Dhaka', aliases: ['BST', 'Bangladesh'] },
+  { city: 'Colombo', country: 'Sri Lanka', iana: 'Asia/Colombo', aliases: ['IST', 'Sri Lanka'] },
+  { city: 'Karachi', country: 'Pakistan', iana: 'Asia/Karachi', aliases: ['PKT', 'Pakistan'] },
 ];
 
 /**
@@ -140,6 +269,23 @@ export function getAllAvailableTimezones(): TimezoneItem[] {
   const seen = new Set<string>();
   const list: TimezoneItem[] = [];
 
+  // 1. Regional timezone conventions (PST, EST, CST, GMT, CET, IST, etc.)
+  for (const item of TIMEZONE_CONVENTIONS) {
+    const id = `convention-${item.city.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+    if (!seen.has(id)) {
+      seen.add(id);
+      list.push({
+        id,
+        city: item.city,
+        country: item.country,
+        iana: item.iana,
+        label: `${item.city}, ${item.country}`,
+        aliases: item.aliases,
+      });
+    }
+  }
+
+  // 2. Popular cities
   for (const item of POPULAR_CITIES) {
     const id = `${item.iana.toLowerCase().replace(/\//g, '-')}-${item.city.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
     if (!seen.has(id)) {
@@ -150,6 +296,7 @@ export function getAllAvailableTimezones(): TimezoneItem[] {
         country: item.country,
         iana: item.iana,
         label: `${item.city}, ${item.country}`,
+        aliases: item.aliases,
       });
     }
   }
@@ -186,15 +333,38 @@ export function searchTimezones(query: string, availableList?: TimezoneItem[]): 
   if (!clean) return [];
 
   const list = availableList || getAllAvailableTimezones();
-  return list
-    .filter((item) => {
-      const cityMatch = item.city.toLowerCase().includes(clean);
-      const countryMatch = item.country.toLowerCase().includes(clean);
-      const ianaMatch = item.iana.toLowerCase().includes(clean);
-      const labelMatch = item.label ? item.label.toLowerCase().includes(clean) : false;
-      return cityMatch || countryMatch || ianaMatch || labelMatch;
-    })
-    .slice(0, 15);
+  const matches = list.filter((item) => {
+    const cityMatch = item.city.toLowerCase().includes(clean);
+    const countryMatch = item.country.toLowerCase().includes(clean);
+    const ianaMatch = item.iana.toLowerCase().includes(clean);
+    const labelMatch = item.label ? item.label.toLowerCase().includes(clean) : false;
+    const aliasMatch = item.aliases
+      ? item.aliases.some((a) => a.toLowerCase().includes(clean))
+      : false;
+    return cityMatch || countryMatch || ianaMatch || labelMatch || aliasMatch;
+  });
+
+  // Sort matches so exact city/alias matches rank first
+  matches.sort((a, b) => {
+    const aExactCity = a.city.toLowerCase() === clean;
+    const bExactCity = b.city.toLowerCase() === clean;
+    if (aExactCity && !bExactCity) return -1;
+    if (!aExactCity && bExactCity) return 1;
+
+    const aExactAlias = a.aliases?.some((al) => al.toLowerCase() === clean);
+    const bExactAlias = b.aliases?.some((al) => al.toLowerCase() === clean);
+    if (aExactAlias && !bExactAlias) return -1;
+    if (!aExactAlias && bExactAlias) return 1;
+
+    const aStartsCity = a.city.toLowerCase().startsWith(clean);
+    const bStartsCity = b.city.toLowerCase().startsWith(clean);
+    if (aStartsCity && !bStartsCity) return -1;
+    if (!aStartsCity && bStartsCity) return 1;
+
+    return 0;
+  });
+
+  return matches.slice(0, 15);
 }
 
 export interface ZonedParts {

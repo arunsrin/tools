@@ -351,7 +351,7 @@ export default function TimezoneConverter({ onBack }: TimezoneConverterProps) {
             <input
               type="text"
               className="tz-search-input"
-              placeholder="Add city or timezone (e.g., London, Sydney, Berlin)..."
+              placeholder="Add city or timezone (e.g., London, PST, Pacific, EST)..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -385,6 +385,7 @@ export default function TimezoneConverter({ onBack }: TimezoneConverterProps) {
                     <span className="tz-search-city">{item.city}</span>
                     <span className="tz-search-details">
                       {item.country} • {item.iana}
+                      {item.aliases && item.aliases.length > 0 ? ` • ${item.aliases.slice(0, 4).join(', ')}` : ''}
                     </span>
                   </button>
                 </li>

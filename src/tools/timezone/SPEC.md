@@ -26,7 +26,7 @@ The Timezone Converter / Visualizer is a client-side utility inspired by World T
 - Date boundary badges displayed at midnight (00:00) showing the local date/day name.
 
 ### 2.3 Search & Customization
-- Fuzzy / substring search across city names, country names, IANA timezone identifiers, and UTC offsets.
+- Fuzzy / substring search across city names, country names, IANA timezone identifiers, UTC offsets, and common timezone abbreviations/conventions (e.g. `PST`, `PDT`, `Pacific`, `EST`, `EDT`, `Eastern`, `CST`, `CDT`, `Central`, `MST`, `MDT`, `Mountain`, `IST`, `GMT`, `BST`, `CET`, `JST`, `AEST`).
 - Add new timezones from search results.
 - Remove timezones (disabled if only one remains).
 - Reorder timezones (move up / down) and designate any timezone as the home / reference base.
