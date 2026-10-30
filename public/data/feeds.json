@@ -1,0 +1,191 @@
+{
+  "lastUpdated": "2026-10-30T17:00:00.000Z",
+  "sources": [
+    {
+      "id": "hacker-news",
+      "name": "Hacker News",
+      "category": "tech",
+      "icon": "🟧",
+      "description": "Tech, startups, and hacking discussions",
+      "color": "#ff6600",
+      "enabled": true,
+      "fetchType": "hn"
+    },
+    {
+      "id": "reddit-tech",
+      "name": "Reddit /r/technology",
+      "category": "tech",
+      "icon": "🤖",
+      "description": "Major technology developments and industry news",
+      "color": "#ff4500",
+      "enabled": true,
+      "fetchType": "reddit",
+      "fetchUrl": "https://www.reddit.com/r/technology/top.json?limit=15"
+    },
+    {
+      "id": "reddit-prog",
+      "name": "Reddit /r/programming",
+      "category": "dev",
+      "icon": "💻",
+      "description": "Computer programming discussions and articles",
+      "color": "#0079d3",
+      "enabled": true,
+      "fetchType": "reddit",
+      "fetchUrl": "https://www.reddit.com/r/programming/top.json?limit=15"
+    },
+    {
+      "id": "lobsters",
+      "name": "Lobste.rs",
+      "category": "dev",
+      "icon": "🦞",
+      "description": "Computing-focused community news and discussions",
+      "color": "#8b1e0f",
+      "enabled": true,
+      "fetchType": "lobsters",
+      "fetchUrl": "https://lobste.rs/hottest.json"
+    },
+    {
+      "id": "github-trending",
+      "name": "GitHub Trending",
+      "category": "dev",
+      "icon": "🐙",
+      "description": "Top trending open source projects and repositories",
+      "color": "#6e40c9",
+      "enabled": true
+    },
+    {
+      "id": "ars-technica",
+      "name": "Ars Technica",
+      "category": "tech",
+      "icon": "⚡",
+      "description": "Deep dives into technology, policy, and science",
+      "color": "#ff4e00",
+      "enabled": true
+    },
+    {
+      "id": "bbc-news",
+      "name": "BBC News",
+      "category": "news",
+      "icon": "🌍",
+      "description": "Global breaking news and international affairs",
+      "color": "#bb1919",
+      "enabled": true
+    },
+    {
+      "id": "product-hunt",
+      "name": "Product Hunt",
+      "category": "design",
+      "icon": "🚀",
+      "description": "The best new products, tools, and startups every day",
+      "color": "#da552f",
+      "enabled": true
+    }
+  ],
+  "items": [
+    {
+      "id": "hn-1",
+      "title": "SQLite in the browser with WebAssembly and OPFS",
+      "url": "https://sqlite.org/wasm/doc/trunk/index.md",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T16:30:00.000Z",
+      "points": 412,
+      "comments": 184,
+      "domain": "sqlite.org"
+    },
+    {
+      "id": "hn-2",
+      "title": "Show HN: A minimalist local-first text editor built in Rust",
+      "url": "https://news.ycombinator.com/item?id=40000002",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:45:00.000Z",
+      "points": 298,
+      "comments": 87,
+      "domain": "github.com"
+    },
+    {
+      "id": "rt-1",
+      "title": "Open source AI models demonstrate major gains in memory efficiency",
+      "url": "https://reddit.com/r/technology/comments/model_efficiency",
+      "source": "Reddit /r/technology",
+      "sourceId": "reddit-tech",
+      "category": "tech",
+      "publishedAt": "2026-10-30T16:15:00.000Z",
+      "points": 1840,
+      "comments": 312,
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "rp-1",
+      "title": "TypeScript 5.8 introduces granular module resolution and checks",
+      "url": "https://devblogs.microsoft.com/typescript/",
+      "source": "Reddit /r/programming",
+      "sourceId": "reddit-prog",
+      "category": "dev",
+      "publishedAt": "2026-10-30T16:05:00.000Z",
+      "points": 620,
+      "comments": 142,
+      "domain": "microsoft.com"
+    },
+    {
+      "id": "lob-1",
+      "title": "PostgreSQL: Hidden index optimizations you might not know about",
+      "url": "https://lobste.rs/s/pg_indexes",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "dev",
+      "publishedAt": "2026-10-30T16:20:00.000Z",
+      "points": 68,
+      "comments": 24,
+      "domain": "brandur.org"
+    },
+    {
+      "id": "gh-1",
+      "title": "astral-sh/uv: An extremely fast Python package and project manager",
+      "url": "https://github.com/astral-sh/uv",
+      "source": "GitHub Trending",
+      "sourceId": "github-trending",
+      "category": "dev",
+      "publishedAt": "2026-10-30T16:00:00.000Z",
+      "points": 38200,
+      "comments": 890,
+      "domain": "github.com"
+    },
+    {
+      "id": "ars-1",
+      "title": "James Webb Space Telescope discovers earliest complex galaxy cluster",
+      "url": "https://arstechnica.com/science/2026/galaxy-cluster/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:40:00.000Z",
+      "comments": 64,
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "bbc-1",
+      "title": "Renewable energy generation surpasses 40% of global electricity capacity",
+      "url": "https://www.bbc.com/news/world-renewable-milestone",
+      "source": "BBC News",
+      "sourceId": "bbc-news",
+      "category": "news",
+      "publishedAt": "2026-10-30T16:10:00.000Z",
+      "domain": "bbc.com"
+    },
+    {
+      "id": "ph-1",
+      "title": "Cursor 2.0: AI-powered code editor with whole-repo comprehension",
+      "url": "https://www.producthunt.com/posts/cursor",
+      "source": "Product Hunt",
+      "sourceId": "product-hunt",
+      "category": "design",
+      "publishedAt": "2026-10-30T15:50:00.000Z",
+      "points": 1420,
+      "comments": 210,
+      "domain": "producthunt.com"
+    }
+  ]
+}

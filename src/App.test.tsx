@@ -9,6 +9,7 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByText(/simple, self-contained utilities/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /big text/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /timezone converter/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /news river/i })).toBeInTheDocument();
     expect(screen.getByText(/coming soon/i)).toBeInTheDocument();
   });
 
@@ -19,6 +20,20 @@ describe('App (Tools Hub Dashboard)', () => {
 
     // In TimezoneConverter tool
     expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  it('navigates to News River tool and back to hub', () => {
+    render(<App />);
+    const newsCard = screen.getByRole('button', { name: /news river/i });
+    fireEvent.click(newsCard);
+
+    // In NewsRiver tool
+    expect(screen.getByRole('heading', { level: 1, name: /news river/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
     // Navigate back to hub

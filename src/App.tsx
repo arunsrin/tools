@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import BigText from './tools/big/BigText';
 import TimezoneConverter from './tools/timezone/TimezoneConverter';
+import NewsRiver from './tools/news-river/NewsRiver';
 import './index.css';
 
-type View = 'hub' | 'big' | 'timezone';
+type View = 'hub' | 'big' | 'timezone' | 'news-river';
 
 function App() {
   const [view, setView] = useState<View>('hub');
@@ -14,6 +15,10 @@ function App() {
 
   if (view === 'timezone') {
     return <TimezoneConverter onBack={() => setView('hub')} />;
+  }
+
+  if (view === 'news-river') {
+    return <NewsRiver onBack={() => setView('hub')} />;
   }
 
   return (
@@ -34,6 +39,12 @@ function App() {
           <div className="tool-icon">🌐</div>
           <h2>Timezone Converter</h2>
           <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
+        </button>
+
+        <button className="tool-card" onClick={() => setView('news-river')}>
+          <div className="tool-icon">🌊</div>
+          <h2>News River</h2>
+          <p>Multi-feed aggregator inspired by popurls and skimfeed with column & river views.</p>
         </button>
         
         {/* Placeholder for future tools */}

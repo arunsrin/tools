@@ -1,0 +1,96 @@
+url,title,description
+https://www.arunsr.in/posts/index.xml,"Posts on arunsrin's notes","Recent content in Posts on arunsrin's notes"
+https://www.aldaily.com/feed/,"Arts & Letters Daily","ideas, criticism, debate"
+https://3quarksdaily.com/feed,"3 Quarks Daily","Science Arts Philosophy Politics Literature"
+https://www.daemonology.net/hn-daily/index.rss,"Hacker News Daily","Daily top stories from Hacker News"
+https://buttondown.com/clivethompson/rss,"The Linkfest","The opposite of doomscrolling: Every two weeks (roughly) I send you a collection of the best Internet reading I've found -- links to culture, technology, art and science that fascinated me. Full, free archives here.I'm Clive Thompson, a longtime science and tech reporter (Wired, New York Times Magazine), book author (Coders) and blogger. I'm at clive@clivethompson.net and on Mastodon.The Linkfest is pay-what-you want. Put your email below and boom you're subscribed, for free!It'll tell you to ""upgrade your subscription"" -- but you don't need to, unless you want to put in a monthly amount below to support this project, and obtain my undying regard. It's Guardian-style economics here; folks who support it help keep it free for rest of the entire planet."
+https://tetw.org/rss,"The Electric Typewriter","Great articles and essays by the world’s best journalists and writers"
+https://www.platformer.news/rss/,Platformer,"Independent reporting on AI, social platforms, and the people shaping technology."
+https://www.wheresyoured.at/rss/,"Ed Zitron's Where's Your Ed At","The Words of Ed Zitron, a PR person and writer."
+https://www.bitsaboutmoney.com/archive/rss/,"Bits about Money","About the modern financial infrastructure that the world sits atop of."
+https://rss.acm.org/technews/TechNews.xml,"ACM TechNews","ACM TechNews"
+https://arstechnica.com/feed/?t=3774eb8d1c221c36c2589aae18e132d0,"Ars Technica","Serving the Technologist since 1998. News, reviews, and analysis."
+https://techcrunch.com/feed/,TechCrunch,"Startup and Technology News"
+https://tildes.net/topics.atom,"Tildes Atom feed",
+https://blog.bytebytego.com/feed,"ByteByteGo Newsletter","Explain complex systems with simple terms, from the authors of the best-selling system design book series. Join over 1,000,000 friendly readers."
+https://realpython.com/atom.xml,"Real Python",
+https://queue.acm.org/rss/feeds/queuecontent.xml,"ACM Queue - All Queue Content",
+https://cacm.acm.org/issue/latest/feed/,"October 2026 – Communications of the ACM",
+https://sreweekly.com/feed/,"SRE WEEKLY","scalability, availability, incident response, automation"
+https://feeds.feedburner.com/oreilly/radar/atom,Radar,"Now, next, and beyond: Tracking need-to-know trends at the intersection of business and technology"
+https://jasonpargin.substack.com/feed,"Jason Pargin’s Newsletter","Something seems off about the world, I'm trying to get to the bottom of it"
+https://magazine.sebastianraschka.com/feed,"Ahead of AI","Ahead of AI focuses on machine learning and AI research and is read by more than 200,000 researchers and practitioners who want to stay ahead in a rapidly evolving field."
+https://www.bensbites.com/feed,"Ben's Bites","What I'm learning building with agents (plus tools worth trying)"
+https://www.latent.space/feed,"Latent Space","Everything from Latent Space: articles, AI News briefings and podcast episodes."
+https://buttondown.com/ainews/rss,"AI News (MOVED TO news.smol.ai!)","We summarize top AI discords + AI reddits + AI X/Twitters, and send you a roundup each day! See [archive](https://buttondown.email/ainews/archive/) for examples. 
+
+> ""Highest-leverage 45 mins I spend everyday"" - [Soumith](https://twitter.com/soumithchintala/status/1764853209498034537) 
+
+> ""best AI newsletter atm"" - [Andrej](https://twitter.com/karpathy/status/1767616494752731633)
+
+> ""I'm not sure that enough people subscribe"" - [Andrej](https://x.com/karpathy/status/1857126049357914266)
+
+# IMPORTANT: WE HAVE MOVED 
+
+WE HAVE MOVED to [https://news.smol.ai](https://news.smol.ai) !
+
+this newsletter provider is deprecated, but unfortunately thousands of people have direct-linked this URL so - if you signed up before Apr 23 you were automatically ported over, if you are new, please go to  [https://news.smol.ai](https://news.smol.ai)  and [@smol_ai](https://x.com/smol_ai) and toss in your email there!
+
+# DO NOT FILL IN YOUR EMAIL BELOW, GO TO [https://news.smol.ai](https://news.smol.ai) and do it there thank you"
+https://www.ai-supremacy.com/feed,"AI Supremacy","News at the intersection of Artificial Intelligence, technology and business including Op-Eds, research summaries, guest contributions and valuable info about A.I. startups."
+https://aifeed.dev/feed.xml,"aifeed.dev - AI & Tech Links Feed","Curated AI and tech links. Latest news on artificial intelligence, machine learning and LLMs."
+https://thegradient.pub/rss/,"The Gradient","A digital publication about artificial intelligence and the future."
+https://www.oneusefulthing.org/feed,"One Useful Thing","Trying to understand the implications of AI for work, education, and life. By Prof. Ethan Mollick"
+https://openai.com/news/rss.xml,"OpenAI News","The OpenAI blog"
+https://www.theguardian.com/news/series/the-long-read/rss,"The long read | The Guardian","In-depth reporting, essays and profiles"
+https://aeon.co/feed.rss,"Aeon | a world of ideas","Aeon is a magazine of ideas and culture. We publish in-depth essays from the world’s most incisive and ambitious thinkers, and a mix of original and curated videos — free to all."
+https://psyche.co/feed.rss,"Psyche | Know Your Self","Psyche is a magazine to help you understand your self and live well. Discover articles and videos on emotions, mental health, spirituality, relationships and community."
+https://www.noemamag.com/?feed=noemarss,NOEMA,"Noema Magazine"
+https://www.astralcodexten.com/feed,"Astral Codex Ten","P(A|B) = [P(A)*P(B|A)]/P(B), all the rest is commentary."
+https://www.afterbabel.com/feed,"After Babel","A free weekly newsletter where Jon Haidt and his team make sense of how technology is reshaping society — and offer practical guidance on how we can respond."
+https://asteriskmag.com/feed,Asterisk,
+https://daily.jstor.org/feed/,"JSTOR Daily","from JSTOR, nonprofit library for the intellectually curious"
+https://fivebooks.com/feed/,"Five Books","The best books on everything"
+https://lithub.com/feed/,"Literary  Hub","The best of the literary web"
+https://bookriot.com/feed/,"BOOK RIOT","Book Recommendations and Reviews"
+https://www.atlasobscura.com/feeds/latest,"Atlas Obscura - Latest Articles and Places","New wonders and curiosities added to the Atlas."
+https://bigthink.com/feed/all,"Big Think","Smarter, Faster"
+https://boldreasoningwithpetersinger.substack.com/feed,"Bold Reasoning with Peter Singer","Explore the intersections of ethics, philosophy, and impactful living."
+https://richarddawkins.substack.com/feed,"The Poetry of Reality with Richard Dawkins","The Poetry of Reality Page is hosted by world renowned evolutionary biologist and best-selling author, Professor Richard Dawkins, celebrated by intellectuals and scientists everywhere for his honest critique of religion and his push for critical thinking."
+https://www.quantamagazine.org/feed/,"Quanta Magazine","Illuminating science"
+https://www.sapiens.org/feed/,SAPIENS,"Anthropology Magazine"
+https://medium.com/feed/starts-with-a-bang,"Starts With A Bang! - Medium","The Universe is out there, waiting for you to discover it. - Medium"
+https://feeds.feedburner.com/colossal,Colossal,"The best of art, craft, and visual culture since 2010."
+https://publicdomainreview.org/rss.xml,"The Public Domain Review","The Public Domain Review"
+https://www.dailyartmagazine.com/feed/,"DailyArt Magazine","- Art History Stories and News"
+https://magazine.artstation.com/feed/,"ArtStation Magazine","ArtStation is the leading showcase platform for professional artists working in games, film, media & entertainment"
+https://linesandcolors.com/feed/,"Lines and Colors",
+https://muddycolors.com/feed/,"Muddy Colors","Celebrating 10 years!"
+https://www.parkablogs.com/rss.xml,"Parka Blogs - Art books, art products, art tech",
+https://illustrationage.com/feed/,"ILLUSTRATION AGE","How to Become an Illustrator"
+https://illustrationart.blogspot.com/feeds/posts/default,"ILLUSTRATION ART",
+https://artcontrarian.blogspot.com/feeds/posts/default,"Art Contrarian","A blog about about painting, design and other aspects of aesthetics along with a dash of non-art topics.  The point-of-view is that modernism in art is an idea that has, after a century or more, been thoroughly tested and found wanting. Not to say that it should be abolished -- just put in its proper, diminished place."
+https://feeds.feedburner.com/thisisnthappiness,"this isn't happiness. — Main RSS","ART, PHOTOGRAPHY, DESIGN & DISAPPOINTMENT
+
+
+     RSS ★ INSTAGRAM  ★ MORE"
+https://www.doodlersanonymous.com/feed/,"Doodlers Anonymous","Art, Draw, Doodle, Create - Daily Inspiration"
+https://this-is-cool.tumblr.com/rss,"Sci-Fi Fantasy Horror","This-Is-Cool is a UK based website dedicated to the visual art of Sci-Fi, Fantasy and Horror. We cover everything from artists, concept art, comics, art books, photography, cosplay, video games and movie trailers - www.this-is-cool.co.uk"
+https://www.lazaruscorporation.co.uk/feeds/blogs/artists-notebook/format/rss,"The Artist’s Notebook","The Artist’s Notebook is my studio journal containing notes on my ongoing artwork and related research, giving an insight into my creative process and artistic practice."
+https://www.amygoodchild.com/blog?format=rss,"Blog - Amy Goodchild",
+https://www.purexbox.com/feeds/latest,"Pure Xbox | Latest Updates",
+https://www.trueachievements.com/newsrss.aspx,"TrueAchievements News Feed","Keep up with all the latest news from your favourite Achievement tracking website"
+https://www.eurogamer.net/feed/reviews,"Eurogamer.net Reviews Feed","The latest Reviews from Eurogamer.net."
+https://www.gamedeveloper.com/rss.xml,gamedeveloper,"Public RSS feed"
+https://jasonschreier.substack.com/feed,"Schrei Guy","News and updates from journalist and author Jason Schreier"
+https://critical-distance.com/archives/feed,"Archives – Critical Distance","""Where is all the good writing about games?"""
+https://www.chess.com/rss/articles,"Chess.com Articles","The latest articles from Chess.com."
+https://theweekinchess.com/twic-rss-feed,"The Week in Chess","Chess News from throughout the World"
+https://en.chessbase.com/feed/20,"Chess News","Chess News"
+https://lichess.org/@/Lichess/blog.atom,"Lichess's Blog",
+https://forwardchess.com/blog/feed/,"Forward Chess","Your Partner in Improving Your Play"
+https://explosm.net/rss.xml,Explosm.net,"Comics, animations and more!"
+https://www.smbc-comics.com/comic/rss,"Saturday Morning Breakfast Cereal","Latest Saturday Morning Breakfast Cereal comics and news"
+https://blogtrottr.com/blog/feed.xml,"The Blogtrottr Blog","News and thoughts."
+https://www.experimental-history.com/feed,"Experimental History","1) Find what's true and make it useful. 2) Publish every other Tuesday. 3) Photo cred: my dad."
+https://morewrong.lol/feed.xml,MoreWrong,"A parody rationalist forum."
