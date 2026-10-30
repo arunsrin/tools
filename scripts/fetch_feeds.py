@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
 Feed scraper for News River (Tools Hub).
-Fetches real, live headlines from Hacker News, Lobste.rs, Ars Technica,
-Quanta Magazine, BBC News, Colossal, and Arts & Letters Daily,
-normalizes them into FeedItem format, and writes to public/data/feeds.json.
-Uses exclusively Python standard library (urllib, json, xml.etree.ElementTree, hashlib).
+Fetches real, live headlines across Hacker News, Lobste.rs (with comment thread links),
+and the author's exact 28 subscriptions organized into Tech, Ideas & Science, Gaming, Chess, and Comics.
+Uses exclusively Python standard library (urllib, json, xml.etree.ElementTree, hashlib, csv).
 """
+import csv
 import datetime
 import hashlib
 import json
@@ -22,13 +22,53 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (ToolsHub-NewsRiver)"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+FEED_METADATA: Dict[str, Dict[str, str]] = {
+    # Tech & Software
+    "https://www.arunsr.in/posts/index.xml": {"id": "arunsr-in", "name": "arunsrin's notes", "category": "tech", "icon": "📝", "color": "#10b981", "desc": "Notes and writings on software and systems"},
+    "https://arstechnica.com/feed/?t=3774eb8d1c221c36c2589aae18e132d0": {"id": "ars-technica", "name": "Ars Technica", "category": "tech", "icon": "⚡", "color": "#ff4e00", "desc": "News, reviews, and in-depth tech analysis"},
+    "https://techcrunch.com/feed/": {"id": "techcrunch", "name": "TechCrunch", "category": "tech", "icon": "🚀", "color": "#029e74", "desc": "Startup and technology news"},
+    "https://www.wheresyoured.at/rss/": {"id": "wheres-your-ed-at", "name": "Where's Your Ed At", "category": "tech", "icon": "🎙️", "color": "#ec4899", "desc": "Essays and commentary by Ed Zitron"},
+    "https://realpython.com/atom.xml": {"id": "real-python", "name": "Real Python", "category": "tech", "icon": "🐍", "color": "#306998", "desc": "Python tutorials and community articles"},
+    "https://rss.acm.org/technews/TechNews.xml": {"id": "acm-technews", "name": "ACM TechNews", "category": "tech", "icon": "📰", "color": "#0284c7", "desc": "Timely computer science and computing developments"},
+    "https://queue.acm.org/rss/feeds/queuecontent.xml": {"id": "acm-queue", "name": "ACM Queue", "category": "tech", "icon": "💻", "color": "#0369a1", "desc": "Software engineering research and practice"},
+    "https://cacm.acm.org/issue/latest/feed/": {"id": "cacm", "name": "CACM", "category": "tech", "icon": "🔬", "color": "#075985", "desc": "Communications of the ACM"},
+    "https://sreweekly.com/feed/": {"id": "sre-weekly", "name": "SRE WEEKLY", "category": "tech", "icon": "🛠️", "color": "#6366f1", "desc": "Scalability, availability, and incident response"},
+    "https://feeds.feedburner.com/oreilly/radar/atom": {"id": "oreilly-radar", "name": "Radar (O'Reilly)", "category": "tech", "icon": "📡", "color": "#dc2626", "desc": "Need-to-know tech and business trends"},
+    "https://tildes.net/topics.atom": {"id": "tildes", "name": "Tildes", "category": "tech", "icon": "💬", "color": "#8b5cf6", "desc": "Community conversations and link shares"},
+
+    # Ideas & Science
+    "https://www.aldaily.com/feed/": {"id": "aldaily", "name": "Arts & Letters Daily", "category": "ideas", "icon": "📚", "color": "#d97706", "desc": "Philosophy, literature, criticism, and debate"},
+    "https://3quarksdaily.com/feed": {"id": "3quarksdaily", "name": "3 Quarks Daily", "category": "ideas", "icon": "⚛️", "color": "#84cc16", "desc": "Science, arts, philosophy, and politics"},
+    "https://www.quantamagazine.org/feed/": {"id": "quanta", "name": "Quanta Magazine", "category": "ideas", "icon": "🌌", "color": "#0099cc", "desc": "Illuminating mathematics, physics, and computer science"},
+    "https://psyche.co/feed.rss": {"id": "psyche", "name": "Psyche", "category": "ideas", "icon": "🧠", "color": "#a855f7", "desc": "Psychology, philosophy, and mental health"},
+    "https://jasonpargin.substack.com/feed": {"id": "jason-pargin", "name": "Jason Pargin", "category": "ideas", "icon": "✍️", "color": "#f97316", "desc": "Observations on technology, culture, and life"},
+    "https://fivebooks.com/feed/": {"id": "five-books", "name": "Five Books", "category": "ideas", "icon": "📖", "color": "#b45309", "desc": "Curated expert book recommendations"},
+    "https://lithub.com/feed/": {"id": "lithub", "name": "Literary Hub", "category": "ideas", "icon": "🖋️", "color": "#b91c1c", "desc": "Literary essays, book news, and culture"},
+    "https://www.dailyartmagazine.com/feed/": {"id": "dailyart", "name": "DailyArt Magazine", "category": "ideas", "icon": "🎨", "color": "#e11d48", "desc": "Art history stories and masterpieces"},
+
+    # Gaming
+    "https://www.eurogamer.net/feed/reviews": {"id": "eurogamer", "name": "Eurogamer Reviews", "category": "gaming", "icon": "🎮", "color": "#0ea5e9", "desc": "In-depth video game reviews"},
+    "https://www.gamedeveloper.com/rss.xml": {"id": "gamedeveloper", "name": "Game Developer", "category": "gaming", "icon": "🕹️", "color": "#14b8a6", "desc": "Game design, engineering, and industry analysis"},
+    "https://www.purexbox.com/feeds/latest": {"id": "pure-xbox", "name": "Pure Xbox", "category": "gaming", "icon": "🟢", "color": "#107c10", "desc": "Xbox news, reviews, and updates"},
+    "https://www.trueachievements.com/newsrss.aspx": {"id": "trueachievements", "name": "TrueAchievements", "category": "gaming", "icon": "🏆", "color": "#f59e0b", "desc": "Gaming achievements and community news"},
+
+    # Chess
+    "https://www.chess.com/rss/articles": {"id": "chess-com", "name": "Chess.com Articles", "category": "chess", "icon": "♟️", "color": "#7fa650", "desc": "Chess master analysis and learning guides"},
+    "https://theweekinchess.com/twic-rss-feed": {"id": "twic", "name": "The Week in Chess", "category": "chess", "icon": "⏱️", "color": "#4b5563", "desc": "Global chess tournaments and Grandmaster results"},
+    "https://en.chessbase.com/feed/20": {"id": "chessbase", "name": "ChessBase News", "category": "chess", "icon": "♞", "color": "#2563eb", "desc": "World chess championships and software updates"},
+
+    # Comics
+    "https://www.smbc-comics.com/comic/rss": {"id": "smbc", "name": "SMBC Comics", "category": "comics", "icon": "🗯️", "color": "#eab308", "desc": "Saturday Morning Breakfast Cereal by Zach Weinersmith"},
+    "https://explosm.net/rss.xml": {"id": "explosm", "name": "Explosm (Cyanide & Happiness)", "category": "comics", "icon": "😂", "color": "#ef4444", "desc": "Comics, animations, and humor"},
+}
 
 
-def fetch_url(url: str, timeout: int = 10) -> Optional[bytes]:
+def fetch_url(url: str, timeout: int = 5) -> Optional[bytes]:
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": USER_AGENT, "Accept": "application/json, application/xml, text/xml, */*"},
+        headers={"User-Agent": USER_AGENT, "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*"},
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
@@ -54,7 +94,7 @@ def fetch_hacker_news() -> List[Dict[str, Any]]:
         return items
     try:
         data = json.loads(data_bytes.decode("utf-8"))
-        for hit in data.get("hits", [])[:10]:
+        for hit in data.get("hits", [])[:15]:
             oid = hit.get("objectID")
             url = hit.get("url") or f"https://news.ycombinator.com/item?id={oid}"
             items.append({
@@ -67,6 +107,7 @@ def fetch_hacker_news() -> List[Dict[str, Any]]:
                 "publishedAt": hit.get("created_at", datetime.datetime.now(datetime.timezone.utc).isoformat()),
                 "points": hit.get("points") or 0,
                 "comments": hit.get("num_comments") or 0,
+                "commentsUrl": f"https://news.ycombinator.com/item?id={oid}",
                 "domain": extract_domain(url, "ycombinator.com"),
             })
     except Exception as e:
@@ -82,19 +123,21 @@ def fetch_lobsters() -> List[Dict[str, Any]]:
         return items
     try:
         posts = json.loads(data_bytes.decode("utf-8"))
-        for p in posts[:8]:
+        for p in posts[:15]:
             short_id = p.get("short_id")
             url = p.get("url") or p.get("comments_url")
+            comments_url = p.get("comments_url") or f"https://lobste.rs/s/{short_id}"
             items.append({
                 "id": f"lob-{short_id}",
                 "title": p.get("title", ""),
                 "url": url,
                 "source": "Lobste.rs",
                 "sourceId": "lobsters",
-                "category": "dev",
+                "category": "tech",
                 "publishedAt": p.get("created_at", datetime.datetime.now(datetime.timezone.utc).isoformat()),
                 "points": p.get("score", 0),
                 "comments": p.get("comment_count", 0),
+                "commentsUrl": comments_url,
                 "domain": extract_domain(url, "lobste.rs"),
             })
     except Exception as e:
@@ -102,8 +145,11 @@ def fetch_lobsters() -> List[Dict[str, Any]]:
     return items
 
 
-def fetch_rss_feed(feed_url: str, source_id: str, source_name: str, category: str, domain_fallback: str) -> List[Dict[str, Any]]:
-    print(f"Fetching RSS feed for {source_name}...")
+def fetch_rss_feed(feed_url: str, meta: Dict[str, str]) -> List[Dict[str, Any]]:
+    source_id = meta["id"]
+    source_name = meta["name"]
+    category = meta["category"]
+    print(f"Fetching {source_name}...")
     items = []
     data_bytes = fetch_url(feed_url)
     if not data_bytes:
@@ -119,8 +165,10 @@ def fetch_rss_feed(feed_url: str, source_id: str, source_name: str, category: st
             elements = channel.findall("{http://www.w3.org/2005/Atom}entry")
         if not elements:
             elements = root.findall(".//item")
+        if not elements:
+            elements = root.findall(".//{http://www.w3.org/2005/Atom}entry")
 
-        for item in elements[:8]:
+        for item in elements[:15]:
             title_elem = item.find("title")
             if title_elem is None:
                 title_elem = item.find("{http://www.w3.org/2005/Atom}title")
@@ -148,7 +196,7 @@ def fetch_rss_feed(feed_url: str, source_id: str, source_name: str, category: st
                 "sourceId": source_id,
                 "category": category,
                 "publishedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                "domain": extract_domain(link, domain_fallback),
+                "domain": extract_domain(link, urllib.parse.urlparse(feed_url).netloc),
             })
     except Exception as e:
         print(f"Error parsing RSS {feed_url}: {e}", file=sys.stderr)
@@ -160,18 +208,82 @@ def main():
     output_path = os.path.join(root_dir, "public", "data", "feeds.json")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    all_items: List[Dict[str, Any]] = []
+    csv_path = os.path.join(root_dir, "scripts", "actual-subscriptions-2026-10-30.csv")
+    feeds_to_fetch: List[tuple] = []
 
-    # Fetch live feeds from popular channels & author subscriptions
+    if os.path.exists(csv_path):
+        with open(csv_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                url = row.get("url", "").strip()
+                if url:
+                    meta = FEED_METADATA.get(url)
+                    if not meta:
+                        title = row.get("title", "").strip() or extract_domain(url, "feed")
+                        slug = "".join(c if c.isalnum() else "-" for c in title.lower())[:20].strip("-")
+                        meta = {
+                            "id": slug,
+                            "name": title,
+                            "category": "tech",
+                            "icon": "📰",
+                            "color": "#6366f1",
+                            "desc": row.get("description", "").strip() or title,
+                        }
+                    feeds_to_fetch.append((url, meta))
+
+    if not feeds_to_fetch:
+        for url, meta in FEED_METADATA.items():
+            feeds_to_fetch.append((url, meta))
+
+    all_items: List[Dict[str, Any]] = []
+    sources_list: List[Dict[str, Any]] = []
+
+    # 1. Add Hacker News & Lobste.rs
+    sources_list.append({
+        "id": "hacker-news",
+        "name": "Hacker News",
+        "category": "tech",
+        "icon": "🟧",
+        "description": "Tech, startups, and hacking discussions",
+        "color": "#ff6600",
+        "enabled": True,
+        "fetchType": "hn",
+    })
+    sources_list.append({
+        "id": "lobsters",
+        "name": "Lobste.rs",
+        "category": "tech",
+        "icon": "🦞",
+        "description": "Computing-focused community news and discussions",
+        "color": "#8b1e0f",
+        "enabled": True,
+        "fetchType": "lobsters",
+        "fetchUrl": "https://lobste.rs/hottest.json",
+    })
+
     all_items.extend(fetch_hacker_news())
     all_items.extend(fetch_lobsters())
-    all_items.extend(fetch_rss_feed("https://feeds.arstechnica.com/arstechnica/index", "ars-technica", "Ars Technica", "tech", "arstechnica.com"))
-    all_items.extend(fetch_rss_feed("https://www.quantamagazine.org/feed/", "quanta", "Quanta Magazine", "news", "quantamagazine.org"))
-    all_items.extend(fetch_rss_feed("https://feeds.bbci.co.uk/news/world/rss.xml", "bbc-news", "BBC News", "news", "bbc.com"))
-    all_items.extend(fetch_rss_feed("https://feeds.feedburner.com/colossal", "colossal", "Colossal", "design", "thisiscolossal.com"))
-    all_items.extend(fetch_rss_feed("https://www.aldaily.com/feed/", "aldaily", "Arts & Letters Daily", "news", "aldaily.com"))
 
-    # If any feed had an issue or for initial seed items (like GitHub trending or Product Hunt), retain existing
+    # 2. Add feeds from user subscriptions
+    seen_ids = {"hacker-news", "lobsters"}
+
+    for url, meta in feeds_to_fetch:
+        if meta["id"] not in seen_ids:
+            seen_ids.add(meta["id"])
+            sources_list.append({
+                "id": meta["id"],
+                "name": meta["name"],
+                "category": meta["category"],
+                "icon": meta["icon"],
+                "description": meta.get("desc", ""),
+                "color": meta["color"],
+                "enabled": True,
+            })
+
+        items = fetch_rss_feed(url, meta)
+        all_items.extend(items)
+
+    # Preserve any existing items from feeds.json for feeds that timed out
     if os.path.exists(output_path):
         try:
             with open(output_path, "r", encoding="utf-8") as f:
@@ -186,96 +298,14 @@ def main():
 
     output_data = {
         "lastUpdated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "sources": [
-            {
-                "id": "hacker-news",
-                "name": "Hacker News",
-                "category": "tech",
-                "icon": "🟧",
-                "description": "Tech, startups, and hacking discussions",
-                "color": "#ff6600",
-                "enabled": True,
-            },
-            {
-                "id": "lobsters",
-                "name": "Lobste.rs",
-                "category": "dev",
-                "icon": "🦞",
-                "description": "Computing-focused community news and discussions",
-                "color": "#8b1e0f",
-                "enabled": True,
-            },
-            {
-                "id": "ars-technica",
-                "name": "Ars Technica",
-                "category": "tech",
-                "icon": "⚡",
-                "description": "Deep dives into technology, policy, and science",
-                "color": "#ff4e00",
-                "enabled": True,
-            },
-            {
-                "id": "quanta",
-                "name": "Quanta Magazine",
-                "category": "news",
-                "icon": "🔬",
-                "description": "Illuminating mathematics, physics, and computer science",
-                "color": "#0099cc",
-                "enabled": True,
-            },
-            {
-                "id": "bbc-news",
-                "name": "BBC News",
-                "category": "news",
-                "icon": "🌍",
-                "description": "Global breaking news and international affairs",
-                "color": "#bb1919",
-                "enabled": True,
-            },
-            {
-                "id": "colossal",
-                "name": "Colossal",
-                "category": "design",
-                "icon": "🎨",
-                "description": "Visual culture, art, design, craft, and photography",
-                "color": "#e056fd",
-                "enabled": True,
-            },
-            {
-                "id": "aldaily",
-                "name": "Arts & Letters Daily",
-                "category": "news",
-                "icon": "📚",
-                "description": "Philosophy, literature, ideas, criticism, and debate",
-                "color": "#d97706",
-                "enabled": True,
-            },
-            {
-                "id": "github-trending",
-                "name": "GitHub Trending",
-                "category": "dev",
-                "icon": "🐙",
-                "description": "Top trending open source projects and repositories",
-                "color": "#6e40c9",
-                "enabled": True,
-            },
-            {
-                "id": "product-hunt",
-                "name": "Product Hunt",
-                "category": "design",
-                "icon": "🚀",
-                "description": "The best new products, tools, and startups every day",
-                "color": "#da552f",
-                "enabled": True,
-            },
-        ],
+        "sources": sources_list,
         "items": all_items,
     }
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-    print(f"✓ Successfully wrote {len(all_items)} real live headlines across feeds to {output_path}")
+    print(f"✓ Successfully wrote {len(all_items)} headlines across {len(sources_list)} feeds to {output_path}")
 
 
 if __name__ == "__main__":

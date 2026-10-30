@@ -165,6 +165,7 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
               publishedAt: hit.created_at,
               points: hit.points || 0,
               comments: hit.num_comments || 0,
+              commentsUrl: `https://news.ycombinator.com/item?id=${hit.objectID}`,
               domain: extractDomain(itemUrl, 'ycombinator.com'),
             });
           });
@@ -185,10 +186,11 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
               url: item.url,
               source: 'Lobste.rs',
               sourceId: 'lobsters',
-              category: 'dev',
+              category: 'tech',
               publishedAt: item.created_at,
               points: item.score || 0,
               comments: item.comment_count || 0,
+              commentsUrl: item.url.includes('lobste.rs/s/') ? item.url : `https://lobste.rs/s/${item.short_id}`,
               domain: extractDomain(item.url, 'lobste.rs'),
             });
           });
@@ -327,7 +329,14 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
     });
   }, [sources, enabledSources, selectedCategory, itemsBySource, searchQuery]);
 
-  const categories: Category[] = ['all', 'tech', 'dev', 'news', 'design'];
+  const categories: { id: Category; label: string }[] = [
+    { id: 'all', label: 'All Feeds' },
+    { id: 'tech', label: 'Tech' },
+    { id: 'ideas', label: 'Ideas & Science' },
+    { id: 'gaming', label: 'Gaming' },
+    { id: 'chess', label: 'Chess' },
+    { id: 'comics', label: 'Comics' },
+  ];
 
   return (
     <div className="news-river-container">
@@ -418,19 +427,11 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
         <div className="news-river-categories">
           {categories.map((cat) => (
             <button
-              key={cat}
-              className={`news-river-category-pill ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
+              key={cat.id}
+              className={`news-river-category-pill ${selectedCategory === cat.id ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(cat.id)}
             >
-              {cat === 'all'
-                ? 'All Feeds'
-                : cat === 'tech'
-                ? 'Tech'
-                : cat === 'dev'
-                ? 'Programming'
-                : cat === 'news'
-                ? 'World News'
-                : 'Design'}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -523,7 +524,20 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
                                   <span className="news-river-item-metric">▲ {item.points}</span>
                                 )}
                                 {item.comments !== undefined && (
-                                  <span className="news-river-item-metric">💬 {item.comments}</span>
+                                  item.commentsUrl ? (
+                                    <a
+                                      href={item.commentsUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="news-river-item-metric news-river-comment-link"
+                                      title="Open discussion comments"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      💬 {item.comments}
+                                    </a>
+                                  ) : (
+                                    <span className="news-river-item-metric">💬 {item.comments}</span>
+                                  )
                                 )}
                                 <span className="news-river-item-time">
                                   {formatRelativeTime(item.publishedAt)}
@@ -599,7 +613,20 @@ const NewsRiver: React.FC<NewsRiverProps> = ({ onBack }) => {
                           <span className="news-river-item-metric">▲ {item.points}</span>
                         )}
                         {item.comments !== undefined && (
-                          <span className="news-river-item-metric">💬 {item.comments}</span>
+                          item.commentsUrl ? (
+                            <a
+                              href={item.commentsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="news-river-item-metric news-river-comment-link"
+                              title="Open discussion comments"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              💬 {item.comments}
+                            </a>
+                          ) : (
+                            <span className="news-river-item-metric">💬 {item.comments}</span>
+                          )
                         )}
                         <span className="news-river-item-time">
                           {formatRelativeTime(item.publishedAt)}

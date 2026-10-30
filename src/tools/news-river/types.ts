@@ -1,4 +1,4 @@
-export type Category = 'all' | 'tech' | 'dev' | 'news' | 'design';
+export type Category = 'all' | 'tech' | 'ideas' | 'gaming' | 'chess' | 'comics';
 
 export type ViewMode = 'columns' | 'river';
 
@@ -14,6 +14,7 @@ export interface FeedItem {
   publishedAt: string;
   points?: number;
   comments?: number;
+  commentsUrl?: string;
   domain: string;
 }
 

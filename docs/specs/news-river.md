@@ -12,28 +12,31 @@ As a technologist, developer, or curious reader, I want a lightning-fast, minima
 ## 3. Acceptance Criteria
 
 ### 3.1 Feed Sources & Categories
-- **AC-1 (Curated Feed Catalog from Author Subscriptions):** The tool ships with a rich, curated catalog of feeds derived from the author's personal subscriptions (`subscriptions-2026-10-30.csv`), organized across 5 distinct channels:
-  - **Tech & Dev:** Hacker News, Ars Technica, ByteByteGo, Real Python, Platformer, Bits about Money, SRE Weekly, Reddit Tech & Programming.
-  - **AI & Research:** Latent Space, Ahead of AI (Sebastian Raschka), Ben's Bites, One Useful Thing (Ethan Mollick), aifeed.dev.
-  - **Ideas & Essays:** Quanta Magazine, Arts & Letters Daily, 3 Quarks Daily, Aeon, Astral Codex Ten, After Babel (Jon Haidt), The Long Read (The Guardian), JSTOR Daily.
-  - **Art & Visual Culture:** Colossal, The Public Domain Review, DailyArt Magazine, Muddy Colors, Lines and Colors.
-  - **Gaming & Chess:** Eurogamer, Game Developer, Chess.com, Lichess Blog, SMBC Comics.
+- **AC-1 (Exact Subscriptions Catalog from User CSV):** The tool ships with the exact catalog of feeds specified in `actual-subscriptions-2026-10-30.csv`, supplemented by Hacker News and Lobste.rs:
+  - **Tech & Dev:** Hacker News, Lobste.rs, ByteByteGo, Real Python, Platformer, Where's Your Ed At, Bits about Money, SRE Weekly, ACM Queue, Communications of the ACM, The Pragmatic Engineer.
+  - **Ideas & Science:** Quanta Magazine, Lit Hub, Arts & Letters Daily, 3 Quarks Daily, Aeon, Astral Codex Ten, After Babel, The Long Read (The Guardian), JSTOR Daily, Psyche.
+  - **Gaming:** Eurogamer, Game Developer, Destructoid, TrueAchievements, Rock Paper Shotgun, Polygon.
+  - **Chess:** Chess.com, Lichess Blog.
+  - **Comics:** Saturday Morning Breakfast Cereal (SMBC).
 - **AC-2 (Category Filtering):** Users can filter displayed feeds by category:
-  - `All`
+  - `All Feeds`
   - `Tech & Dev`
-  - `AI & Research`
-  - `Ideas & Essays`
-  - `Art & Visual`
-  - `Gaming & Chess`
+  - `Ideas & Science`
+  - `Gaming`
+  - `Chess`
+  - `Comics`
 
 ### 3.2 Dual View Modes (Columns & River)
-- **AC-3 (Multi-Column Grid View):** Classic popurls / skimfeed dense multi-column card layout:
-  - Responsive multi-column layout (1 col on mobile, 2 on tablet, 3-4 on desktop/ultrawide).
-  - Each feed card contains the feed icon, source name, category tag, and top 5-10 headlines.
-  - Each headline shows rank/bullet, title, external domain badge, relative time, and score/comments count when available.
+- **AC-3 (Multi-Column Grid View & Full Page Scrolling):** Classic popurls / skimfeed dense multi-column card layout:
+  - Responsive multi-column layout with 3 columns on desktop/wide screens (`repeat(3, 1fr)`) and unlimited vertical rows.
+  - Natural vertical document scrolling allowing 10-20 entries per card without cutoffs or fixed layout constraints.
+  - Each feed card contains the feed icon, source name, category tag, and 10-20 headlines.
+  - Each headline shows bullet/rank, title, external domain badge, relative time, and score/comments count when available.
+  - **Clickable Comment Links:** For Hacker News and Lobste.rs, comment count badges are directly clickable (`target="_blank"`, `rel="noopener noreferrer"`) and navigate directly to the discussion thread.
 - **AC-4 (River of News View):** A single unified, chronological stream combining headlines across all enabled feeds:
   - Displays source badge with unique color coding per source.
   - Sortable by latest time or popularity/score.
+  - Clickable comment badges for supported feeds.
   - Clean infinite-scroll or paginated/scrollable stream.
 - **AC-5 (View Switcher):** An accessible toggle switch in the toolbar allows seamless switching between "Columns" (Grid) and "River" (Chronological Stream). Active view preference persists in `localStorage`.
 

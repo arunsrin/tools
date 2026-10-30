@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-30T18:05:53.553839+00:00",
+  "lastUpdated": "2026-10-30T18:19:51.283774+00:00",
   "sources": [
     {
       "id": "hacker-news",
@@ -8,15 +8,63 @@
       "icon": "🟧",
       "description": "Tech, startups, and hacking discussions",
       "color": "#ff6600",
-      "enabled": true
+      "enabled": true,
+      "fetchType": "hn"
     },
     {
       "id": "lobsters",
       "name": "Lobste.rs",
-      "category": "dev",
+      "category": "tech",
       "icon": "🦞",
       "description": "Computing-focused community news and discussions",
       "color": "#8b1e0f",
+      "enabled": true,
+      "fetchType": "lobsters",
+      "fetchUrl": "https://lobste.rs/hottest.json"
+    },
+    {
+      "id": "arunsr-in",
+      "name": "arunsrin's notes",
+      "category": "tech",
+      "icon": "📝",
+      "description": "Notes and writings on software and systems",
+      "color": "#10b981",
+      "enabled": true
+    },
+    {
+      "id": "aldaily",
+      "name": "Arts & Letters Daily",
+      "category": "ideas",
+      "icon": "📚",
+      "description": "Philosophy, literature, criticism, and debate",
+      "color": "#d97706",
+      "enabled": true
+    },
+    {
+      "id": "3quarksdaily",
+      "name": "3 Quarks Daily",
+      "category": "ideas",
+      "icon": "⚛️",
+      "description": "Science, arts, philosophy, and politics",
+      "color": "#84cc16",
+      "enabled": true
+    },
+    {
+      "id": "wheres-your-ed-at",
+      "name": "Where's Your Ed At",
+      "category": "tech",
+      "icon": "🎙️",
+      "description": "Essays and commentary by Ed Zitron",
+      "color": "#ec4899",
+      "enabled": true
+    },
+    {
+      "id": "acm-technews",
+      "name": "ACM TechNews",
+      "category": "tech",
+      "icon": "📰",
+      "description": "Timely computer science and computing developments",
+      "color": "#0284c7",
       "enabled": true
     },
     {
@@ -24,62 +72,206 @@
       "name": "Ars Technica",
       "category": "tech",
       "icon": "⚡",
-      "description": "Deep dives into technology, policy, and science",
+      "description": "News, reviews, and in-depth tech analysis",
       "color": "#ff4e00",
+      "enabled": true
+    },
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch",
+      "category": "tech",
+      "icon": "🚀",
+      "description": "Startup and technology news",
+      "color": "#029e74",
+      "enabled": true
+    },
+    {
+      "id": "tildes",
+      "name": "Tildes",
+      "category": "tech",
+      "icon": "💬",
+      "description": "Community conversations and link shares",
+      "color": "#8b5cf6",
+      "enabled": true
+    },
+    {
+      "id": "real-python",
+      "name": "Real Python",
+      "category": "tech",
+      "icon": "🐍",
+      "description": "Python tutorials and community articles",
+      "color": "#306998",
+      "enabled": true
+    },
+    {
+      "id": "acm-queue",
+      "name": "ACM Queue",
+      "category": "tech",
+      "icon": "💻",
+      "description": "Software engineering research and practice",
+      "color": "#0369a1",
+      "enabled": true
+    },
+    {
+      "id": "cacm",
+      "name": "CACM",
+      "category": "tech",
+      "icon": "🔬",
+      "description": "Communications of the ACM",
+      "color": "#075985",
+      "enabled": true
+    },
+    {
+      "id": "sre-weekly",
+      "name": "SRE WEEKLY",
+      "category": "tech",
+      "icon": "🛠️",
+      "description": "Scalability, availability, and incident response",
+      "color": "#6366f1",
+      "enabled": true
+    },
+    {
+      "id": "oreilly-radar",
+      "name": "Radar (O'Reilly)",
+      "category": "tech",
+      "icon": "📡",
+      "description": "Need-to-know tech and business trends",
+      "color": "#dc2626",
+      "enabled": true
+    },
+    {
+      "id": "jason-pargin",
+      "name": "Jason Pargin",
+      "category": "ideas",
+      "icon": "✍️",
+      "description": "Observations on technology, culture, and life",
+      "color": "#f97316",
+      "enabled": true
+    },
+    {
+      "id": "psyche",
+      "name": "Psyche",
+      "category": "ideas",
+      "icon": "🧠",
+      "description": "Psychology, philosophy, and mental health",
+      "color": "#a855f7",
+      "enabled": true
+    },
+    {
+      "id": "five-books",
+      "name": "Five Books",
+      "category": "ideas",
+      "icon": "📖",
+      "description": "Curated expert book recommendations",
+      "color": "#b45309",
+      "enabled": true
+    },
+    {
+      "id": "lithub",
+      "name": "Literary Hub",
+      "category": "ideas",
+      "icon": "🖋️",
+      "description": "Literary essays, book news, and culture",
+      "color": "#b91c1c",
       "enabled": true
     },
     {
       "id": "quanta",
       "name": "Quanta Magazine",
-      "category": "news",
-      "icon": "🔬",
+      "category": "ideas",
+      "icon": "🌌",
       "description": "Illuminating mathematics, physics, and computer science",
       "color": "#0099cc",
       "enabled": true
     },
     {
-      "id": "bbc-news",
-      "name": "BBC News",
-      "category": "news",
-      "icon": "🌍",
-      "description": "Global breaking news and international affairs",
-      "color": "#bb1919",
-      "enabled": true
-    },
-    {
-      "id": "colossal",
-      "name": "Colossal",
-      "category": "design",
+      "id": "dailyart",
+      "name": "DailyArt Magazine",
+      "category": "ideas",
       "icon": "🎨",
-      "description": "Visual culture, art, design, craft, and photography",
-      "color": "#e056fd",
+      "description": "Art history stories and masterpieces",
+      "color": "#e11d48",
       "enabled": true
     },
     {
-      "id": "aldaily",
-      "name": "Arts & Letters Daily",
-      "category": "news",
-      "icon": "📚",
-      "description": "Philosophy, literature, ideas, criticism, and debate",
-      "color": "#d97706",
+      "id": "pure-xbox",
+      "name": "Pure Xbox",
+      "category": "gaming",
+      "icon": "🟢",
+      "description": "Xbox news, reviews, and updates",
+      "color": "#107c10",
       "enabled": true
     },
     {
-      "id": "github-trending",
-      "name": "GitHub Trending",
-      "category": "dev",
-      "icon": "🐙",
-      "description": "Top trending open source projects and repositories",
-      "color": "#6e40c9",
+      "id": "trueachievements",
+      "name": "TrueAchievements",
+      "category": "gaming",
+      "icon": "🏆",
+      "description": "Gaming achievements and community news",
+      "color": "#f59e0b",
       "enabled": true
     },
     {
-      "id": "product-hunt",
-      "name": "Product Hunt",
-      "category": "design",
-      "icon": "🚀",
-      "description": "The best new products, tools, and startups every day",
-      "color": "#da552f",
+      "id": "eurogamer",
+      "name": "Eurogamer Reviews",
+      "category": "gaming",
+      "icon": "🎮",
+      "description": "In-depth video game reviews",
+      "color": "#0ea5e9",
+      "enabled": true
+    },
+    {
+      "id": "gamedeveloper",
+      "name": "Game Developer",
+      "category": "gaming",
+      "icon": "🕹️",
+      "description": "Game design, engineering, and industry analysis",
+      "color": "#14b8a6",
+      "enabled": true
+    },
+    {
+      "id": "chess-com",
+      "name": "Chess.com Articles",
+      "category": "chess",
+      "icon": "♟️",
+      "description": "Chess master analysis and learning guides",
+      "color": "#7fa650",
+      "enabled": true
+    },
+    {
+      "id": "twic",
+      "name": "The Week in Chess",
+      "category": "chess",
+      "icon": "⏱️",
+      "description": "Global chess tournaments and Grandmaster results",
+      "color": "#4b5563",
+      "enabled": true
+    },
+    {
+      "id": "chessbase",
+      "name": "ChessBase News",
+      "category": "chess",
+      "icon": "♞",
+      "description": "World chess championships and software updates",
+      "color": "#2563eb",
+      "enabled": true
+    },
+    {
+      "id": "explosm",
+      "name": "Explosm (Cyanide & Happiness)",
+      "category": "comics",
+      "icon": "😂",
+      "description": "Comics, animations, and humor",
+      "color": "#ef4444",
+      "enabled": true
+    },
+    {
+      "id": "smbc",
+      "name": "SMBC Comics",
+      "category": "comics",
+      "icon": "🗯️",
+      "description": "Saturday Morning Breakfast Cereal by Zach Weinersmith",
+      "color": "#eab308",
       "enabled": true
     }
   ],
@@ -92,21 +284,10 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T07:09:12Z",
-      "points": 453,
-      "comments": 370,
+      "points": 465,
+      "comments": 378,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50300683",
       "domain": "phorion.io"
-    },
-    {
-      "id": "hn-50298436",
-      "title": "Herdr has released native app",
-      "url": "https://github.com/herdrdev/herdr-app",
-      "source": "Hacker News",
-      "sourceId": "hacker-news",
-      "category": "tech",
-      "publishedAt": "2026-10-30T00:42:41Z",
-      "points": 325,
-      "comments": 217,
-      "domain": "github.com"
     },
     {
       "id": "hn-50305693",
@@ -116,8 +297,9 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T15:52:18Z",
-      "points": 258,
-      "comments": 195,
+      "points": 278,
+      "comments": 208,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50305693",
       "domain": "newsletter.signoz.io"
     },
     {
@@ -128,21 +310,10 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T12:50:01Z",
-      "points": 216,
-      "comments": 154,
+      "points": 225,
+      "comments": 157,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50303172",
       "domain": "wired.com"
-    },
-    {
-      "id": "hn-50301854",
-      "title": "Azure's Weakest Link – Five Full Cross-Tenant Compromises",
-      "url": "https://www.binarysecurity.no/posts/2026/10/one-root-case",
-      "source": "Hacker News",
-      "sourceId": "hacker-news",
-      "category": "tech",
-      "publishedAt": "2026-10-30T10:06:15Z",
-      "points": 200,
-      "comments": 35,
-      "domain": "binarysecurity.no"
     },
     {
       "id": "hn-50304419",
@@ -152,21 +323,23 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T14:27:44Z",
-      "points": 195,
-      "comments": 186,
+      "points": 206,
+      "comments": 199,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50304419",
       "domain": "medpagetoday.com"
     },
     {
-      "id": "hn-50263127",
-      "title": "Gilgamesh by Simon Armitage review – an ancient epic is brilliantly translated",
-      "url": "https://www.theguardian.com/books/2026/oct/20/gilgamesh-by-simon-armitage-review-an-ancient-epic-is-brilliantly-translated-for-our-times",
+      "id": "hn-50301854",
+      "title": "Azure's Weakest Link – Five Full Cross-Tenant Compromises",
+      "url": "https://www.binarysecurity.no/posts/2026/10/one-root-case",
       "source": "Hacker News",
       "sourceId": "hacker-news",
       "category": "tech",
-      "publishedAt": "2026-10-27T17:54:57Z",
-      "points": 158,
-      "comments": 46,
-      "domain": "theguardian.com"
+      "publishedAt": "2026-10-30T10:06:15Z",
+      "points": 202,
+      "comments": 35,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50301854",
+      "domain": "binarysecurity.no"
     },
     {
       "id": "hn-50305025",
@@ -176,9 +349,23 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T15:10:31Z",
-      "points": 156,
-      "comments": 88,
+      "points": 171,
+      "comments": 98,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50305025",
       "domain": "status.northflank.com"
+    },
+    {
+      "id": "hn-50263127",
+      "title": "Gilgamesh by Simon Armitage review – an ancient epic is brilliantly translated",
+      "url": "https://www.theguardian.com/books/2026/oct/20/gilgamesh-by-simon-armitage-review-an-ancient-epic-is-brilliantly-translated-for-our-times",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-27T17:54:57Z",
+      "points": 159,
+      "comments": 48,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50263127",
+      "domain": "theguardian.com"
     },
     {
       "id": "hn-50306008",
@@ -188,8 +375,9 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-30T16:13:02Z",
-      "points": 133,
-      "comments": 88,
+      "points": 152,
+      "comments": 125,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50306008",
       "domain": "bbc.co.uk"
     },
     {
@@ -200,9 +388,88 @@
       "sourceId": "hacker-news",
       "category": "tech",
       "publishedAt": "2026-10-26T21:14:43Z",
-      "points": 99,
+      "points": 103,
       "comments": 54,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50251070",
       "domain": "devblogs.microsoft.com"
+    },
+    {
+      "id": "hn-50305480",
+      "title": "Blockchain intelligence firms link North Korea to $6.3B hack on Binance",
+      "url": "https://www.npr.org/2026/10/30/g-s1-150902/blockchain-intelligence-firms-link-north-korea-to-6-3b-hack-on-binance",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:39:05Z",
+      "points": 96,
+      "comments": 31,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50305480",
+      "domain": "npr.org"
+    },
+    {
+      "id": "hn-50305573",
+      "title": "The federated code forge",
+      "url": "https://tangled.org/blog/forge/",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:44:29Z",
+      "points": 89,
+      "comments": 35,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50305573",
+      "domain": "tangled.org"
+    },
+    {
+      "id": "hn-50306442",
+      "title": "A Working Nintendo in ~1GB of Qwen Weights",
+      "url": "https://github.com/dbreunig/nesformer",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T16:40:22Z",
+      "points": 71,
+      "comments": 62,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50306442",
+      "domain": "github.com"
+    },
+    {
+      "id": "hn-50307183",
+      "title": "Proton's CEO Cancels AI 'Re-Interviews'",
+      "url": "https://www.404media.co/protons-ceo-cancels-ai-re-interviews/",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T17:24:45Z",
+      "points": 65,
+      "comments": 23,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50307183",
+      "domain": "404media.co"
+    },
+    {
+      "id": "hn-50305225",
+      "title": "Polymarket 1h halt after vendor compromise; affected users will be 'made whole'",
+      "url": "https://www.nbcnews.com/business/consumer/polymarket-trading-halt-hack-wallets-rcna606405",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T15:23:41Z",
+      "points": 64,
+      "comments": 20,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50305225",
+      "domain": "nbcnews.com"
+    },
+    {
+      "id": "hn-50301717",
+      "title": "How do you take a picture of a black hole?",
+      "url": "https://www.quantamagazine.org/how-do-you-take-a-picture-of-a-black-hole-20261029/",
+      "source": "Hacker News",
+      "sourceId": "hacker-news",
+      "category": "tech",
+      "publishedAt": "2026-10-30T09:49:02Z",
+      "points": 57,
+      "comments": 44,
+      "commentsUrl": "https://news.ycombinator.com/item?id=50301717",
+      "domain": "quantamagazine.org"
     },
     {
       "id": "lob-ttp7aq",
@@ -210,10 +477,11 @@
       "url": "https://cyberplace.social/@GossiTheDog/117528831681803563",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T06:04:55.168-05:00",
-      "points": 104,
-      "comments": 31,
+      "points": 106,
+      "comments": 32,
+      "commentsUrl": "https://lobste.rs/s/ttp7aq/backdoors_claude_code_for_vs_cursor",
       "domain": "cyberplace.social"
     },
     {
@@ -222,10 +490,11 @@
       "url": "https://melaniekat.com/blog/public-on-pds/",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T06:22:43.498-05:00",
       "points": 47,
       "comments": 14,
+      "commentsUrl": "https://lobste.rs/s/htgcuc/do_at_proto_users_know_this_is_public",
       "domain": "melaniekat.com"
     },
     {
@@ -234,10 +503,11 @@
       "url": "https://smoores.dev/post/no_npm_estee_is_not_a_typo/",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T10:01:56.550-05:00",
       "points": 11,
-      "comments": 6,
+      "comments": 8,
+      "commentsUrl": "https://lobste.rs/s/xudbqx/no_npm_estee_is_not_typo_testem",
       "domain": "smoores.dev"
     },
     {
@@ -246,10 +516,11 @@
       "url": "https://seriot.ch/computation/curl.html",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T02:24:01.170-05:00",
-      "points": 45,
+      "points": 47,
       "comments": 5,
+      "commentsUrl": "https://lobste.rs/s/f4aqog/how_curl_was_accidentally_turing",
       "domain": "seriot.ch"
     },
     {
@@ -258,10 +529,11 @@
       "url": "http://blog.mistys-internet.website/post/2026/10/29/if-you-love-a-website-back-it-up/",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-29T20:29:00.653-05:00",
       "points": 57,
       "comments": 16,
+      "commentsUrl": "https://lobste.rs/s/6ole9g/if_you_love_website_back_it_up",
       "domain": "blog.mistys-internet.website"
     },
     {
@@ -270,10 +542,11 @@
       "url": "https://www.transformativeworks.org/update-on-ao3-downtime-october-30-2026/",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T08:54:17.523-05:00",
       "points": 18,
-      "comments": 1,
+      "comments": 2,
+      "commentsUrl": "https://lobste.rs/s/yu5k5y/update_on_ao3_downtime_october_30_2026",
       "domain": "transformativeworks.org"
     },
     {
@@ -282,10 +555,11 @@
       "url": "https://lobste.rs/s/u7dsbx/what_are_you_doing_this_weekend",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-30T04:55:20.859-05:00",
       "points": 13,
       "comments": 21,
+      "commentsUrl": "https://lobste.rs/s/u7dsbx/what_are_you_doing_this_weekend",
       "domain": "lobste.rs"
     },
     {
@@ -294,11 +568,503 @@
       "url": "https://lobste.rs/s/dsrruj/london_meetup",
       "source": "Lobste.rs",
       "sourceId": "lobsters",
-      "category": "dev",
+      "category": "tech",
       "publishedAt": "2026-10-29T15:56:43.483-05:00",
       "points": 52,
       "comments": 41,
+      "commentsUrl": "https://lobste.rs/s/dsrruj/london_meetup",
       "domain": "lobste.rs"
+    },
+    {
+      "id": "lob-qsvspv",
+      "title": "Pidgin 3.0 Alpha 4 2.98.0 has been released",
+      "url": "https://discourse.imfreedom.org/t/pidgin-3-0-alpha-4-2-98-0-has-been-released/445",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-29T22:58:19.553-05:00",
+      "points": 17,
+      "comments": 4,
+      "commentsUrl": "https://lobste.rs/s/qsvspv/pidgin_3_0_alpha_4_2_98_0_has_been_released",
+      "domain": "discourse.imfreedom.org"
+    },
+    {
+      "id": "lob-fskctn",
+      "title": "Infinite Mac: BeOS",
+      "url": "https://blog.persistent.info/2026/10/infinite-mac-beos.html",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-30T11:06:56.125-05:00",
+      "points": 9,
+      "comments": 1,
+      "commentsUrl": "https://lobste.rs/s/fskctn/infinite_mac_beos",
+      "domain": "blog.persistent.info"
+    },
+    {
+      "id": "lob-2matgw",
+      "title": "C2PA's eMudhra Moment",
+      "url": "https://www.da.vidbuchanan.co.uk/blog/c2pa-four.html",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-29T15:33:44.663-05:00",
+      "points": 25,
+      "comments": 5,
+      "commentsUrl": "https://lobste.rs/s/2matgw/c2pa_s_emudhra_moment",
+      "domain": "da.vidbuchanan.co.uk"
+    },
+    {
+      "id": "lob-eccbci",
+      "title": "Shared password manager for families?",
+      "url": "https://lobste.rs/s/eccbci/shared_password_manager_for_families",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-29T09:39:51.453-05:00",
+      "points": 48,
+      "comments": 53,
+      "commentsUrl": "https://lobste.rs/s/eccbci/shared_password_manager_for_families",
+      "domain": "lobste.rs"
+    },
+    {
+      "id": "lob-qqelq1",
+      "title": "Design the interface for functionality not familiarity",
+      "url": "https://lapcatsoftware.com/articles/2026/10/10.html",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-29T20:04:38.454-05:00",
+      "points": 17,
+      "comments": 5,
+      "commentsUrl": "https://lobste.rs/s/qqelq1/design_interface_for_functionality_not",
+      "domain": "lapcatsoftware.com"
+    },
+    {
+      "id": "lob-o1z9mm",
+      "title": "Shrinking NixOS Ram footprint and resource requirements to the bare minimum",
+      "url": "https://lowendspirit.com/discussion/11543/shrinking-nixos-ram-footprint-and-resource-requirements-to-the-bare-minimum",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-30T10:04:44.431-05:00",
+      "points": 5,
+      "comments": 0,
+      "commentsUrl": "https://lobste.rs/s/o1z9mm/shrinking_nixos_ram_footprint_resource",
+      "domain": "lowendspirit.com"
+    },
+    {
+      "id": "lob-m6fw0x",
+      "title": "NetBSD adds a new Emacs-like text editor called atto",
+      "url": "https://mastodon.sdf.org/@netbsd/117518160563539748",
+      "source": "Lobste.rs",
+      "sourceId": "lobsters",
+      "category": "tech",
+      "publishedAt": "2026-10-29T06:58:00.549-05:00",
+      "points": 48,
+      "comments": 27,
+      "commentsUrl": "https://lobste.rs/s/m6fw0x/netbsd_adds_new_emacs_like_text_editor",
+      "domain": "mastodon.sdf.org"
+    },
+    {
+      "id": "arunsr-in-c48211ff",
+      "title": "Resident Evil Review",
+      "url": "https://www.arunsr.in/posts/resident-evil-review/",
+      "source": "arunsrin's notes",
+      "sourceId": "arunsr-in",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:18.836516+00:00",
+      "domain": "arunsr.in"
+    },
+    {
+      "id": "arunsr-in-09363494",
+      "title": "Hello, Posts",
+      "url": "https://www.arunsr.in/posts/hello-posts/",
+      "source": "arunsrin's notes",
+      "sourceId": "arunsr-in",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:18.836905+00:00",
+      "domain": "arunsr.in"
+    },
+    {
+      "id": "aldaily-76770389",
+      "title": "The life of a Capitol Hill intern involves bamboozling policyspeak, hellacious heat, free food at AEI, and a parade of utterly charmless Tattes",
+      "url": "https://www.thenewcritic.com/p/city-of-magnificent-intentions?utm_source=post-email-title&publication_id=4883084&post_id=222548047&utm_campaign=email-post-title&isFreemail=true&r=3vx0z&triedRedirect=t",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.096745+00:00",
+      "domain": "thenewcritic.com"
+    },
+    {
+      "id": "aldaily-b2935324",
+      "title": "The femininization of the deathcare industry. Advances in cosmetics, among other things, are pushing women into the mortuary arts",
+      "url": "https://lareviewofbooks.org/article/death-industry-mortuary-programs-women-andie-eisen-quarterly/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.096984+00:00",
+      "domain": "lareviewofbooks.org"
+    },
+    {
+      "id": "aldaily-0636ec57",
+      "title": "The Guide for the Perplexed is a perplexing work — its difficulty is, in part, the point. Can fluent English do it justice?",
+      "url": "https://jewishreviewofbooks.com/rabbinics/20353/turning-hills-into-plains-and-mountains-into-valleys-on-translating-maimonidess-guide/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097137+00:00",
+      "domain": "jewishreviewofbooks.com"
+    },
+    {
+      "id": "aldaily-5f7b7d33",
+      "title": "Drunk or sober, but especially drunk, Edgar Allan Poe acted against his own interests. He turned the mystery of why into art",
+      "url": "https://slate.com/culture/2026/10/edgar-allan-poe-poems-stories-most-influential-american-writer-death-horror-detective.html",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097219+00:00",
+      "domain": "slate.com"
+    },
+    {
+      "id": "aldaily-896b67d2",
+      "title": "The hottest class at Harvard? Humanities 10, where phones are banned, attendance is mandatory, and the readings are dense",
+      "url": "https://www.wsj.com/lifestyle/harvard-class-humanities-32e06366?st=DoqM7q&reflink=desktopwebshare_permalink",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097282+00:00",
+      "domain": "wsj.com"
+    },
+    {
+      "id": "aldaily-faf475a5",
+      "title": "Fields of lilies, fractal landscapes, idioms, DNA, Renoir’s orange, human anatomy: Why is the world full of so much beauty?",
+      "url": "https://thereader.mitpress.mit.edu/beauty-is-everywhere-but-what-is-it-for/",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097345+00:00",
+      "domain": "thereader.mitpress.mit.edu"
+    },
+    {
+      "id": "aldaily-46cbead6",
+      "title": "Is the book business distressed? Anxious? Optimistic? All of the above",
+      "url": "https://www.gq.com/story/state-of-books-2026",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097409+00:00",
+      "domain": "gq.com"
+    },
+    {
+      "id": "aldaily-4840e106",
+      "title": "Eric Hobsbawm against the identitarians. Centering gender, race, and sexuality was not his “kind of history.” Nor was it Karl Marx’s",
+      "url": "https://jacobin.substack.com/p/eric-hobsbawm-historian-of-defeat",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097468+00:00",
+      "domain": "jacobin.substack.com"
+    },
+    {
+      "id": "aldaily-9230c284",
+      "title": "James Fessenden was indolent, wrote little, and inspired two of the most charismatic intellectuals of his time",
+      "url": "https://www.chronicle.com/article/camille-paglia-gillian-rose-and-the-forgotten-genius-behind-them",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097520+00:00",
+      "domain": "chronicle.com"
+    },
+    {
+      "id": "aldaily-ba41b8c8",
+      "title": "\"You can fight the premise that AI is a better writer than the best human, but you’ll be whistling past the graveyard of dead writers and metaphors\"",
+      "url": "https://www.thefp.com/p/the-last-essay-ai-writing-tech-books-future?utm_campaign=realclearpolitics",
+      "source": "Arts & Letters Daily",
+      "sourceId": "aldaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:20.097572+00:00",
+      "domain": "thefp.com"
+    },
+    {
+      "id": "3quarksdaily-ffeb782b",
+      "title": "Noah Smith: A Golden Age of Science Is Coming",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/noah-smith-a-golden-age-of-science-is-coming.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.310849+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-6a0df9aa",
+      "title": "Ulysses: James Joyce’s Properly Obscene Book",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/ulysses-james-joyces-properly-obscene-book.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311082+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-bbc6bdec",
+      "title": "Worker-Managed Firms Can Curb Inequality and Protect Free Markets",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/worker-managed-firms-can-curb-inequality-and-protect-free-markets.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311125+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-473d5db5",
+      "title": "Beauty Is Everywhere. But What Is It For?",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/beauty-is-everywhere-but-what-is-it-for-2.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311157+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-73771b03",
+      "title": "how Captain Picard inspired today’s science leaders",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/how-captain-picard-inspired-todays-science-leaders.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311186+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-60a5d05f",
+      "title": "Friday Poem",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/friday-poem-513.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311214+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-368cd492",
+      "title": "Not Everything That Goes BOOM is bad",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/not-everything-that-goes-boom-is-bad.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311240+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-b8efdd7c",
+      "title": "Libertarianism and Loneliness: What Does a Plumber Do in the Network State?",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/libertarianism-and-loneliness-what-does-a-plumber-do-in-the-network-state.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311264+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-919d3abf",
+      "title": "Stephen Fry: ‘Sherlock Holmes Altered the Course of My Whole Life’",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/stephen-fry-sherlock-holmes-altered-the-course-of-my-whole-life.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311289+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-faf27516",
+      "title": "Recent AI Progress Wasn’t Overhyped: Almost Everyone Underestimated It.",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/recent-ai-progress-wasnt-overhyped-almost-everyone-underestimated-it.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311314+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-a447e9ae",
+      "title": "Scott Aaronson: The Most Significant Moment in Math History Just Happened",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/scott-aaronson-the-most-significant-moment-in-math-history-just-happened.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311337+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-72cbd6be",
+      "title": "Human Rights Leaders Launch New Organization to Ensure Criminal Accountability for US Public Officials",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/human-rights-leaders-launch-new-organization-to-ensure-criminal-accountability-for-us-public-officials.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311367+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-a920f04f",
+      "title": "Thursday Poem",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/thursday-poem-536.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311395+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-f071b010",
+      "title": "Suhasini Haidar on Modi’s Challenges: Trump Abroad and Gen Z at Home",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/suhasini-haidar-on-modis-challenges-trump-abroad-and-gen-z-at-home.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311418+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "3quarksdaily-b564aeb7",
+      "title": "I *Don’t* Quit: Some people hate their jobs. But they solemnly refuse to leave",
+      "url": "https://3quarksdaily.com/3quarksdaily/2026/10/i-dont-quit-some-people-hate-their-jobs-but-they-solemnly-refuse-to-leave.html",
+      "source": "3 Quarks Daily",
+      "sourceId": "3quarksdaily",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:21.311446+00:00",
+      "domain": "3quarksdaily.com"
+    },
+    {
+      "id": "acm-technews-6804d392",
+      "title": "U.S. CS Degree Programs Lose Students",
+      "url": "https://www.business-standard.com/world-news/student-enrolment-in-us-computer-science-programs-falls-as-ai-takes-jobs-126102900433_1.html",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.759951+00:00",
+      "domain": "business-standard.com"
+    },
+    {
+      "id": "acm-technews-41d73fba",
+      "title": "China-Linked Hackers Exploit PHP2Shell to Breach U.S. Government Network",
+      "url": "https://cybernews.com/security/china-linked-hackers-exploit-php2shell-breach-us-government/",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760216+00:00",
+      "domain": "cybernews.com"
+    },
+    {
+      "id": "acm-technews-2c5cd1c4",
+      "title": "Trump Declares Robot Imports a National Security Threat",
+      "url": "https://arstechnica.com/gadgets/2026/10/trump-declares-robot-imports-a-national-security-threat/",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760301+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "acm-technews-032adfed",
+      "title": "Carney Frames C$1.6B AI Investment as National Security Imperative",
+      "url": "https://www.politico.eu/article/mark-carney-canada-ai-investment-national-security-imperative/",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760363+00:00",
+      "domain": "politico.eu"
+    },
+    {
+      "id": "acm-technews-7f07cdfa",
+      "title": "New U.S. Datacenters Projected to Emit More Carbon Than Mexico",
+      "url": "https://www.claimsjournal.com/news/national/2026/10/29/340971.htm",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760420+00:00",
+      "domain": "claimsjournal.com"
+    },
+    {
+      "id": "acm-technews-0f68b384",
+      "title": "FTC Orders Companies to Hand Over Data on Algorithmic Pricing",
+      "url": "https://www.theguardian.com/us-news/2026/oct/29/delta-uber-ftc-pricing",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760471+00:00",
+      "domain": "theguardian.com"
+    },
+    {
+      "id": "acm-technews-ff347cf6",
+      "title": "U.K. Links Datacenter Grid Access to Jobs, Local Investment",
+      "url": "https://www.reuters.com/legal/litigation/uks-healey-offers-grid-access-incentives-critical-data-centres-2026-10-28/",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760521+00:00",
+      "domain": "reuters.com"
+    },
+    {
+      "id": "acm-technews-5ec6c248",
+      "title": "FAA Gets Serious About Aviation Airwaves",
+      "url": "https://spectrum.ieee.org/faa-aviation-airwaves",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760576+00:00",
+      "domain": "spectrum.ieee.org"
+    },
+    {
+      "id": "acm-technews-e7682309",
+      "title": "Hackers Expose Identities of More Than 40,000 DHS Employees",
+      "url": "https://www.npr.org/2026/10/28/nx-s1-6021497/dhs-hack-ice",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760640+00:00",
+      "domain": "npr.org"
+    },
+    {
+      "id": "acm-technews-1ad3e0ba",
+      "title": "New York Enacts Ban on 'Unsafe' Chatbot Behavior with Kids",
+      "url": "https://apnews.com/article/chatbots-ai-new-york-legislation-bans-children-03a4e090a7df1532838a5cb6f93a23ba",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760710+00:00",
+      "domain": "apnews.com"
+    },
+    {
+      "id": "acm-technews-4de062ae",
+      "title": "Hospital to Bring Humanoid Robots into Operating Room",
+      "url": "https://humanoidroboticstechnology.com/industry-news/samsung-medical-center-debuts-humanoid-surgical-assistant/",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760760+00:00",
+      "domain": "humanoidroboticstechnology.com"
+    },
+    {
+      "id": "acm-technews-5bc8e5bb",
+      "title": "Hackers Target FEC System, Disrupting Campaign Finance Disclosures",
+      "url": "https://www.nbcnews.com/politics/politics-news/hackers-target-fec-system-disrupting-campaign-finance-disclosures-rcna606029",
+      "source": "ACM TechNews",
+      "sourceId": "acm-technews",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:28.760809+00:00",
+      "domain": "nbcnews.com"
+    },
+    {
+      "id": "ars-technica-1853e0f8",
+      "title": "Rare meteorite from Mars gives us a view into its ancient crust",
+      "url": "https://arstechnica.com/science/2026/10/rare-meteorite-from-mars-gives-us-a-view-into-its-ancient-crust/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294248+00:00",
+      "domain": "arstechnica.com"
     },
     {
       "id": "ars-technica-a4df15e2",
@@ -307,7 +1073,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836071+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294410+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -317,7 +1083,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836713+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294458+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -327,7 +1093,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836810+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294495+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -337,7 +1103,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836848+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294525+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -347,7 +1113,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836878+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294552+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -357,7 +1123,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836902+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294584+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -367,7 +1133,7 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836925+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294619+00:00",
       "domain": "arstechnica.com"
     },
     {
@@ -377,8 +1143,1118 @@
       "source": "Ars Technica",
       "sourceId": "ars-technica",
       "category": "tech",
-      "publishedAt": "2026-10-30T18:05:49.836946+00:00",
+      "publishedAt": "2026-10-30T18:19:31.294644+00:00",
       "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-ff9e38d3",
+      "title": "Reddit is moving to “a logged-in-only experience,” CEO says",
+      "url": "https://arstechnica.com/gadgets/2026/10/reddit-will-require-you-to-log-in-eventually-ceo-confirms/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294673+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-9ef8bca9",
+      "title": "Microsoft fixes a Windows 11 annoyance as PC revenue declines",
+      "url": "https://arstechnica.com/gadgets/2026/10/windows-11-gets-right-click-menu-improvements-as-pc-revenue-slides/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294697+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-5a02832e",
+      "title": "Pentagon IG refuses to investigate Starlink/Starshield slowdown in Ukraine",
+      "url": "https://arstechnica.com/tech-policy/2026/10/pentagon-ig-refuses-to-investigate-starlink-starshield-slowdown-in-ukraine/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294720+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-2c5cd1c4",
+      "title": "Trump declares robot imports a national security threat",
+      "url": "https://arstechnica.com/gadgets/2026/10/trump-declares-robot-imports-a-national-security-threat/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294880+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-5b22ab97",
+      "title": "Trump ignored intel on China’s Nvidia spy to protect company’s stock, report says",
+      "url": "https://arstechnica.com/tech-policy/2026/10/report-trump-did-nothing-with-intel-that-china-planted-spy-close-to-nvidia-ceo/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294902+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "ars-technica-eebf54c4",
+      "title": "Turning a solar power system into its own backup",
+      "url": "https://arstechnica.com/science/2026/10/turning-a-solar-power-system-into-its-own-backup/",
+      "source": "Ars Technica",
+      "sourceId": "ars-technica",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.294927+00:00",
+      "domain": "arstechnica.com"
+    },
+    {
+      "id": "techcrunch-a106b02a",
+      "title": "Satlyt takes another step toward turning satellites into space data centers",
+      "url": "https://techcrunch.com/2026/10/30/satlyt-takes-another-step-toward-turning-satellites-into-space-data-centers/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.408927+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-c9dcfb62",
+      "title": "Zest’s new AI agent finds restaurants and books reservations over text",
+      "url": "https://techcrunch.com/2026/10/30/zests-new-ai-agent-finds-restaurants-and-books-reservations-over-text/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409076+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-d4c3a958",
+      "title": "Google’s first data center satellite is online and writing poetry",
+      "url": "https://techcrunch.com/2026/10/30/googles-first-data-center-satellite-is-online-and-writing-poetry/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409128+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-9baf1e5f",
+      "title": "Theranos whistleblower Tyler Shultz warns that the AI boom is ‘a great opportunity to go deceive people’",
+      "url": "https://techcrunch.com/2026/10/30/theranos-whistleblower-tyler-shultz-warns-that-the-ai-boom-is-a-great-opportunity-to-go-deceive-people/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409177+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-8bb96483",
+      "title": "North Korean hackers blamed for stealing record $6.3B in Binance breach",
+      "url": "https://techcrunch.com/2026/10/30/north-korean-hackers-blamed-for-stealing-record-6-3b-in-binance-breach/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409217+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-969515ea",
+      "title": "Skip the small talk: Make game-changing connections at TechCrunch Founder Summit with Braindate",
+      "url": "https://techcrunch.com/2026/10/30/skip-the-small-talk-make-game-changing-connections-at-techcrunch-founder-summit-with-braindate/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409250+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-30b5f07a",
+      "title": "DoorDash said it’s only received ‘several hundred’ orders from AI agents",
+      "url": "https://techcrunch.com/2026/10/30/doordash-said-its-only-received-several-hundred-orders-from-ai-agents/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409282+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-12c5b28f",
+      "title": "Can AI data centers be mass-produced like cars? This startup aims to find out",
+      "url": "https://techcrunch.com/2026/10/30/can-ai-data-centers-be-mass-produced-like-cars-and-online-in-48-hours-this-startup-aims-to-find-out/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409318+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-11a724be",
+      "title": "5 days left: Your last chance to connect, scale, and save at TechCrunch Founder Summit 2026",
+      "url": "https://techcrunch.com/2026/10/30/5-days-left-your-last-chance-to-connect-scale-and-save-at-techcrunch-founder-summit-2026/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409374+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-98f03f49",
+      "title": "Waymo taps Toyota to supply robotaxis for Japan and the UK",
+      "url": "https://techcrunch.com/2026/10/30/waymos-next-robotaxi-will-be-a-toyota-bz4x-destined-for-japan-and-the-uk/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409404+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-4585bce5",
+      "title": "You don’t need to believe in a god to get a religious exemption from using AI at work",
+      "url": "https://techcrunch.com/2026/10/29/you-dont-need-to-believe-in-a-god-to-get-a-religious-exemption-from-using-ai-at-work/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409432+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-8c87afc6",
+      "title": "Andy Jassy says Prime Video is on track to earn ‘tens of billions of dollars’",
+      "url": "https://techcrunch.com/2026/10/29/andy-jassy-says-prime-video-is-on-track-to-earn-tens-of-billions-of-dollars/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409461+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-ee09513d",
+      "title": "AWS will be a $1T business, Jassy says — but first, it will spend big",
+      "url": "https://techcrunch.com/2026/10/29/aws-will-be-a-1t-business-jassy-says-but-first-it-will-spend-big/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409489+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-67918afa",
+      "title": "Binance pauses withdrawals as hackers suspected of stealing billions in crypto",
+      "url": "https://techcrunch.com/2026/10/29/binance-pauses-withdrawals-as-hackers-suspected-of-stealing-billions-in-crypto/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409517+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "techcrunch-a23e0e04",
+      "title": "Elon Musk is ‘truly a genius,’ says Vladimir Putin",
+      "url": "https://techcrunch.com/2026/10/29/elon-musk-is-truly-a-genius-says-vladimir-putin/",
+      "source": "TechCrunch",
+      "sourceId": "techcrunch",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:31.409548+00:00",
+      "domain": "techcrunch.com"
+    },
+    {
+      "id": "tildes-998f0fb2",
+      "title": "Mercy Land - Maddie I&#39;m Scared (2026)",
+      "url": "https://www.youtube.com/watch?v=Vfwm_E0f7ps",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.002723+00:00",
+      "domain": "youtube.com"
+    },
+    {
+      "id": "tildes-06a02def",
+      "title": "Dread Witch feat. Sofia Schmidt – Altar (2026)",
+      "url": "https://www.youtube.com/watch?v=-07J8EetGT8",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.002943+00:00",
+      "domain": "youtube.com"
+    },
+    {
+      "id": "tildes-bf345632",
+      "title": "What have you been listening to this week?",
+      "url": "https://tildes.net/~music/1wp9/what_have_you_been_listening_to_this_week",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003007+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-11f2eefc",
+      "title": "Babylon 3 S2E18: &#34;Confessions and Lamentations&#34; - Episode Discussion",
+      "url": "https://youtube.com/watch?v=A9Fxa4BUe5E",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003056+00:00",
+      "domain": "youtube.com"
+    },
+    {
+      "id": "tildes-e912cc87",
+      "title": "‘The Encyclopedia of Movie Cats’ is an exhaustive index of every feline to prowl on screen",
+      "url": "https://www.thisiscolossal.com/2026/10/the-encyclopedia-of-movie-cats-a24/",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003100+00:00",
+      "domain": "thisiscolossal.com"
+    },
+    {
+      "id": "tildes-f701683d",
+      "title": "Microbes could turn plastic and plant waste into ingredients for protein-rich cookies",
+      "url": "https://www.discovermagazine.com/these-microbes-could-turn-plastic-and-plant-waste-into-ingredients-for-protein-rich-cookies-49584",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003143+00:00",
+      "domain": "discovermagazine.com"
+    },
+    {
+      "id": "tildes-4e4f4d66",
+      "title": "What did you do this week (and weekend)?",
+      "url": "https://tildes.net/~talk/1wp5/what_did_you_do_this_week_and_weekend",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003184+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-c3a5d136",
+      "title": "/r/Seattle mods find Archive.today injected malware links into archived page",
+      "url": "https://www.reddit.com/r/Seattle/comments/1xhf6qp/comment/19rsjwtln9dt0/",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003221+00:00",
+      "domain": "reddit.com"
+    },
+    {
+      "id": "tildes-0306d763",
+      "title": "Rodman rule has been revised but the fight to keep stars in the National Women&#39;s Soccer League goes on",
+      "url": "https://www.theguardian.com/football/2026/oct/29/rodman-rule-revised-fight-keep-stars-nwsl-moving-the-goalposts",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003259+00:00",
+      "domain": "theguardian.com"
+    },
+    {
+      "id": "tildes-493ea240",
+      "title": "Offbeat Fridays – The thread where offbeat headlines become front page news",
+      "url": "https://tildes.net/~news/1woz/offbeat_fridays_the_thread_where_offbeat_headlines_become_front_page_news",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003297+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-53010954",
+      "title": "Heroic Games Launcher: an open source, cross-platform launcher for GOG and Epic Game Store",
+      "url": "https://heroicgameslauncher.com/",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003331+00:00",
+      "domain": "heroicgameslauncher.com"
+    },
+    {
+      "id": "tildes-e1878f58",
+      "title": "Announcing the Backlog Burner event for November 2026: Shrink your unplayed games list this coming month!",
+      "url": "https://tildes.net/~games/1wox/announcing_the_backlog_burner_event_for_november_2026_shrink_your_unplayed_games_list_this_coming",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003377+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-2826842f",
+      "title": "CGA-2026-10 🕹️🏚️ 🦇👻 REMOVE CARTRIDGE ⏏️ Spooky Mansion Adventures",
+      "url": "https://tildes.net/~games/1wow/cga_2026_10_remove_cartridge_spooky_mansion_adventures",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003414+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-925d5f32",
+      "title": "Is there a decent brand of USB-c earphones that wont break after 2-3 years but also doesnt cost hundreds of dollars?",
+      "url": "https://tildes.net/~music/1wov/is_there_a_decent_brand_of_usb_c_earphones_that_wont_break_after_2_3_years_but_also_doesnt_cost",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003453+00:00",
+      "domain": "tildes.net"
+    },
+    {
+      "id": "tildes-f8d8b7b8",
+      "title": "We Were Here (Pranav Bhasin 2026)",
+      "url": "https://www.youtube.com/watch?v=EMSQtqUIlXY",
+      "source": "Tildes",
+      "sourceId": "tildes",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:33.003488+00:00",
+      "domain": "youtube.com"
+    },
+    {
+      "id": "real-python-3eadfb1e",
+      "title": "GPT-6.1 Terra Draws a Python Reading a Book",
+      "url": "https://realpython.com/ai-benchmark-gpt-6-1-terra/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.130556+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-ea5ec238",
+      "title": "The Real Python Podcast – Episode #317: Demystifying Python Memory Management & Choosing a Project Layout",
+      "url": "https://realpython.com/podcasts/rpp/317/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.130819+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-8131e3db",
+      "title": "Quiz: Python's Mutable vs Immutable Types: What's the Difference?",
+      "url": "https://realpython.com/quizzes/python-mutable-vs-immutable-types/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.130889+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-29e068bb",
+      "title": "Quiz: Inheritance and Composition: A Python OOP Guide",
+      "url": "https://realpython.com/quizzes/inheritance-composition-python/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.130940+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-1c740813",
+      "title": "Learn With Mentor AI: A Guided Journey Through Async Python",
+      "url": "https://realpython.com/learn-with-mentor-ai-async-python/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.130987+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-3df10f6e",
+      "title": "Quiz: Dictionaries and Arrays: Selecting the Ideal Data Structure",
+      "url": "https://realpython.com/quizzes/dicts-arrays-ideal-data-structure/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131481+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-565a1136",
+      "title": "Quiz: Learn With Mentor AI: A Guided Journey Through Async Python",
+      "url": "https://realpython.com/quizzes/learn-with-mentor-ai-async-python/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131637+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-8ef11eda",
+      "title": "Build a Python MCP Client to Test Servers From Your Terminal",
+      "url": "https://realpython.com/python-mcp-client/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131693+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-515e7e0e",
+      "title": "Quiz: Creating a Scalable Flask Web Application From Scratch",
+      "url": "https://realpython.com/quizzes/create-scalable-flask-web-app/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131738+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-e3015161",
+      "title": "Pyrefly: A Fast Static Type Checker for Python Projects",
+      "url": "https://realpython.com/pyrefly-python/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131898+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-74c180bf",
+      "title": "Python Circular Imports: Why They Happen and How to Fix Them",
+      "url": "https://realpython.com/python-circular-imports/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131941+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-c26d5e10",
+      "title": "MCP vs API Calls: Which Should You Use for Python LLM Apps?",
+      "url": "https://realpython.com/mcp-vs-api/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.131980+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-9dcdf721",
+      "title": "How to Get Out of Tutorial Hell",
+      "url": "https://realpython.com/how-to-get-out-of-tutorial-hell/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.132033+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-6e8e662b",
+      "title": "Exploring AI Coding Agent Workflows",
+      "url": "https://realpython.com/courses/exploring-ai-coding-agent-workflows/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.132072+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "real-python-c3666f0b",
+      "title": "Quiz: How to Get Out of Tutorial Hell",
+      "url": "https://realpython.com/quizzes/how-to-get-out-of-tutorial-hell/",
+      "source": "Real Python",
+      "sourceId": "real-python",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:34.132111+00:00",
+      "domain": "realpython.com"
+    },
+    {
+      "id": "sre-weekly-e008cea9",
+      "title": "SRE Weekly Issue #540",
+      "url": "https://sreweekly.com/sre-weekly-issue-540/",
+      "source": "SRE WEEKLY",
+      "sourceId": "sre-weekly",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:36.712617+00:00",
+      "domain": "sreweekly.com"
+    },
+    {
+      "id": "sre-weekly-5537a984",
+      "title": "SRE Weekly Issue #539",
+      "url": "https://sreweekly.com/sre-weekly-issue-539/",
+      "source": "SRE WEEKLY",
+      "sourceId": "sre-weekly",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:36.712794+00:00",
+      "domain": "sreweekly.com"
+    },
+    {
+      "id": "sre-weekly-f96a8e52",
+      "title": "SRE Weekly Issue #538",
+      "url": "https://sreweekly.com/sre-weekly-issue-538/",
+      "source": "SRE WEEKLY",
+      "sourceId": "sre-weekly",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:36.712844+00:00",
+      "domain": "sreweekly.com"
+    },
+    {
+      "id": "sre-weekly-0f7964f7",
+      "title": "SRE Weekly Issue #537",
+      "url": "https://sreweekly.com/sre-weekly-issue-537/",
+      "source": "SRE WEEKLY",
+      "sourceId": "sre-weekly",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:36.712882+00:00",
+      "domain": "sreweekly.com"
+    },
+    {
+      "id": "sre-weekly-c0647822",
+      "title": "SRE Weekly Issue #536",
+      "url": "https://sreweekly.com/sre-weekly-issue-536/",
+      "source": "SRE WEEKLY",
+      "sourceId": "sre-weekly",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:36.713096+00:00",
+      "domain": "sreweekly.com"
+    },
+    {
+      "id": "oreilly-radar-408afce8",
+      "title": "Getting Smarter, Not Just Faster",
+      "url": "https://www.oreilly.com/radar/getting-smarter-not-just-faster/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.324871+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-e5c130e7",
+      "title": "This Week in AI: Agents Rewrite the Rules",
+      "url": "https://www.oreilly.com/radar/this-week-in-ai-agents-rewrite-the-rules/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325121+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-8ed0fb26",
+      "title": "Who Governs What an Agent Learns?",
+      "url": "https://www.oreilly.com/radar/who-governs-what-an-agent-learns/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325207+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-596a082e",
+      "title": "Cheap Code, Expensive Confidence",
+      "url": "https://www.oreilly.com/radar/cheap-code-expensive-confidence/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325272+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-a596bdcb",
+      "title": "The PHP Incident",
+      "url": "https://www.oreilly.com/radar/the-php-incident/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325328+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-321d99ed",
+      "title": "Are You Getting Your Money’s Worth From AI?",
+      "url": "https://www.oreilly.com/radar/are-you-getting-your-moneys-worth-from-ai/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325386+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-d0f55072",
+      "title": "Are agent harnesses dying? What harness distillation changes.",
+      "url": "https://www.oreilly.com/radar/are-agent-harnesses-dying-what-harness-distillation-changes/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325453+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-053a3b99",
+      "title": "This Week in AI: AI’s Growing Pains",
+      "url": "https://www.oreilly.com/radar/this-week-in-ai-ais-growing-pains/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325507+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-3df6ab6b",
+      "title": "Soloists, Copy-Pasters, and Tourists",
+      "url": "https://www.oreilly.com/radar/soloists-copy-pasters-and-tourists/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325557+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-65012786",
+      "title": "Owners, Not Renters: Raffi Krikorian on Open Source AI",
+      "url": "https://www.oreilly.com/radar/owners-not-renters-raffi-krikorian-on-open-source-ai/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325606+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-f0c40a79",
+      "title": "The Agentic Software Factory Hierarchy of Needs",
+      "url": "https://www.oreilly.com/radar/the-agentic-software-factory-hierarchy-of-needs/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325654+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-c423ba46",
+      "title": "The Latest Anthropic Claude Models Contain AI Text Watermarks: What Does This Mean for You?",
+      "url": "https://www.oreilly.com/radar/the-latest-anthropic-claude-models-contain-ai-text-watermarks-what-does-this-mean-for-you/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325703+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-8f271801",
+      "title": "The State of AI Security: Threats, Tools, and Skills Gaps",
+      "url": "https://www.oreilly.com/radar/the-state-of-ai-security-threats-tools-and-skills-gaps/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325750+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-ccc90472",
+      "title": "The Second-User Test",
+      "url": "https://www.oreilly.com/radar/the-second-user-test/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325797+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "oreilly-radar-5d3d3438",
+      "title": "Building an AI Analyst, One Football Argument at a Time",
+      "url": "https://www.oreilly.com/radar/building-an-ai-analyst-one-football-argument-at-a-time/",
+      "source": "Radar (O'Reilly)",
+      "sourceId": "oreilly-radar",
+      "category": "tech",
+      "publishedAt": "2026-10-30T18:19:39.325852+00:00",
+      "domain": "oreilly.com"
+    },
+    {
+      "id": "jason-pargin-e2c9e8a9",
+      "title": "If You Want a Signed Book From Me, You Are Running Out of Time",
+      "url": "https://jasonpargin.substack.com/p/if-you-want-a-signed-book-from-me",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.582662+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-d56d7dc4",
+      "title": "Everyone is Wrong About AI Except Me",
+      "url": "https://jasonpargin.substack.com/p/everyone-is-wrong-about-ai-except",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.582973+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-92ac1d94",
+      "title": "Interstellar Space Travel Will Never, Ever Happen",
+      "url": "https://jasonpargin.substack.com/p/interstellar-space-travel-will-never",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583036+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-895cd910",
+      "title": "To Save the World, Save Yourself",
+      "url": "https://jasonpargin.substack.com/p/to-save-the-world-save-yourself",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583077+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-400fc70c",
+      "title": "In Which I Declare War On Beloved Entertainer Bo Burnham",
+      "url": "https://jasonpargin.substack.com/p/in-which-i-declare-war-on-beloved",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583112+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-a4ec5d8b",
+      "title": "Here's 60 hours of me talking about mildly interesting subjects",
+      "url": "https://jasonpargin.substack.com/p/heres-60-hours-of-me-talking-about",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583147+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-5cebfb8e",
+      "title": "Is Deadpool & Wolverine a chilling symbol of society's decline?",
+      "url": "https://jasonpargin.substack.com/p/is-deadpool-and-wolverine-a-chilling",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583324+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-81d4a914",
+      "title": "THE NEW BOOK IS OUT RIGHT NOW! FINALLY.",
+      "url": "https://jasonpargin.substack.com/p/the-new-book-is-out-right-now-finally",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583468+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-e2f02f92",
+      "title": "Clearing up confusion about my old pseudonym",
+      "url": "https://jasonpargin.substack.com/p/clearing-up-confusion-about-my-old",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583516+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-a6a68014",
+      "title": "Can a TV show save your sanity?",
+      "url": "https://jasonpargin.substack.com/p/can-a-tv-show-save-your-sanity",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583554+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-fe98ed52",
+      "title": "Is Modern Mass Media A Mind Prison?",
+      "url": "https://jasonpargin.substack.com/p/is-modern-mass-media-a-mind-prison",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583591+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-d5326097",
+      "title": "I'm Starting to Worry About This Black Box of Doom",
+      "url": "https://jasonpargin.substack.com/p/im-starting-to-worry-about-this-black",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583625+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-6b19b4d1",
+      "title": "News on the next novel! Links to my many podcasts! Signed books!",
+      "url": "https://jasonpargin.substack.com/p/news-on-the-next-novel-links-to-my",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583656+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-1735b8bb",
+      "title": "Celebrity Worship is Weird and Will Only Get Weirder",
+      "url": "https://jasonpargin.substack.com/p/celebrity-worship-is-weird-and-will",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583685+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "jason-pargin-94f5db1d",
+      "title": "A Creepy Question We'll All Have To Answer Soon",
+      "url": "https://jasonpargin.substack.com/p/a-creepy-question-well-all-have-to",
+      "source": "Jason Pargin",
+      "sourceId": "jason-pargin",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.583714+00:00",
+      "domain": "jasonpargin.substack.com"
+    },
+    {
+      "id": "psyche-aacb4861",
+      "title": "The power of pareidolia",
+      "url": "https://psyche.co/videos/why-we-see-faces-in-unexpected-places-and-what-it-says-about-us",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729446+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-a44bf9f6",
+      "title": "‘Heroes work here’: why I quit being an ER nurse",
+      "url": "https://psyche.co/turning-points/my-er-regulars-spat-at-me-and-opened-my-mind",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729602+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-b27d8661",
+      "title": "When giving up teaches you more than persevering ever could",
+      "url": "https://psyche.co/ideas/when-giving-up-teaches-you-more-than-persevering-ever-could",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729639+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-5d081272",
+      "title": "The bookshelf builder",
+      "url": "https://psyche.co/portraits/ellah-wakatama-the-godmother-of-african-books",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729667+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-73f4de97",
+      "title": "A plane crossing the Moon",
+      "url": "https://psyche.co/videos/one-mans-10-year-mission-to-film-a-plane-engulfed-by-the-moon",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729691+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-52256cbb",
+      "title": "On Japan’s Shinkansen trains, pork buns split reality in two",
+      "url": "https://psyche.co/ideas/on-japans-shinkansen-trains-pork-buns-split-reality-in-two",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729715+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-a1b79756",
+      "title": "Everyone says they have anxiety. Clinical anxiety is different",
+      "url": "https://psyche.co/ideas/everyone-says-they-have-anxiety-clinical-anxiety-is-different",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729736+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-51d97ebc",
+      "title": "Can you ever really think what someone else is thinking?",
+      "url": "https://psyche.co/ideas/can-you-ever-really-think-what-someone-else-is-thinking",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729757+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-e5fafb73",
+      "title": "How to live a life of awe",
+      "url": "https://psyche.co/videos/encounters-with-awe-have-profound-benefits-heres-how-to-have-more",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729777+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-25c4d7f9",
+      "title": "Why romantic relationships matter more to men than to women",
+      "url": "https://psyche.co/ideas/why-romantic-relationships-matter-more-to-men-than-to-women",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729798+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-42d4c56c",
+      "title": "Dear Al Pacino",
+      "url": "https://psyche.co/turning-points/why-i-wrote-mad-letters-to-celebrities-on-my-mothers-behalf",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729821+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-ef73a578",
+      "title": "Are you getting enough sun?",
+      "url": "https://psyche.co/notes-to-self/why-sunlight-is-vital-to-our-physical-and-mental-health",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729844+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-863e3560",
+      "title": "How to overcome task paralysis",
+      "url": "https://psyche.co/guides/how-to-overcome-task-paralysis",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729872+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-a7c985b6",
+      "title": "Portraits of another life: Nemo Gould",
+      "url": "https://psyche.co/videos/i-take-silly-very-seriously-a-kinetic-sculptors-credo-of-creation",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729893+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "psyche-0df953e0",
+      "title": "What life in Denmark shows about the power of emotional safety",
+      "url": "https://psyche.co/ideas/what-life-in-denmark-shows-about-the-power-of-emotional-safety",
+      "source": "Psyche",
+      "sourceId": "psyche",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:39.729914+00:00",
+      "domain": "psyche.co"
+    },
+    {
+      "id": "five-books-cbd81623",
+      "title": "The best books on Medieval Europe, recommended by Thomas Williams",
+      "url": "https://fivebooks.com/best-books/medieval-europe-thomas-williams/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490439+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-6850d5c6",
+      "title": "New in Ancient History",
+      "url": "https://fivebooks.com/best-books/new-in-ancient-history/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490577+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-61887766",
+      "title": "The Best Shakespeare Comedies, recommended by Heather Hirschfeld",
+      "url": "https://fivebooks.com/best-books/shakespeare-comedies-heather-hirschfeld/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490611+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-77ca3a9f",
+      "title": "The Best Popular Science Books of 2026: The Royal Society Book Prize, recommended by Michael Benton",
+      "url": "https://fivebooks.com/best-books/the-best-popular-science-books-of-2026-the-royal-society-book-prize-michael-benton/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490646+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-865d0b84",
+      "title": "The Best Adventure Novels: The 2026 Wilbur Smith Prize, recommended by Alex Bescoby",
+      "url": "https://fivebooks.com/best-books/adventure-novels-2026-alex-bescoby/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490672+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-3423c11f",
+      "title": "Biographies for Kids",
+      "url": "https://fivebooks.com/best-books/biographies-for-kids/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490692+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-1a13acb4",
+      "title": "The Best Novels of 2026: The Booker Prize Shortlist, recommended by Rebecca Liu",
+      "url": "https://fivebooks.com/best-books/novels-shortlist-booker-prize-2026-rebecca-liu/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490705+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-fba3ebda",
+      "title": "Books about Mesopotamia, recommended by Moudhy Al-Rashid",
+      "url": "https://fivebooks.com/best-books/books-about-mesopotamia-moudhy-al-rashid/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.490937+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-ae00d50e",
+      "title": "The best books on Knitting, recommended by Rosie Fletcher",
+      "url": "https://fivebooks.com/best-books/knitting-rosie-fletcher/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.491036+00:00",
+      "domain": "fivebooks.com"
+    },
+    {
+      "id": "five-books-37860f27",
+      "title": "Five Funny Sci Fi Books, recommended by Andrew Hunter Murray",
+      "url": "https://fivebooks.com/best-books/funny-sci-fi-books-andrew-hunter-murray/",
+      "source": "Five Books",
+      "sourceId": "five-books",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:40.491070+00:00",
+      "domain": "fivebooks.com"
     },
     {
       "id": "quanta-1b2e1a9d",
@@ -386,8 +2262,8 @@
       "url": "https://www.quantamagazine.org/a-new-map-of-empty-space-challenges-a-tranquil-picture-of-the-galaxy-20261030/",
       "source": "Quanta Magazine",
       "sourceId": "quanta",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:49.943812+00:00",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:41.857029+00:00",
       "domain": "quantamagazine.org"
     },
     {
@@ -396,8 +2272,8 @@
       "url": "https://www.quantamagazine.org/how-do-you-take-a-picture-of-a-black-hole-20261029/",
       "source": "Quanta Magazine",
       "sourceId": "quanta",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:49.943913+00:00",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:41.857267+00:00",
       "domain": "quantamagazine.org"
     },
     {
@@ -406,8 +2282,8 @@
       "url": "https://www.quantamagazine.org/how-spiders-spin-silk-dope-into-natures-toughest-material-20261028/",
       "source": "Quanta Magazine",
       "sourceId": "quanta",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:49.943937+00:00",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:41.857357+00:00",
       "domain": "quantamagazine.org"
     },
     {
@@ -416,8 +2292,8 @@
       "url": "https://www.quantamagazine.org/how-voting-is-like-a-klein-bottle-20261026/",
       "source": "Quanta Magazine",
       "sourceId": "quanta",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:49.943957+00:00",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:41.857422+00:00",
       "domain": "quantamagazine.org"
     },
     {
@@ -426,9 +2302,1209 @@
       "url": "https://www.quantamagazine.org/malaria-parasite-caught-in-the-act-of-breaking-and-entering-20261023/",
       "source": "Quanta Magazine",
       "sourceId": "quanta",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:49.943974+00:00",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:41.857480+00:00",
       "domain": "quantamagazine.org"
+    },
+    {
+      "id": "dailyart-ef174533",
+      "title": "Spooky Strokes: 10 Paintings for a Haunting Halloween",
+      "url": "https://www.dailyartmagazine.com/spooky-strokes-10-paiting-for-a-haunting-halloween/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.019782+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-1aecb5ae",
+      "title": "Best Artsy Halloween Costumes",
+      "url": "https://www.dailyartmagazine.com/best-artsy-halloween-costumes/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020000+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-c559f934",
+      "title": "Scary Monsters and Super Creeps for a Frightening Halloween!",
+      "url": "https://www.dailyartmagazine.com/scary-monsters-in-art/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020086+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-c698b263",
+      "title": "Goya’s 5 Scariest Caprichos for Halloween",
+      "url": "https://www.dailyartmagazine.com/goya-5-scariest-caprichos/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020152+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-c8e35c90",
+      "title": "Halloween Special: Horror in Art",
+      "url": "https://www.dailyartmagazine.com/halloween-special-horror-in-art/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020230+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-3f630ac0",
+      "title": "An American Poet: Eileen Myles",
+      "url": "https://www.dailyartmagazine.com/eileen-myles-an-american-poet/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020287+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-809e7243",
+      "title": "Pat Passlof: Painting, Community, and the Work of Making Space",
+      "url": "https://www.dailyartmagazine.com/pat-passlof-painting-community-and-the-work-of-making-space/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020344+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-300b139f",
+      "title": "The Widow Van Gogh: The Woman Behind Vincent’s Fame",
+      "url": "https://www.dailyartmagazine.com/book-review-the-widow-van-gogh/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020395+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-fa562bb0",
+      "title": "Meet 13 Famous Artists and Their Cats (Cuteness Overload!)",
+      "url": "https://www.dailyartmagazine.com/meet-13-famous-artists-and-their-cats-cuteness-overload/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020452+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "dailyart-e43f5fbd",
+      "title": "Paw Prints: The Diversity of Cats in Japanese Art",
+      "url": "https://www.dailyartmagazine.com/cats-in-japanese-art/",
+      "source": "DailyArt Magazine",
+      "sourceId": "dailyart",
+      "category": "ideas",
+      "publishedAt": "2026-10-30T18:19:43.020502+00:00",
+      "domain": "dailyartmagazine.com"
+    },
+    {
+      "id": "pure-xbox-84e532bd",
+      "title": "Three Special Football Jerseys Go On Sale To Celebrate Xbox's 25th Anniversary",
+      "url": "https://www.purexbox.com/news/2026/10/three-special-football-jerseys-go-on-sale-to-celebrate-xboxs-25th-anniversary",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709160+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-dbe1ea9a",
+      "title": "Report: EA Bet On Star Wars Battlefront III Success, Cancelled Mass Effect Was Too 'Risky'",
+      "url": "https://www.purexbox.com/news/2026/10/report-ea-bet-on-star-wars-battlefront-iii-success-cancelled-mass-effect-was-too-risky",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709441+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-7edd4ea0",
+      "title": "Kojima's Xbox-Published OD KNOCK Gets A New Game Poster",
+      "url": "https://www.purexbox.com/news/2026/10/kojimas-xbox-published-od-knock-gets-a-new-game-poster",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709530+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-a8f90113",
+      "title": "Crimson Desert Enhanced Adds Surprise Free Trial For All Xbox Series X|S Owners",
+      "url": "https://www.purexbox.com/news/2026/10/crimson-desert-enhanced-adds-surprise-free-trial-for-all-xbox-series-xs-owners",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709594+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-e4629899",
+      "title": "Here's What The Metro Redux Next-Gen Upgrades Look Like On Xbox Series X|S",
+      "url": "https://www.purexbox.com/news/2026/10/heres-what-the-metro-redux-next-gen-upgrades-look-like-on-xbox-series-xs",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709655+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-a95eda50",
+      "title": "Turn 10 Director Departs Microsoft As Forza Studio Merges With Playground Games",
+      "url": "https://www.purexbox.com/news/2026/10/turn-10-director-departs-microsoft-as-forza-studio-merges-with-playground-games",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709721+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-a0454e36",
+      "title": "15 Xbox Games Are Out Today, Including A Spooky Platformer Inspired By '90s Classics (October 30)",
+      "url": "https://www.purexbox.com/news/2026/10/15-xbox-games-are-out-today-including-a-spooky-platformer-inspired-by-90s-classics-october-30",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709781+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-9db68f36",
+      "title": "Two Metro Redux Games Receive Free 4K/60FPS Upgrades For Xbox Series X|S, Full Patch Notes Revealed",
+      "url": "https://www.purexbox.com/news/2026/10/two-metro-redux-games-receive-free-4k60fps-upgrades-for-xbox-series-xs-full-patch-notes-revealed",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709836+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-fa169410",
+      "title": "Report: The Elder Scrolls 6 Gets Named Ahead Of Xbox Announcement, Plus Extra Details",
+      "url": "https://www.purexbox.com/news/2026/10/report-the-elder-scrolls-6-gets-named-ahead-of-xbox-announcement-plus-extra-details",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709887+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-9583fb63",
+      "title": "'We Did This To Support The BDS Boycott' - Two Xbox Games Delisted As Celeste Developer Issues Statement",
+      "url": "https://www.purexbox.com/news/2026/10/we-did-this-to-support-the-bds-boycott-two-xbox-games-delisted-as-celeste-developer-issues-statement",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709943+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-b67dd582",
+      "title": "Feature: 35+ Of The Best Discounted Games From Xbox's Shocktober Sale",
+      "url": "https://www.purexbox.com/features/35plus-of-the-best-discounted-games-from-xboxs-shocktober-sale",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.709999+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-471409bd",
+      "title": "New GTA 6 'Dog Poop' Gameplay, Images, And Extra Info To Hype You Up",
+      "url": "https://www.purexbox.com/news/2026/10/new-gta-6-dog-poop-gameplay-images-and-extra-info-to-hype-you-up",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.710054+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-b3542b03",
+      "title": "Free Play Days: Try These Xbox Games For Free (October 29 - November 1)",
+      "url": "https://www.purexbox.com/news/2026/10/free-play-days-try-these-xbox-games-for-free-october-29-november-1",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.710104+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-4ea622aa",
+      "title": "Xbox CEO Reacts To Latest Revenue Figures With Official Statement",
+      "url": "https://www.purexbox.com/news/2026/10/xbox-ceo-reacts-to-latest-revenue-figures-with-official-statement",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.710153+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "pure-xbox-6e049882",
+      "title": "20+ Xbox Games Are Available Today, And It's Also A Big Day For Game Pass (October 29)",
+      "url": "https://www.purexbox.com/news/2026/10/20plus-xbox-games-are-available-today-and-its-also-a-big-day-for-game-pass-october-29",
+      "source": "Pure Xbox",
+      "sourceId": "pure-xbox",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:43.710200+00:00",
+      "domain": "purexbox.com"
+    },
+    {
+      "id": "eurogamer-608c3c15",
+      "title": "Call of Duty Modern Warfare 4 review",
+      "url": "https://www.eurogamer.net/call-of-duty-modern-warfare-4-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203074+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-d04b0c40",
+      "title": "Phantom Blade Zero review",
+      "url": "https://www.eurogamer.net/phantom-blade-zero-review-1",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203267+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-de9abfb1",
+      "title": "Nintendo Switch Sports Resort review",
+      "url": "https://www.eurogamer.net/nintendo-switch-sports-resort-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203319+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-de1e9cc2",
+      "title": "Final Fantasy Resonance review",
+      "url": "https://www.eurogamer.net/final-fantasy-resonance-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203357+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-5f7d7954",
+      "title": "Star Wars Zero Company review",
+      "url": "https://www.eurogamer.net/star-wars-zero-company-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203389+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-dbc65f10",
+      "title": "Castlevania: Belmont's Curse review",
+      "url": "https://www.eurogamer.net/castlevania-belmonts-curse-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203427+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-56b2bba4",
+      "title": "Ace Combat 8: Wings of Theve review",
+      "url": "https://www.eurogamer.net/ace-combat-8-wings-of-theve-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203462+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-87426c8b",
+      "title": "Valor Mortis review",
+      "url": "https://www.eurogamer.net/valor-mortis-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203492+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-fcf74309",
+      "title": "Gears of War: E-Day review",
+      "url": "https://www.eurogamer.net/gears-of-war-eday-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203525+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-87a21712",
+      "title": "EA Sports FC 27 review",
+      "url": "https://www.eurogamer.net/ea-sports-fc-27-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203554+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-a3bf2088",
+      "title": "Hellraiser: Revival review",
+      "url": "https://www.eurogamer.net/hellraiser-revival-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203584+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-2ccd8f70",
+      "title": "Star Wars: Galactic Racer review",
+      "url": "https://www.eurogamer.net/star-wars-galactic-racer-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203612+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-f50d6cf9",
+      "title": "Gears of War E-Day campaign review - turns out you can teach old Cogs new tricks",
+      "url": "https://www.eurogamer.net/gears-of-war-eday-campaign-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203640+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-e2733eeb",
+      "title": "Wardogs early access review",
+      "url": "https://www.eurogamer.net/wardogs-early-access-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203669+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "eurogamer-ea64c067",
+      "title": "Roman Sands Re:Build review - a fiendish immersive sim drenched in a vaporwave glitchcore palette",
+      "url": "https://www.eurogamer.net/roman-sands-rebuild-review",
+      "source": "Eurogamer Reviews",
+      "sourceId": "eurogamer",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:47.203697+00:00",
+      "domain": "eurogamer.net"
+    },
+    {
+      "id": "gamedeveloper-eb153045",
+      "title": "John Romero's canceled game finds a new publisher amidst an overall scope change",
+      "url": "https://www.gamedeveloper.com/business/john-romero-canceled-game-finds-a-new-publisher-amidst-an-overall-scope-change",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271082+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-dd79ade0",
+      "title": "Report: EA shut down BioWare in favor of Star Wars: Battlefront sequel after previously decrying licensed games",
+      "url": "https://www.gamedeveloper.com/business/report-ea-shut-down-bioware-in-favor-of-star-wars-battlefront-sequel-after-previously-decrying-licensed-games",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271281+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-3262e863",
+      "title": "GDC Side Quest - An anti-cheat primer with Lucia Suarez",
+      "url": "https://www.gamedeveloper.com/programming/gdc-side-quest-an-anti-cheat-primer-with-lucia-suarez",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271336+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-6d7628c8",
+      "title": "Donald Glover to direct, star in Netflix adaptation of PUBG Battlegrounds",
+      "url": "https://www.gamedeveloper.com/business/netflix-adapts-krafton-pubg-to-be-written-and-led-by-donald-glover",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271377+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-dc8a0c19",
+      "title": "Xbox CEO says console demand is outstripping supply—but sales continue to drop",
+      "url": "https://www.gamedeveloper.com/console/xbox-ceo-says-console-demand-is-outstripping-supply-as-sales-continue-to-drop",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271414+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-6c2f89ab",
+      "title": "Epic VP says AI code tools have stomped out decade-old 'non-deterministic cooking bugs' in Unreal Engine",
+      "url": "https://www.gamedeveloper.com/programming/unreal-engine-will-be-developed-with-ai-code-confirms-epic",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271450+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-96ec8792",
+      "title": "Roblox confirms no adult content used in AI training after scraping Open3DLab data",
+      "url": "https://www.gamedeveloper.com/business/roblox-confirms-no-adult-content-used-in-ai-training-after-scraping-open3dlab-data",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271487+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-f1ae019e",
+      "title": "Valve weighs in on Next Fest AI cloning phenomenon",
+      "url": "https://www.gamedeveloper.com/pc/valve-addresses-steam-ai-cloning-problem",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271520+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-4b502e24",
+      "title": "Rockstar Games workers to vote on unionization right as Grand Theft Auto VI launches",
+      "url": "https://www.gamedeveloper.com/business/rockstar-workers-to-vote-on-unionization-ahead-of-grand-theft-auto-vi-release",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271551+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-61c229f1",
+      "title": "Warhorse Studios hit by an undetailed cybersecurity incident",
+      "url": "https://www.gamedeveloper.com/programming/warhorse-studios-hit-by-an-undetailed-cybersecurity-incident",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271582+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-30813352",
+      "title": "Crossy Road creator Matt Hall named Atari's EVP of Mobile",
+      "url": "https://www.gamedeveloper.com/mobile/crossy-road-creator-matt-hall-named-atari-s-evp-of-mobile",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271612+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-53b2223b",
+      "title": "Epic is updating its EULA to allow AI training on outputs from Unreal Engine and MetaHuman",
+      "url": "https://www.gamedeveloper.com/programming/epic-is-updating-the-eula-to-allow-ai-training-on-outputs-from-unreal-engine-and-metahuman",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271644+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-84a26157",
+      "title": "Changing acquired studios' core identity consistently leads to doom, says Nightdive Studios CEO",
+      "url": "https://www.gamedeveloper.com/business/night-dive-studios-ceo-says-atari-is-demonstrating-right-way-to-do-acquisitions",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271674+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-50450c0a",
+      "title": "Sucker Punch lays off 24 to align with 'current market', 'next project needs'",
+      "url": "https://www.gamedeveloper.com/business/sucker-punch-lays-off-24-to-align-with-current-market-next-project-needs",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271714+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "gamedeveloper-799ee52c",
+      "title": "Xbox reportedly turned down a $500 million deal from Netflix to adapt its video game properties",
+      "url": "https://www.gamedeveloper.com/business/xbox-reportedly-turned-down-a-500-million-deal-from-netflix-for-adapting-gaming-properties",
+      "source": "Game Developer",
+      "sourceId": "gamedeveloper",
+      "category": "gaming",
+      "publishedAt": "2026-10-30T18:19:48.271750+00:00",
+      "domain": "gamedeveloper.com"
+    },
+    {
+      "id": "chess-com-40f448de",
+      "title": "What You Can Learn From Odds Chess",
+      "url": "https://www.chess.com/article/view/what-you-can-learn-from-odds-chess",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672213+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-fff829cc",
+      "title": "How Sindarov Made History At The 2026 Candidates Tournament",
+      "url": "https://www.chess.com/article/view/how-sindarov-made-history-2026-fide-candidates-tournament",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672358+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-5a16111c",
+      "title": "Teaching Students \"Chess for World, Wisdom for Life\"",
+      "url": "https://www.chess.com/article/view/coach-of-the-month-wfm-kiki-chen",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672406+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-9204a99b",
+      "title": "The Treacherous Back Rank",
+      "url": "https://www.chess.com/article/view/the-treacherous-back-rank",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672440+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-e076f7db",
+      "title": "Keeping Content Entertaining: \"Just Being Good At Something Is Not Enough\"",
+      "url": "https://www.chess.com/article/view/felu-creator-of-the-month",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672469+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-6ed53cb9",
+      "title": "Castle To Attack",
+      "url": "https://www.chess.com/article/view/castle-to-attack",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672498+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-7ac89aa4",
+      "title": "Grandmasters In Theaters, And A Flurry Of Product Innovations",
+      "url": "https://www.chess.com/article/view/chesscom-update-october-2026",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672523+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-d83c3bfb",
+      "title": "Grandmasters Movie: Cast, Release, How to Watch & More",
+      "url": "https://www.chess.com/article/view/grandmasters-chess-documentary",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672552+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-6bb76217",
+      "title": "Olympic Kaleidoscope For Less Advanced Players",
+      "url": "https://www.chess.com/article/view/olympic-kaleidoscope-for-less-advanced-players",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672579+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-24dec11e",
+      "title": "How To Force Zach To Checkmate You",
+      "url": "https://www.chess.com/article/view/how-to-force-zach-to-checkmate-you",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672605+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-9cca42b2",
+      "title": "Teaching Chess With a Human Element",
+      "url": "https://www.chess.com/article/view/creator-of-the-month-im-mika-karttunen",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672630+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-fbb80cd5",
+      "title": "Chess.com Alternatives: What Else Is Out There?",
+      "url": "https://www.chess.com/article/view/chess-com-alternatives",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672655+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-8b73d99a",
+      "title": "Too Many Checks Spoils The Mate",
+      "url": "https://www.chess.com/article/view/too-many-checks-spoils-the-mate",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672678+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-42d5b811",
+      "title": "Master Chess Concepts With This Chess Master Coach",
+      "url": "https://www.chess.com/article/view/coach-of-the-month-gm-johan-hellsten",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672703+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "chess-com-aee9eb68",
+      "title": "Ranking The Teams Expected To Top The Olympiad Standings",
+      "url": "https://www.chess.com/article/view/chess-olympiad-power-rankings",
+      "source": "Chess.com Articles",
+      "sourceId": "chess-com",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:48.672727+00:00",
+      "domain": "chess.com"
+    },
+    {
+      "id": "twic-0208ffe5",
+      "title": "Clutch Chess: Champions Showdown 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/clutch-chess-champions-showdown-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.804825+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-0140961d",
+      "title": "41st European Club Cup 2026 - Games and Results",
+      "url": "https://theweekinchess.com/chessnews/events/41st-european-club-cup-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.804960+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-75345ce4",
+      "title": "US Chess Championships 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/us-chess-championships-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.804999+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-3da5ded8",
+      "title": "46th World Chess Olympiad 2026 - Games and Results",
+      "url": "https://theweekinchess.com/chessnews/events/46th-world-chess-olympiad-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805029+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-984853e9",
+      "title": "3rd FIDE Chess Olympiad for People with Disabilities 2026 - Games and Results",
+      "url": "https://theweekinchess.com/chessnews/events/3rd-fide-chess-olympiad-for-people-with-disabilities-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805055+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-d0ea159e",
+      "title": "Clutch Chess: The Legends 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/clutch-chess-the-legends-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805080+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-a299587d",
+      "title": "Tech Mahindra Global Chess League 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/tech-mahindra-global-chess-league-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805101+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-a2a8d2c0",
+      "title": "Legends and Prodigies II 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/legends-and-prodigies-ii-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805122+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-f2e7e8d1",
+      "title": "European Senior Team Championship 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/european-senior-team-championship-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805142+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-ca384506",
+      "title": "Season Four of the Tech Mahindra Global Chess League - Start",
+      "url": "https://theweekinchess.com/twic-news-feed/season-four-of-the-tech-mahindra-global-chess-league",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805162+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-20b13cfd",
+      "title": "TCh-ESP 1st Div 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/tch-esp-1st-div-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805183+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-0ffb850a",
+      "title": "Green Hills Resort Masters 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/green-hills-resort-masters-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805203+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-eb2689b3",
+      "title": "Sofia Cup 2026 - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/sofia-cup-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805226+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-c4742135",
+      "title": "Grand Chess Tour Finals 2026  - Games and results",
+      "url": "https://theweekinchess.com/chessnews/events/grand-chess-tour-finals-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805249+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "twic-0c455b3c",
+      "title": "6th Cairns Cup 2026 - Games and Results",
+      "url": "https://theweekinchess.com/chessnews/events/6th-cairns-cup-2026",
+      "source": "The Week in Chess",
+      "sourceId": "twic",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:49.805281+00:00",
+      "domain": "theweekinchess.com"
+    },
+    {
+      "id": "chessbase-55f665fd",
+      "title": "A chess revival at Simpson's-in-the-Strand",
+      "url": "https://en.chessbase.com/post/chess-revival-simpsons-in-strand",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401625+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-4f453d49",
+      "title": "Lhamsuren Myagmarsuren (1938-2026)",
+      "url": "https://en.chessbase.com/post/lhamsuren-myagmarsuren-1938-2026",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401802+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-c7e534e2",
+      "title": "Sindarov takes Clutch Chess title ahead of World Championship match",
+      "url": "https://en.chessbase.com/post/clutch-chess-showdown-2026-3",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401864+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-d9b9a1c9",
+      "title": "Istanbul to host FIDE World Rapid and Blitz Championships 2026",
+      "url": "https://en.chessbase.com/post/fide-world-rapid-blitz-ch-2026-venue",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401910+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-2b12dec0",
+      "title": "Stellar line-up for 2026 XTX London Chess Classic",
+      "url": "https://en.chessbase.com/post/stellar-line-up-for-2026-xtx-london-chess-classic",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401951+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-67c60ddd",
+      "title": "Clutch Chess: Champions Showdown - Live!",
+      "url": "https://en.chessbase.com/post/clutch-chess-showdown-2026-live",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.401991+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-c62ab620",
+      "title": "KazChess Masters: Mamedov and Makhnev set the pace in Almaty",
+      "url": "https://en.chessbase.com/post/kazchess-masters-almaty-2026-r3",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402040+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-bf2b2222",
+      "title": "Dragons of the Olympiad 2026 - The Monthly Dragon",
+      "url": "https://en.chessbase.com/post/dragons-of-the-olympiad-2026-the-monthly-dragon",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402082+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-66bb9e1a",
+      "title": "Clutch Chess: Nakamura leads after lively first day of action",
+      "url": "https://en.chessbase.com/post/clutch-chess-showdown-2026-1",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402118+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-7ee29a9a",
+      "title": "Review: My favourite FritzTrainer courses",
+      "url": "https://en.chessbase.com/post/review-my-favourite-fritztrainer-courses",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402152+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-c8d9925d",
+      "title": "ChessBase´26 – Tips for Beginners, part 32: Training with style",
+      "url": "https://en.chessbase.com/post/chessbase-26-tips-for-beginners-part-32-training-with-style",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402187+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-70fc2790",
+      "title": "25 years ago  –  ChessBase news",
+      "url": "https://en.chessbase.com/post/25-years-ago-chessbase-news",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402221+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-55b5156d",
+      "title": "ChessBase´26 – Tips for Beginners, part 30: Use \"Folders\"",
+      "url": "https://en.chessbase.com/post/chessbase-26-tips-for-beginners-part-30-use-folders",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402255+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-29610042",
+      "title": "Fridrik Olafsson Memorial",
+      "url": "https://en.chessbase.com/post/fridrik-olafsson-memorial",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402287+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "chessbase-7a6d698a",
+      "title": "Hassabis on chess and AI",
+      "url": "https://en.chessbase.com/post/hassabis-on-ai",
+      "source": "ChessBase News",
+      "sourceId": "chessbase",
+      "category": "chess",
+      "publishedAt": "2026-10-30T18:19:50.402320+00:00",
+      "domain": "en.chessbase.com"
+    },
+    {
+      "id": "explosm-a90118f8",
+      "title": "Comic for 2026.10.30 - Halloween",
+      "url": "https://explosm.net/comics/halloween",
+      "source": "Explosm (Cyanide & Happiness)",
+      "sourceId": "explosm",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:50.749575+00:00",
+      "domain": "explosm.net"
+    },
+    {
+      "id": "explosm-91641c6f",
+      "title": "Comic for 2026.10.29 - Fix This Painting",
+      "url": "https://explosm.net/comics/fix-this-painting",
+      "source": "Explosm (Cyanide & Happiness)",
+      "sourceId": "explosm",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:50.749736+00:00",
+      "domain": "explosm.net"
+    },
+    {
+      "id": "explosm-22102e00",
+      "title": "Comic for 2026.10.26 - Inside Out",
+      "url": "https://explosm.net/comics/inside-out",
+      "source": "Explosm (Cyanide & Happiness)",
+      "sourceId": "explosm",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:50.749795+00:00",
+      "domain": "explosm.net"
+    },
+    {
+      "id": "explosm-0e079286",
+      "title": "Comic for 2026.10.25 - Yaaawn",
+      "url": "https://explosm.net/comics/yaaawn-2",
+      "source": "Explosm (Cyanide & Happiness)",
+      "sourceId": "explosm",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:50.749839+00:00",
+      "domain": "explosm.net"
+    },
+    {
+      "id": "explosm-cb61bcbd",
+      "title": "Comic for 2026.10.23 - Q-Tip",
+      "url": "https://explosm.net/comics/q-tip",
+      "source": "Explosm (Cyanide & Happiness)",
+      "sourceId": "explosm",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:50.749877+00:00",
+      "domain": "explosm.net"
+    },
+    {
+      "id": "smbc-4e1bbd6b",
+      "title": "Saturday Morning Breakfast Cereal - Dead",
+      "url": "https://www.smbc-comics.com/comic/dead-3",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.280730+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-701b17e0",
+      "title": "Saturday Morning Breakfast Cereal - Eyes",
+      "url": "https://www.smbc-comics.com/comic/eyes",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.280982+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-38b3af9a",
+      "title": "Saturday Morning Breakfast Cereal - Signal",
+      "url": "https://www.smbc-comics.com/comic/signal-5",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281032+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-41dbc055",
+      "title": "Saturday Morning Breakfast Cereal - Clankor",
+      "url": "https://www.smbc-comics.com/comic/clankor",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281072+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-15ac5365",
+      "title": "Saturday Morning Breakfast Cereal - Order",
+      "url": "https://www.smbc-comics.com/comic/order-3",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281109+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-381e4a30",
+      "title": "Saturday Morning Breakfast Cereal - XXL",
+      "url": "https://www.smbc-comics.com/comic/xxl",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281142+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-70326b5f",
+      "title": "Saturday Morning Breakfast Cereal - Watch",
+      "url": "https://www.smbc-comics.com/comic/watch-2",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281176+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-252e5018",
+      "title": "Saturday Morning Breakfast Cereal - Alignment",
+      "url": "https://www.smbc-comics.com/comic/alignment-2",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281220+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-a78c9601",
+      "title": "Saturday Morning Breakfast Cereal - Revenge",
+      "url": "https://www.smbc-comics.com/comic/revenge",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281252+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-a9c160cc",
+      "title": "Saturday Morning Breakfast Cereal - Future",
+      "url": "https://www.smbc-comics.com/comic/future-5",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281282+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-aae204e7",
+      "title": "Saturday Morning Breakfast Cereal - Funeral",
+      "url": "https://www.smbc-comics.com/comic/funeral",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281313+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-55a051a6",
+      "title": "Saturday Morning Breakfast Cereal - Cells",
+      "url": "https://www.smbc-comics.com/comic/cells",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281342+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-43967960",
+      "title": "Saturday Morning Breakfast Cereal - Reactions",
+      "url": "https://www.smbc-comics.com/comic/reactions",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281370+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-89b52145",
+      "title": "Saturday Morning Breakfast Cereal - Chip",
+      "url": "https://www.smbc-comics.com/comic/chip",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281399+00:00",
+      "domain": "smbc-comics.com"
+    },
+    {
+      "id": "smbc-1a47a159",
+      "title": "Saturday Morning Breakfast Cereal - Hun",
+      "url": "https://www.smbc-comics.com/comic/hun",
+      "source": "SMBC Comics",
+      "sourceId": "smbc",
+      "category": "comics",
+      "publishedAt": "2026-10-30T18:19:51.281427+00:00",
+      "domain": "smbc-comics.com"
     },
     {
       "id": "bbc-news-db231a97",
@@ -589,86 +3665,6 @@
       "category": "design",
       "publishedAt": "2026-10-30T18:05:52.306618+00:00",
       "domain": "thisiscolossal.com"
-    },
-    {
-      "id": "aldaily-76770389",
-      "title": "The life of a Capitol Hill intern involves bamboozling policyspeak, hellacious heat, free food at AEI, and a parade of utterly charmless Tattes",
-      "url": "https://www.thenewcritic.com/p/city-of-magnificent-intentions?utm_source=post-email-title&publication_id=4883084&post_id=222548047&utm_campaign=email-post-title&isFreemail=true&r=3vx0z&triedRedirect=t",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551058+00:00",
-      "domain": "thenewcritic.com"
-    },
-    {
-      "id": "aldaily-b2935324",
-      "title": "The femininization of the deathcare industry. Advances in cosmetics, among other things, are pushing women into the mortuary arts",
-      "url": "https://lareviewofbooks.org/article/death-industry-mortuary-programs-women-andie-eisen-quarterly/",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551255+00:00",
-      "domain": "lareviewofbooks.org"
-    },
-    {
-      "id": "aldaily-0636ec57",
-      "title": "The Guide for the Perplexed is a perplexing work — its difficulty is, in part, the point. Can fluent English do it justice?",
-      "url": "https://jewishreviewofbooks.com/rabbinics/20353/turning-hills-into-plains-and-mountains-into-valleys-on-translating-maimonidess-guide/",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551330+00:00",
-      "domain": "jewishreviewofbooks.com"
-    },
-    {
-      "id": "aldaily-5f7b7d33",
-      "title": "Drunk or sober, but especially drunk, Edgar Allan Poe acted against his own interests. He turned the mystery of why into art",
-      "url": "https://slate.com/culture/2026/10/edgar-allan-poe-poems-stories-most-influential-american-writer-death-horror-detective.html",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551382+00:00",
-      "domain": "slate.com"
-    },
-    {
-      "id": "aldaily-896b67d2",
-      "title": "The hottest class at Harvard? Humanities 10, where phones are banned, attendance is mandatory, and the readings are dense",
-      "url": "https://www.wsj.com/lifestyle/harvard-class-humanities-32e06366?st=DoqM7q&reflink=desktopwebshare_permalink",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551434+00:00",
-      "domain": "wsj.com"
-    },
-    {
-      "id": "aldaily-faf475a5",
-      "title": "Fields of lilies, fractal landscapes, idioms, DNA, Renoir’s orange, human anatomy: Why is the world full of so much beauty?",
-      "url": "https://thereader.mitpress.mit.edu/beauty-is-everywhere-but-what-is-it-for/",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551524+00:00",
-      "domain": "thereader.mitpress.mit.edu"
-    },
-    {
-      "id": "aldaily-46cbead6",
-      "title": "Is the book business distressed? Anxious? Optimistic? All of the above",
-      "url": "https://www.gq.com/story/state-of-books-2026",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551568+00:00",
-      "domain": "gq.com"
-    },
-    {
-      "id": "aldaily-4840e106",
-      "title": "Eric Hobsbawm against the identitarians. Centering gender, race, and sexuality was not his “kind of history.” Nor was it Karl Marx’s",
-      "url": "https://jacobin.substack.com/p/eric-hobsbawm-historian-of-defeat",
-      "source": "Arts & Letters Daily",
-      "sourceId": "aldaily",
-      "category": "news",
-      "publishedAt": "2026-10-30T18:05:53.551605+00:00",
-      "domain": "jacobin.substack.com"
     },
     {
       "id": "rt-1",

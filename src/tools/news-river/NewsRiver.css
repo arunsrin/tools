@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  height: auto;
+  overflow-y: visible;
   background-color: #0d1117;
   color: #e6edf3;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -270,9 +272,15 @@
 /* Columns Grid View */
 .news-river-columns-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
   align-items: start;
+}
+
+@media (min-width: 1200px) {
+  .news-river-columns-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .news-river-feed-card {
@@ -417,6 +425,23 @@
   align-items: center;
   gap: 0.2rem;
   color: #8b949e;
+}
+
+.news-river-comment-link {
+  color: #58a6ff;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background-color: #21262d;
+  transition: all 0.15s ease;
+}
+
+.news-river-comment-link:hover {
+  background-color: #30363d;
+  color: #79c0ff;
+  text-decoration: underline;
 }
 
 .news-river-item-time {

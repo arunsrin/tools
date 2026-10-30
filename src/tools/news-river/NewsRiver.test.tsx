@@ -29,7 +29,7 @@ describe('NewsRiver Component', () => {
 
     // Check that primary feed headers are rendered
     expect(screen.getByRole('heading', { name: 'Hacker News' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Reddit /r/technology' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Ars Technica' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Lobste.rs' })).toBeInTheDocument();
 
     // Check specific headline presence
@@ -67,14 +67,14 @@ describe('NewsRiver Component', () => {
     expect(screen.getByText(/SQLite in the browser with WebAssembly/i)).toBeInTheDocument();
 
     // Other headlines shouldn't match
-    expect(screen.queryByText(/Renewable energy generation surpasses/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/The \$6.3B Binance hack/i)).not.toBeInTheDocument();
 
     // Clear button should be visible and functional
     const clearBtn = screen.getByRole('button', { name: /Clear search/i });
     expect(clearBtn).toBeInTheDocument();
 
     fireEvent.click(clearBtn);
-    expect(screen.getByText(/Renewable energy generation surpasses/i)).toBeInTheDocument();
+    expect(screen.getByText(/The \$6.3B Binance hack/i)).toBeInTheDocument();
   });
 
   it('displays empty state when search returns no results', () => {
@@ -96,12 +96,12 @@ describe('NewsRiver Component', () => {
   it('filters by category pills', () => {
     render(<NewsRiver onBack={vi.fn()} />);
 
-    // Click "World News" category
-    const newsPill = screen.getByRole('button', { name: 'World News' });
-    fireEvent.click(newsPill);
+    // Click "Chess" category
+    const chessPill = screen.getByRole('button', { name: 'Chess' });
+    fireEvent.click(chessPill);
 
-    // BBC should be present, Hacker News should not be shown
-    expect(screen.getByRole('heading', { name: 'BBC News' })).toBeInTheDocument();
+    // Chess.com should be present, Hacker News should not be shown
+    expect(screen.getByRole('heading', { name: 'Chess.com Articles' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Hacker News' })).not.toBeInTheDocument();
 
     // Click "All Feeds" to restore
@@ -109,6 +109,18 @@ describe('NewsRiver Component', () => {
     fireEvent.click(allPill);
 
     expect(screen.getByRole('heading', { name: 'Hacker News' })).toBeInTheDocument();
+  });
+
+  it('renders clickable comment counts for Hacker News and Lobsters', () => {
+    render(<NewsRiver onBack={vi.fn()} />);
+
+    const commentLinks = screen.getAllByRole('link', { name: /💬/i });
+    expect(commentLinks.length).toBeGreaterThan(0);
+
+    const firstCommentLink = commentLinks[0];
+    expect(firstCommentLink).toHaveAttribute('href');
+    expect(firstCommentLink.getAttribute('href')).toMatch(/news\.ycombinator\.com|lobste\.rs/);
+    expect(firstCommentLink).toHaveAttribute('target', '_blank');
   });
 
   it('opens customize sources modal and allows toggling feeds', () => {
