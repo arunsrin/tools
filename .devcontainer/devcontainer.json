@@ -1,0 +1,47 @@
+{
+  "name": "Tools Hub (React 19 + TypeScript + Vite)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12",
+      "installTools": false
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [5173, 5174],
+  "portsAttributes": {
+    "5173": {
+      "label": "Tools Hub Baseline (:5173)",
+      "onAutoForward": "notify"
+    },
+    "5174": {
+      "label": "Feature Worktree Preview (:5174)",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "npm install && chmod +x scripts/*.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "vitest.explorer",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "[typescript]": {
+          "editor.defaultFormatter": "vscode.typescript-language-features"
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "vscode.typescript-language-features"
+        }
+      }
+    }
+  }
+}

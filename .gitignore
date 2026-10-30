@@ -46,6 +46,14 @@ coverage/
 .wrangler/
 .cloudflare/
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Worktrees
+.worktrees/
+
 # OS generated files
 Thumbs.db
 Desktop.ini

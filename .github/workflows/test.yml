@@ -22,8 +22,25 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Run lint
+      run: npm run lint
+
     - name: Run tests with coverage
       run: npm run coverage
 
     - name: Check build
       run: npm run build
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Validate modular tool structure & specs
+      run: python scripts/test_tools_structure.py
+
+    - name: Validate sprint cleanup tooling
+      run: python scripts/test_cleanup_tooling.py
+
+    - name: Validate CI parity
+      run: python scripts/test_ci_parity.py
