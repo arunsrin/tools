@@ -1,7 +1,27 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import BigText from './BigText';
-import { findBestFontSize } from './constants';
+import { findBestFontSize, calculateResponsivePadding, MIN_FONT_SIZE } from './constants';
+
+describe('calculateResponsivePadding', () => {
+  it('calculates responsive padding for a narrow mobile screen', () => {
+    // 360px wide: 360 * 0.04 = 14.4 -> clamped to 16px per side -> 32px total
+    const result = calculateResponsivePadding(360, 780);
+    expect(result.paddingX).toBe(32);
+    expect(result.availableWidth).toBe(328);
+    expect(result.paddingY).toBe(62); // 780 * 0.04 = 31.2 -> 31 * 2 = 62
+    expect(result.availableHeight).toBe(718);
+  });
+
+  it('calculates clamped padding for large desktop screens', () => {
+    // 1920px wide: 1920 * 0.04 = 76.8 -> clamped to 32px per side -> 64px total
+    const result = calculateResponsivePadding(1920, 1080);
+    expect(result.paddingX).toBe(64);
+    expect(result.availableWidth).toBe(1856);
+    expect(result.paddingY).toBe(64);
+    expect(result.availableHeight).toBe(1016);
+  });
+});
 
 describe('findBestFontSize', () => {
   it('finds the correct font size for a simple case', () => {
@@ -11,11 +31,12 @@ describe('findBestFontSize', () => {
     expect(result).toBe(100);
   });
 
-  it('respects width limits', () => {
-    const measureText = (size: number) => ({ width: size * 2, height: size });
-    // 50 * 2 = 100 width, 50 height. Should fit in 100x100
-    const result = findBestFontSize(100, 100, measureText);
-    expect(result).toBe(50);
+  it('respects width limits and scales down wide words', () => {
+    // A single word like "Coffee" where width is 5x font size
+    const measureText = (size: number) => ({ width: size * 5, height: size });
+    // In a 300px wide container, max size where 5 * size <= 300 is 60
+    const result = findBestFontSize(300, 500, measureText);
+    expect(result).toBe(60);
   });
 
   it('respects height limits', () => {
@@ -38,6 +59,13 @@ describe('findBestFontSize', () => {
     );
     
     expect(result).toBe(60); // 100 - 40 = 60
+  });
+
+  it('falls back to minSize floor when text does not fit at minSize', () => {
+    // Massive text that overflows even at 10px
+    const measureText = (size: number) => ({ width: size * 100, height: size });
+    const result = findBestFontSize(200, 200, measureText, MIN_FONT_SIZE);
+    expect(result).toBe(MIN_FONT_SIZE);
   });
 });
 
@@ -109,5 +137,30 @@ describe('BigText Tool', () => {
     fireEvent.click(lightThemeBtn);
     expect(container).toHaveClass('theme-light');
     expect(localStorage.getItem('bigTheme')).toBe('theme-light');
+  });
+
+  it('handles localStorage exceptions gracefully without crashing', () => {
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = vi.fn(() => {
+      throw new Error('QuotaExceededError');
+    });
+
+    render(<BigText onBack={mockOnBack} />);
+    const input = screen.getByPlaceholderText(/Type something.../i);
+    // Should not throw
+    expect(() => {
+      fireEvent.change(input, { target: { value: 'SAFE TEXT' } });
+    }).not.toThrow();
+
+    localStorage.setItem = originalSetItem;
+  });
+
+  it('switches to preset text when preset button is clicked', () => {
+    render(<BigText onBack={mockOnBack} />);
+    const presetBtn = screen.getByRole('button', { name: '🍺 1 more please' });
+    fireEvent.click(presetBtn);
+
+    expect(screen.getByText('🍺 1 more please')).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText(/Type something.../i)).not.toBeInTheDocument();
   });
 });

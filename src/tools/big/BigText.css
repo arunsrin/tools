@@ -213,20 +213,26 @@ body, #root {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 20px;
+  padding: clamp(16px, 4vw, 32px);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .big-text {
-  width: 100%;
+  max-width: 100%;
   text-align: center;
-  line-height: 1;
+  line-height: 1.05;
   font-weight: 900;
   white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: manual;
   user-select: none;
+}
+
+.big-text.force-break {
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .back-hint {
