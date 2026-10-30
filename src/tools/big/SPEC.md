@@ -4,7 +4,7 @@
 - **Text Input**: Users can enter text into a clear, prominent input field.
 - **Quick-Select Presets**: A set of commonly used text/emoji buttons (e.g., 'Yes', 'No', '🍺 1 more please') for instant display.
 - **Theme Selection**: A concise set of high-contrast themes (e.g., Light on Dark, Dark on Light, Green on Black, Yellow on Black).
-- **Dynamic Font Sizing**: The entered text must automatically resize to fill as much of the viewport as possible without overflowing. A mandatory padding of at least 20px (or 5% of viewport width) SHALL be maintained to ensure text never touches the screen edges. Long words SHALL be broken with hyphens if they exceed the viewport width.
+- **Dynamic Font Sizing**: The entered text must automatically resize to fill as much of the viewport as possible without overflowing. A responsive padding (minimum 16px to 5% of viewport width) SHALL be maintained to ensure text never touches the screen edges. Natural words SHALL NOT break mid-word; font size scales down so each word fits horizontally on a single line. Extremely long unbroken strings that exceed container width at minimum font size (16px) wrap or truncate gracefully.
 - **Toggle Display Mode**: A clear switch between "Editing" and "Displaying" modes.
 - **Persistence**: Store the last entered text and theme in `localStorage`.
 

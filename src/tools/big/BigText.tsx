@@ -1,24 +1,47 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { findBestFontSize, PRESETS, THEMES } from './constants';
+import {
+  findBestFontSize,
+  calculateResponsivePadding,
+  MIN_FONT_SIZE,
+  PRESETS,
+  THEMES
+} from './constants';
 import './BigText.css';
+
 interface BigTextProps {
   onBack: () => void;
 }
 
+const getStoredValue = (key: string, defaultValue: string): string => {
+  try {
+    return localStorage.getItem(key) || defaultValue;
+  } catch {
+    return defaultValue;
+  }
+};
+
+const setStoredValue = (key: string, value: string): void => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Gracefully ignore storage quota / restricted exceptions
+  }
+};
+
 function BigText({ onBack }: BigTextProps) {
-  const [text, setText] = useState(localStorage.getItem('bigText') || 'HELLO');
-  const [currentTheme, setCurrentTheme] = useState(localStorage.getItem('bigTheme') || 'theme-dark');
+  const [text, setText] = useState(() => getStoredValue('bigText', 'HELLO'));
+  const [currentTheme, setCurrentTheme] = useState(() => getStoredValue('bigTheme', 'theme-dark'));
   const [isEditing, setIsEditing] = useState(true);
   const [fontSize, setFontSize] = useState(100);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    localStorage.setItem('bigText', text);
+    setStoredValue('bigText', text);
   }, [text]);
 
   useEffect(() => {
-    localStorage.setItem('bigTheme', currentTheme);
+    setStoredValue('bigTheme', currentTheme);
   }, [currentTheme]);
 
   const handlePresetClick = (preset: string) => {
@@ -32,11 +55,14 @@ function BigText({ onBack }: BigTextProps) {
     const container = containerRef.current;
     const textElement = textRef.current;
     
-    // Add 40px padding total (20px per side) to ensure text doesn't touch edges
-    const padding = 40;
-    const availableWidth = Math.max(0, container.clientWidth - padding);
-    const availableHeight = Math.max(0, container.clientHeight - padding);
+    const { availableWidth, availableHeight } = calculateResponsivePadding(
+      container.clientWidth,
+      container.clientHeight
+    );
 
+    textElement.classList.remove('force-break');
+
+    const minSize = MIN_FONT_SIZE;
     const bestSize = findBestFontSize(
       availableWidth,
       availableHeight,
@@ -44,11 +70,22 @@ function BigText({ onBack }: BigTextProps) {
         textElement.style.fontSize = `${size}px`;
         return {
           width: textElement.scrollWidth,
-          height: textElement.scrollHeight
+          height: textElement.scrollHeight,
         };
-      }
+      },
+      minSize
     );
     
+    textElement.style.fontSize = `${bestSize}px`;
+
+    // Fallback: If even at the minimum font size floor the unbroken text overflows horizontally,
+    // apply force-break to avoid horizontal clipping or window scrollbars.
+    if (bestSize <= minSize && textElement.scrollWidth > availableWidth) {
+      textElement.classList.add('force-break');
+    } else {
+      textElement.classList.remove('force-break');
+    }
+
     setFontSize(bestSize);
   }, [isEditing]);
 
