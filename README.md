@@ -13,6 +13,7 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 - **[Big Text](./src/tools/big/SPEC.md)**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments, presentations, or at a distance.
 - **[Timezone Converter](./src/tools/timezone/SPEC.md)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
 - **[Random Picker](./src/tools/picker/SPEC.md)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
+- **[Cute Pomo](./src/tools/pomo/SPEC.md)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
 
 ---
 
@@ -77,6 +78,7 @@ This project is designed to be hosted as a static-only Worker using **Cloudflare
   - `src/tools/big/`: The Big Text tool module.
   - `src/tools/timezone/`: The Timezone Converter tool module.
   - `src/tools/picker/`: The Random Picker and Decision Maker tool module.
+  - `src/tools/pomo/`: The Cute Pomo / Focus Timer tool module.
 - `docs/specs/`: Feature specifications authored during autonomous sprints.
 - `scripts/`: Local verification, CI parity, and sprint lifecycle automation.
 

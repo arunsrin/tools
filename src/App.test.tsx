@@ -11,6 +11,7 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByRole('button', { name: /big text/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /timezone converter/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /random picker/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cute pomo/i })).toBeInTheDocument();
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -69,6 +70,21 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
     // Navigate back
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  it('navigates to Cute Pomo tool and back to hub', () => {
+    render(<App />);
+    const pomoCard = screen.getByRole('button', { name: /cute pomo/i });
+    fireEvent.click(pomoCard);
+
+    // In PomoTimer tool
+    expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+    expect(screen.getByText(/focus session/i)).toBeInTheDocument();
+
+    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
