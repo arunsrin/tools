@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import ThemeToggle from '../../components/ThemeToggle';
 import {
   findBestFontSize,
   calculateResponsivePadding,
@@ -149,9 +150,12 @@ function BigText({ onBack }: BigTextProps) {
               />
             ))}
           </div>
-          <button className="back-link" onClick={onBack}>
-            ← Back to Tools Hub
-          </button>
+          <div className="big-bottom-actions">
+            <button className="back-link" onClick={onBack}>
+              ← Back to Tools Hub
+            </button>
+            <ThemeToggle />
+          </div>
         </div>
       ) : (
         <div className="display-mode" onClick={handleBack}>

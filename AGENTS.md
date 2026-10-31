@@ -166,6 +166,8 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     The application outputs to `./dist` and is deployed as static assets via `wrangler.json`. Ensure `not_found_handling` is configured for single-page applications and no Node.js runtime APIs bleed into client bundles.
 21. **Line Ending Normalization (`.gitattributes`):**
     All shell scripts (`*.sh`), Python scripts (`*.py`), TypeScript files (`*.ts`, `*.tsx`), markdown (`*.md`), and JSON (`*.json`) must use LF line endings. PowerShell scripts (`*.ps1`) use CRLF. Enforced by `.gitattributes`.
+22. **Mandatory README Tool Registration:**
+    Whenever a new tool is introduced, `README.md` MUST be updated under Featured Tools and Project Structure to maintain public documentation integrity. Enforced automatically by `python scripts/test_tools_structure.py`.
 
 ---
 

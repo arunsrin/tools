@@ -1,9 +1,28 @@
 # Tools Hub
 
-A centralized static hub for hosting multiple small, self-contained utilities. Built with React, TypeScript, and Vite, and optimized for deployment on Cloudflare Workers.
+A centralized static hub for hosting multiple small, self-contained utilities. Built with React 19, TypeScript, and Vite, and optimized for deployment on Cloudflare Workers using Workers Assets.
+
+**Live Site:** [https://tools.arunsr.in](https://tools.arunsr.in)  
+**Author:** Authored by [Arun](https://www.arunsr.in) · Co-authored by LLM  
+**Repository:** [GitHub](https://github.com/arunsrin/tools)  
+
+---
 
 ## 🚀 Featured Tools
-- **Big Text**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments or at a distance.
+
+- **[Big Text](./src/tools/big/SPEC.md)**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments, presentations, or at a distance.
+- **[Timezone Converter](./src/tools/timezone/SPEC.md)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
+
+---
+
+## 🎨 Theme & Easter Eggs
+
+- **Cyan Color Harmony:** Inspired by [arunsr.in](https://www.arunsr.in), featuring a crisp light theme (`#ffffff` / `#0284c7`) and deep slate dark theme (`#0f172a` / `#38bdf8`).
+- **Persistent Theme Toggle:** Seamless ☀️ / 🌙 mode switcher in the top right that persists across sessions via `localStorage` and applies to the Hub and all tools.
+- **Interactive Chessboard Watermark:** A subtle SVG 8×8 corner watermark fading gracefully into the screen. Click the knight (♞) for famous quotes on chess, art, and strategy from Marcel Duchamp, Garry Kasparov, Savielly Tartakower, and more.
+- **Hidden ASCII Banner:** Curious developers inspecting page source will discover a hidden ASCII Owl of Athena and philosophical greeting.
+
+---
 
 ## 🛠️ Getting Started
 
@@ -19,25 +38,49 @@ npm run dev
 ```
 Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
+---
+
 ## 🏗️ Building & Testing
-- **Test**: `npm test`
-- **Build**: `npm run build` (outputs to `dist/`)
-- **Lint**: `npm run lint`
+
+- **Strict Test Pipeline:**
+  ```bash
+  ./scripts/test.ps1    # PowerShell (Windows)
+  ./scripts/test.sh     # Bash (Linux / macOS / WSL)
+  ```
+- **Individual Commands:**
+  - `npm test`: Run Vitest tests
+  - `npm run coverage`: Run Vitest with v8 coverage
+  - `npm run build`: Production build (outputs to `dist/`)
+  - `npm run lint`: ESLint static analysis
+
+---
 
 ## ☁️ Deployment (Cloudflare Workers Assets)
+
 This project is designed to be hosted as a static-only Worker using **Cloudflare Workers Assets**.
 
 1. Ensure your `wrangler.json` is configured correctly (points to `./dist`).
 2. Deploy using:
-```bash
-npm run build && npx wrangler deploy
-```
+   ```bash
+   npm run build && npx wrangler deploy
+   ```
+
+---
 
 ## 📖 Project Structure
+
 - `SPEC.md`: Master specification for the hub.
-- `src/App.tsx`: Hub dashboard and view switcher.
-- `src/tools/`: Directory containing individual modular tools.
+- `src/App.tsx`: Central hub dashboard and view switcher.
+- `src/components/`: Shared UI components (ThemeToggle, ChessWatermark).
+- `src/theme/`: ThemeContext and localStorage persistence hooks.
+- `src/tools/`: Directory containing individual modular tools:
   - `src/tools/big/`: The Big Text tool module.
+  - `src/tools/timezone/`: The Timezone Converter tool module.
+- `docs/specs/`: Feature specifications authored during autonomous sprints.
+- `scripts/`: Local verification, CI parity, and sprint lifecycle automation.
+
+---
 
 ## ⚖️ License
+
 GPLv3 - See [LICENSE](./LICENSE) for details.
