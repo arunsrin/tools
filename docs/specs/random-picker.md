@@ -26,8 +26,8 @@ As a user of Tools Hub, I want a playful, responsive, visual-first random decisi
 2. **Custom Choices Management**: Users can input custom choices via textarea or comma-delimited list.
 3. **Quick Presets**: Offers built-in presets:
    - *"Yes / No / Maybe"*
-   - *"What to Eat"* (Pizza, Sushi, Tacos, Burgers, Pasta, Salad)
-   - *"Who Goes First"* (Player 1, Player 2, Player 3, Player 4)
+   - *"What to Eat"* (Pizza, North Indian, South Indian, Sandwiches, Chaat, Chinese)
+   - *"Who Goes First"* (Asha, Siddharth, Amma, Appa)
    - *"Numbers 1–10"*
 4. **Elimination Mode (Raffle / No Repeats)**:
    - Optional toggle: "Eliminate picked option".

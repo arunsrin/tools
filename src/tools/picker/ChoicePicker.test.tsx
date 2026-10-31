@@ -46,11 +46,18 @@ describe('ChoicePicker Component', () => {
     it('applies quick presets and updates the choices list', () => {
       render(<ChoicePicker onBack={vi.fn()} />);
 
+      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
+
+      // Default should be "What to Eat" preset
+      expect(textarea.value).toBe('Pizza\nNorth Indian\nSouth Indian\nSandwiches\nChaat\nChinese');
+
       const yesNoBtn = screen.getByRole('button', { name: /yes \/ no \/ maybe/i });
       fireEvent.click(yesNoBtn);
-
-      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
       expect(textarea.value).toBe('Yes\nNo\nMaybe');
+
+      const whoGoesFirstBtn = screen.getByRole('button', { name: /who goes first/i });
+      fireEvent.click(whoGoesFirstBtn);
+      expect(textarea.value).toBe('Asha\nSiddharth\nAmma\nAppa');
     });
 
     it('picks a winner in wheel view and announces it', () => {

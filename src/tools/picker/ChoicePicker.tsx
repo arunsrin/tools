@@ -33,8 +33,8 @@ interface PickRecord {
 
 const PRESETS: Record<string, string[]> = {
   'Yes / No / Maybe': ['Yes', 'No', 'Maybe'],
-  'What to Eat': ['Pizza', 'Sushi', 'Tacos', 'Burgers', 'Pasta', 'Salad'],
-  'Who Goes First': ['Player 1', 'Player 2', 'Player 3', 'Player 4'],
+  'What to Eat': ['Pizza', 'North Indian', 'South Indian', 'Sandwiches', 'Chaat', 'Chinese'],
+  'Who Goes First': ['Asha', 'Siddharth', 'Amma', 'Appa'],
   'Numbers 1–10': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
 };
 
@@ -753,7 +753,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
                   rows={6}
                   value={rawInput}
                   onChange={(e) => handleInputChange(e.target.value)}
-                  placeholder="Pizza&#10;Sushi&#10;Tacos&#10;Burgers"
+                  placeholder="Pizza&#10;North Indian&#10;South Indian&#10;Chaat"
                   disabled={isChoosing}
                 />
               </div>
