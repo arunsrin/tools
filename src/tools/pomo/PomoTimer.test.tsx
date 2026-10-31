@@ -253,7 +253,114 @@ describe('PomoTimer Component', () => {
     expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
   });
 
-  it('toggles mute preference and handles audio gracefully', () => {
+  it('dismisses settings modal on Escape key and resets uncommitted input errors on reopen', () => {
+    render(<PomoTimer onBack={mockOnBack} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
+    expect(screen.getByRole('heading', { name: /timer settings/i })).toBeInTheDocument();
+
+    const form = screen.getByTestId('pomo-settings-form');
+    const focusInput = screen.getByLabelText(/focus duration/i);
+
+    // Enter invalid input
+    fireEvent.change(focusInput, { target: { value: '999' } });
+    fireEvent.submit(form);
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+
+    // Dismiss with Escape key
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
+
+    // Reopen modal - input should be back to saved duration and error cleared
+    fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
+    expect(screen.getByRole('heading', { name: /timer settings/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/focus duration/i)).toHaveValue(25);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    // Dismiss by clicking backdrop
+    const backdrop = screen.getByRole('dialog');
+    fireEvent.click(backdrop);
+    expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
+  });
+
+  it('auto-starts next phase when autoStart is enabled', () => {
+    vi.useFakeTimers();
+    localStorage.setItem(
+      'tools_hub_pomo_prefs',
+      JSON.stringify({
+        focusDuration: 1,
+        shortBreakDuration: 1,
+        longBreakDuration: 5,
+        autoStart: true,
+        isMuted: true,
+        totalCompleted: 0,
+      })
+    );
+
+    render(<PomoTimer onBack={mockOnBack} />);
+    expect(screen.getByText('01:00')).toBeInTheDocument();
+
+    // Start Focus
+    fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
+    expect(screen.getByRole('button', { name: /pause timer/i })).toBeInTheDocument();
+
+    // Advance 60s to natural completion
+    act(() => {
+      vi.advanceTimersByTime(60 * 1000);
+    });
+
+    // Should transition to Short Break AND stay running automatically
+    expect(screen.getByText(/short coffee break/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /pause timer/i })).toBeInTheDocument();
+
+    // Advance 2s in short break to confirm it's ticking
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(screen.getByText('00:58')).toBeInTheDocument();
+  });
+
+  it('toggles mute preference and handles audio gracefully with context cleanup', () => {
+    const mockClose = vi.fn().mockResolvedValue(undefined);
+    const mockResume = vi.fn().mockResolvedValue(undefined);
+    let capturedOnEnded: (() => void) | undefined = undefined;
+
+    class MockAudioContext {
+      state = 'suspended';
+      currentTime = 0;
+      destination = {};
+      resume = mockResume;
+      close = mockClose;
+      createOscillator() {
+        return {
+          type: 'sine',
+          frequency: {
+            setValueAtTime: vi.fn(),
+            exponentialRampToValueAtTime: vi.fn(),
+          },
+          connect: vi.fn(),
+          start: vi.fn(),
+          stop: vi.fn(),
+          set onended(fn: () => void) {
+            capturedOnEnded = fn;
+          },
+        };
+      }
+      createGain() {
+        return {
+          gain: {
+            setValueAtTime: vi.fn(),
+            linearRampToValueAtTime: vi.fn(),
+            exponentialRampToValueAtTime: vi.fn(),
+          },
+          connect: vi.fn(),
+        };
+      }
+    }
+
+    const originalAudioContext = window.AudioContext;
+    (window as unknown as { AudioContext: typeof MockAudioContext }).AudioContext = MockAudioContext;
+
     render(<PomoTimer onBack={mockOnBack} />);
 
     const muteBtn = screen.getByRole('button', { name: /mute alerts/i });
@@ -264,9 +371,21 @@ describe('PomoTimer Component', () => {
 
     // Calling playChime with muted should do nothing
     playChime(true);
+    expect(mockResume).not.toHaveBeenCalled();
 
-    // Calling playChime when unmuted in environment without AudioContext
+    // Unmute
+    fireEvent.click(screen.getByRole('button', { name: /unmute alerts/i }));
+
+    // Calling playChime when unmuted uses AudioContext and closes on ended
     playChime(false);
+    expect(mockResume).toHaveBeenCalled();
+    const triggerEnded = capturedOnEnded as (() => void) | undefined;
+    if (triggerEnded) {
+      triggerEnded();
+      expect(mockClose).toHaveBeenCalled();
+    }
+
+    (window as unknown as { AudioContext?: typeof originalAudioContext }).AudioContext = originalAudioContext;
   });
 
   it('renders PomoMascot across all phases and animation states', () => {

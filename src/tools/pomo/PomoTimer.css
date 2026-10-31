@@ -584,13 +584,18 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 480px) {
+  .pomo-container {
+    padding: 1rem 0.5rem;
+  }
+
   .pomo-timer-card {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 0.75rem;
   }
 
   .pomo-dial-container {
-    width: 250px;
-    height: 250px;
+    width: min(250px, 100%);
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .pomo-mascot {

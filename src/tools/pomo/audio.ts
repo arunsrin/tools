@@ -7,6 +7,10 @@ export function playChime(isMuted: boolean): void {
     if (!AudioContextClass) return;
 
     const ctx = new AudioContextClass();
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+
     const now = ctx.currentTime;
     const osc1 = ctx.createOscillator();
     const osc2 = ctx.createOscillator();
@@ -27,6 +31,11 @@ export function playChime(isMuted: boolean): void {
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(ctx.destination);
+
+    // Explicitly release hardware resources when chime decays
+    osc2.onended = () => {
+      ctx.close().catch(() => {});
+    };
 
     osc1.start(now);
     osc1.stop(now + 0.3);

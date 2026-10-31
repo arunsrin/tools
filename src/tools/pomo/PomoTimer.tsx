@@ -261,6 +261,7 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
   );
 
   const [timeLeft, setTimeLeft] = useState<number>(prefs.focusDuration * 60);
+  const timeLeftRef = useRef<number>(prefs.focusDuration * 60);
 
   // Keep track of settings inputs
   const [customFocus, setCustomFocus] = useState<string>(String(prefs.focusDuration));
@@ -304,21 +305,29 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
       }));
 
       if (cycleStep < 4) {
+        const nextTime = prefs.shortBreakDuration * 60;
+        timeLeftRef.current = nextTime;
         setPhase('shortBreak');
-        setTimeLeft(prefs.shortBreakDuration * 60);
+        setTimeLeft(nextTime);
       } else {
+        const nextTime = prefs.longBreakDuration * 60;
+        timeLeftRef.current = nextTime;
         setPhase('longBreak');
-        setTimeLeft(prefs.longBreakDuration * 60);
+        setTimeLeft(nextTime);
       }
     } else if (phase === 'shortBreak') {
+      const nextTime = prefs.focusDuration * 60;
+      timeLeftRef.current = nextTime;
       setPhase('focus');
       setCycleStep((prev) => prev + 1);
-      setTimeLeft(prefs.focusDuration * 60);
+      setTimeLeft(nextTime);
     } else {
       // Long Break ended, reset to cycle 1
+      const nextTime = prefs.focusDuration * 60;
+      timeLeftRef.current = nextTime;
       setPhase('focus');
       setCycleStep(1);
-      setTimeLeft(prefs.focusDuration * 60);
+      setTimeLeft(nextTime);
     }
 
     if (!prefs.autoStart) {
@@ -335,13 +344,14 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
     if (!isRunning) return;
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          advanceRef.current();
-          return 0;
-        }
-        return prev - 1;
-      });
+      if (timeLeftRef.current <= 1) {
+        timeLeftRef.current = 0;
+        setTimeLeft(0);
+        advanceRef.current();
+      } else {
+        timeLeftRef.current -= 1;
+        setTimeLeft(timeLeftRef.current);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
@@ -354,43 +364,57 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
 
   const handleReset = () => {
     setIsRunning(false);
-    setTimeLeft(getPhaseDuration(phase) * 60);
+    const d = getPhaseDuration(phase) * 60;
+    timeLeftRef.current = d;
+    setTimeLeft(d);
   };
 
   const handleSkip = () => {
     setIsRunning(false);
     if (phase === 'focus') {
       if (cycleStep < 4) {
+        const nextTime = prefs.shortBreakDuration * 60;
+        timeLeftRef.current = nextTime;
         setPhase('shortBreak');
-        setTimeLeft(prefs.shortBreakDuration * 60);
+        setTimeLeft(nextTime);
       } else {
+        const nextTime = prefs.longBreakDuration * 60;
+        timeLeftRef.current = nextTime;
         setPhase('longBreak');
-        setTimeLeft(prefs.longBreakDuration * 60);
+        setTimeLeft(nextTime);
       }
     } else if (phase === 'shortBreak') {
+      const nextTime = prefs.focusDuration * 60;
+      timeLeftRef.current = nextTime;
       setPhase('focus');
       setCycleStep((prev) => prev + 1);
-      setTimeLeft(prefs.focusDuration * 60);
+      setTimeLeft(nextTime);
     } else {
+      const nextTime = prefs.focusDuration * 60;
+      timeLeftRef.current = nextTime;
       setPhase('focus');
       setCycleStep(1);
-      setTimeLeft(prefs.focusDuration * 60);
+      setTimeLeft(nextTime);
     }
   };
 
   const handleAddMinute = () => {
-    setTimeLeft((prev) => prev + 60);
+    timeLeftRef.current += 60;
+    setTimeLeft(timeLeftRef.current);
   };
 
   const handleSubtractMinute = () => {
-    setTimeLeft((prev) => Math.max(0, prev - 60));
+    timeLeftRef.current = Math.max(0, timeLeftRef.current - 60);
+    setTimeLeft(timeLeftRef.current);
   };
 
   const handleSelectPhase = (targetPhase: PomoPhase) => {
     if (targetPhase === phase) return;
     setIsRunning(false);
+    const d = getPhaseDuration(targetPhase) * 60;
+    timeLeftRef.current = d;
     setPhase(targetPhase);
-    setTimeLeft(getPhaseDuration(targetPhase) * 60);
+    setTimeLeft(d);
   };
 
   const handleToggleMute = () => {
@@ -399,6 +423,32 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
       isMuted: !prev.isMuted,
     }));
   };
+
+  const handleOpenSettings = () => {
+    setCustomFocus(String(prefs.focusDuration));
+    setCustomShortBreak(String(prefs.shortBreakDuration));
+    setCustomLongBreak(String(prefs.longBreakDuration));
+    setSettingsError(null);
+    setIsSettingsOpen(true);
+  };
+
+  const handleCloseSettings = () => {
+    setSettingsError(null);
+    setIsSettingsOpen(false);
+  };
+
+  useEffect(() => {
+    if (!isSettingsOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleCloseSettings();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSettingsOpen]);
 
   // Settings Save & Validation
   const handleSaveSettings = (e: React.FormEvent) => {
@@ -430,9 +480,18 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
 
     // If currently paused, update current time left
     if (!isRunning) {
-      if (phase === 'focus') setTimeLeft(f * 60);
-      if (phase === 'shortBreak') setTimeLeft(sb * 60);
-      if (phase === 'longBreak') setTimeLeft(lb * 60);
+      if (phase === 'focus') {
+        timeLeftRef.current = f * 60;
+        setTimeLeft(f * 60);
+      }
+      if (phase === 'shortBreak') {
+        timeLeftRef.current = sb * 60;
+        setTimeLeft(sb * 60);
+      }
+      if (phase === 'longBreak') {
+        timeLeftRef.current = lb * 60;
+        setTimeLeft(lb * 60);
+      }
     }
 
     setIsSettingsOpen(false);
@@ -449,9 +508,21 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
       longBreakDuration: DEFAULT_PREFS.longBreakDuration,
     }));
     if (!isRunning) {
-      if (phase === 'focus') setTimeLeft(DEFAULT_PREFS.focusDuration * 60);
-      if (phase === 'shortBreak') setTimeLeft(DEFAULT_PREFS.shortBreakDuration * 60);
-      if (phase === 'longBreak') setTimeLeft(DEFAULT_PREFS.longBreakDuration * 60);
+      if (phase === 'focus') {
+        const d = DEFAULT_PREFS.focusDuration * 60;
+        timeLeftRef.current = d;
+        setTimeLeft(d);
+      }
+      if (phase === 'shortBreak') {
+        const d = DEFAULT_PREFS.shortBreakDuration * 60;
+        timeLeftRef.current = d;
+        setTimeLeft(d);
+      }
+      if (phase === 'longBreak') {
+        const d = DEFAULT_PREFS.longBreakDuration * 60;
+        timeLeftRef.current = d;
+        setTimeLeft(d);
+      }
     }
     setSettingsError(null);
   };
@@ -499,7 +570,7 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
           </button>
           <button
             className="pomo-icon-btn"
-            onClick={() => setIsSettingsOpen(true)}
+            onClick={handleOpenSettings}
             type="button"
             title="Timer Settings"
             aria-label="Timer Settings"
@@ -659,7 +730,7 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
       {isSettingsOpen && (
         <div
           className="pomo-modal-backdrop"
-          onClick={() => setIsSettingsOpen(false)}
+          onClick={handleCloseSettings}
           role="dialog"
           aria-modal="true"
           aria-labelledby="pomo-settings-title"
@@ -672,7 +743,7 @@ export default function PomoTimer({ onBack }: PomoTimerProps) {
               <h2 id="pomo-settings-title">Timer Settings</h2>
               <button
                 className="pomo-modal-close"
-                onClick={() => setIsSettingsOpen(false)}
+                onClick={handleCloseSettings}
                 type="button"
                 aria-label="Close settings"
               >
