@@ -17,8 +17,7 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 
 ## 🎨 Theme & Easter Eggs
 
-- **Cyan Color Harmony:** Inspired by [arunsr.in](https://www.arunsr.in), featuring a crisp light theme (`#ffffff` / `#0284c7`) and deep slate dark theme (`#0f172a` / `#38bdf8`).
-- **Persistent Theme Toggle:** Seamless ☀️ / 🌙 mode switcher in the top right that persists across sessions via `localStorage` and applies to the Hub and all tools.
+- **Cyan Color Harmony (Dark Theme by Default):** Inspired by [arunsr.in](https://www.arunsr.in), featuring a deep slate/navy palette (`#0f172a` / `#1e293b`) with vibrant cyan and sky-blue accents (`#38bdf8`).
 - **Interactive Chessboard Watermark:** A subtle SVG 8×8 corner watermark fading gracefully into the screen. Click the knight (♞) for famous quotes on chess, art, and strategy from Marcel Duchamp, Garry Kasparov, Savielly Tartakower, and more.
 - **Hidden ASCII Banner:** Curious developers inspecting page source will discover a hidden ASCII Owl of Athena and philosophical greeting.
 

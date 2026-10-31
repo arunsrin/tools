@@ -243,11 +243,3 @@
   opacity: 0.6;
 }
 
-.big-bottom-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-  width: 100%;
-}
-

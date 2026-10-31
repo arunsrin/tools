@@ -168,6 +168,8 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     All shell scripts (`*.sh`), Python scripts (`*.py`), TypeScript files (`*.ts`, `*.tsx`), markdown (`*.md`), and JSON (`*.json`) must use LF line endings. PowerShell scripts (`*.ps1`) use CRLF. Enforced by `.gitattributes`.
 22. **Mandatory README Tool Registration:**
     Whenever a new tool is introduced, `README.md` MUST be updated under Featured Tools and Project Structure to maintain public documentation integrity. Enforced automatically by `python scripts/test_tools_structure.py`.
+23. **Dark Theme Standard:**
+    The Tools Hub and all tools strictly adopt a high-contrast dark theme by default, matching the dark theme of the main `arunsr.in` Hugo site (deep slate/navy `#0f172a`, card surfaces `#1e293b`, borders `#334155`, text `#f1f5f9` / `#94a3b8`, and vivid cyan accents `#38bdf8` / `#7dd3fc`). Avoid introducing global light/dark mode toggles unless explicitly requested for a specific tool.
 
 ---
 

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import ThemeToggle from '../../components/ThemeToggle';
 import type {
   TimezoneItem,
   TimezonePreferences,
@@ -340,8 +339,6 @@ export default function TimezoneConverter({ onBack }: TimezoneConverterProps) {
           >
             ↺ Reset
           </button>
-
-          <ThemeToggle />
         </div>
       </header>
 

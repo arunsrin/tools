@@ -1,13 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
 describe('App (Tools Hub Dashboard)', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    document.documentElement.removeAttribute('data-theme');
-  });
-
   it('renders the hub header, badge, and featured tools', () => {
     render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -18,35 +13,25 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
-  it('renders GitHub link in top chrome and links to repo', () => {
+  it('renders icon-only GitHub link in top chrome', () => {
     render(<App />);
     const githubLink = screen.getByRole('link', { name: /gitHub repository/i });
     expect(githubLink).toBeInTheDocument();
     expect(githubLink).toHaveAttribute('href', 'https://github.com/arunsrin/tools');
     expect(githubLink).toHaveAttribute('target', '_blank');
+    expect(githubLink).toHaveAttribute('title', 'GitHub Repository');
+    // Ensure no redundant text
+    expect(githubLink).not.toHaveTextContent('GitHub');
   });
 
-  it('renders theme toggle and toggles between light and dark modes', () => {
-    render(<App />);
-    const themeBtn = screen.getByRole('button', { name: /switch to (light|dark) mode/i });
-    expect(themeBtn).toBeInTheDocument();
-
-    // Toggle theme
-    fireEvent.click(themeBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
-
-    // Toggle back
-    fireEvent.click(themeBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-  });
-
-  it('renders footer attribution and links', () => {
+  it('renders footer attribution with author link and co-author note', () => {
     render(<App />);
     expect(screen.getByText(/authored by/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /^arun$/i })).toHaveAttribute('href', 'https://www.arunsr.in/');
+    const arunLink = screen.getByRole('link', { name: /^arun$/i });
+    expect(arunLink).toHaveAttribute('href', 'https://www.arunsr.in/');
     expect(screen.getByText(/co-authored by llm/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /digital garden/i })).toHaveAttribute('href', 'https://www.arunsr.in/');
-    expect(screen.getByText(/gplv3 licensed/i)).toBeInTheDocument();
+    // Auxiliary line removed per author review
+    expect(screen.queryByText(/gplv3 licensed/i)).not.toBeInTheDocument();
   });
 
   it('navigates to Timezone Converter tool and back to hub', () => {

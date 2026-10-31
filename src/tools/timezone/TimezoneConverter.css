@@ -20,16 +20,6 @@
   --tz-accent: var(--accent-color, #38bdf8);
 }
 
-[data-theme="light"] .tz-container {
-  --tz-bg: #f8fafc;
-  --tz-surface: #ffffff;
-  --tz-surface-secondary: #f1f5f9;
-  --tz-border: #e2e8f0;
-  --tz-text: #1e293b;
-  --tz-text-muted: #64748b;
-  --tz-accent: #0284c7;
-}
-
 /* Header */
 .tz-header {
   display: flex;

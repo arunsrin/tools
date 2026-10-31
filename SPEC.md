@@ -6,7 +6,7 @@ A centralized static hub for hosting multiple small, self-contained tools.
 - **Centralized Navigation**: A main "Tools Hub" page that lists all available tools.
 - **Tool Isolation**: Each tool operates independently but follows the hub's UI/UX standards.
 - **Routing/View Switching**: Seamless navigation between the hub and individual tools using a centralized state-based switcher.
-- **Persistent Theme System**: Global light and dark mode toggling persisting across sessions via `localStorage`, cascading across the hub and all tools.
+- **Dark Theme Standard**: Tools Hub and modular tools adopt a high-contrast dark theme by default matching `arunsr.in` (`#0f172a`, `#1e293b`, `#38bdf8`), avoiding unnecessary global theme toggles.
 - **Mandatory README Tool Registration**: Whenever a new tool is introduced to `src/tools/`, `README.md` MUST be updated under Featured Tools and Project Structure.
 - **Scalability**: New tools can be added by creating a new module in `src/tools/`.
 
