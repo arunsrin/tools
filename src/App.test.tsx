@@ -10,6 +10,7 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByText(/utility toolkit/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /big text/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /timezone converter/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /random picker/i })).toBeInTheDocument();
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -27,7 +28,6 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(githubLink).toHaveAttribute('title', 'GitHub Repository');
     expect(githubLink).not.toHaveTextContent('GitHub');
 
-    // Auxiliary line removed per author review
     expect(screen.queryByText(/gplv3 licensed/i)).not.toBeInTheDocument();
   });
 
@@ -53,6 +53,20 @@ describe('App (Tools Hub Dashboard)', () => {
     // In BigText tool
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+
+    // Navigate back
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  it('navigates to Random Picker tool when its card is clicked and back to hub', () => {
+    render(<App />);
+    const pickerCard = screen.getByRole('button', { name: /random picker/i });
+    fireEvent.click(pickerCard);
+
+    // In ChoicePicker tool
+    expect(screen.getByRole('heading', { level: 1, name: /random picker & decision maker/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
     // Navigate back
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
