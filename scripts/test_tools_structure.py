@@ -17,6 +17,7 @@ if hasattr(sys.stderr, "reconfigure"):
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS_DIR = os.path.join(ROOT_DIR, "src", "tools")
 MASTER_SPEC = os.path.join(ROOT_DIR, "SPEC.md")
+README_FILE = os.path.join(ROOT_DIR, "README.md")
 
 
 def main():
@@ -26,6 +27,13 @@ def main():
 
     with open(MASTER_SPEC, "r", encoding="utf-8") as f:
         master_spec_text = f.read()
+
+    if not os.path.exists(README_FILE):
+        print(f"Error: README.md not found at {README_FILE}", file=sys.stderr)
+        sys.exit(1)
+
+    with open(README_FILE, "r", encoding="utf-8") as f:
+        readme_text = f.read()
 
     if not os.path.exists(TOOLS_DIR):
         print(f"Error: Tools directory not found at {TOOLS_DIR}", file=sys.stderr)
@@ -60,6 +68,10 @@ def main():
         # 4. Check that master SPEC.md mentions this tool
         if tool.lower() not in master_spec_text.lower():
             errors.append(f"Master SPEC.md does not reference tool '{tool}'.")
+
+        # 5. Check that README.md mentions this tool
+        if tool.lower() not in readme_text.lower():
+            errors.append(f"README.md does not reference tool '{tool}'.")
 
     if errors:
         print("❌ Tool Structure Validation Failed:", file=sys.stderr)
