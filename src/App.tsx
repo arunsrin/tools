@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import BigText from './tools/big/BigText';
 import TimezoneConverter from './tools/timezone/TimezoneConverter';
+import PomoTimer from './tools/pomo/PomoTimer';
 import ChessWatermark from './components/ChessWatermark';
 import './index.css';
 
-type View = 'hub' | 'big' | 'timezone';
+type View = 'hub' | 'big' | 'timezone' | 'pomo';
 
 export default function App() {
   const [view, setView] = useState<View>('hub');
@@ -15,6 +16,10 @@ export default function App() {
 
   if (view === 'timezone') {
     return <TimezoneConverter onBack={() => setView('hub')} />;
+  }
+
+  if (view === 'pomo') {
+    return <PomoTimer onBack={() => setView('hub')} />;
   }
 
   return (
@@ -39,6 +44,12 @@ export default function App() {
             <div className="tool-icon">🌐</div>
             <h2>Timezone Converter</h2>
             <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
+          </button>
+
+          <button className="tool-card" onClick={() => setView('pomo')} type="button">
+            <div className="tool-icon">🍅</div>
+            <h2>Cute Pomo</h2>
+            <p>Playful Pomodoro timer with Sprouting Tomato Buddy, chimes & cycle tracking.</p>
           </button>
 
           {/* Placeholder for future tools */}
