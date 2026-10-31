@@ -146,6 +146,7 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
 14. **High-Contrast & Responsive Accessibility:**
     - Contrast ratios must satisfy WCAG AA standards (minimum 4.5:1 for normal text).
     - Interfaces must scale gracefully across viewports, from compact mobile devices (320px) to desktop and ultrawide screens.
+    - **Visual Stage Mobile Scaling Rule:** All visual stages, wheels, canvases, and animated cards MUST specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions (`width: 320px`). Card containers must provide responsive padding (`padding: 1rem` on viewports ≤ 480px) to guarantee zero horizontal scroll on 320px–375px viewports.
 15. **Subagent Permission Minimization & The Interruption-Free Reviewer Principle:**
     Subagents should be granted the minimum tool privileges strictly required for their role. In particular, code review agents (like Elrond) must NOT be spawned with write/shell tools (`enable_write_tools: false`). Arbitrary shell commands (`git log`, `git diff`, `git status`) executed by subagents trigger interactive Antigravity CLI permission prompts that disrupt the author. Instead:
     - Gandalf pre-gathers the git diff, commit history, and living spec context and passes them directly in Elrond's prompt.

@@ -39,6 +39,7 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Test responsive styling across viewport widths (320px to 2560px).
   - Every tool MUST have a clear, accessible "Back to Hub" button with high contrast and intuitive placement.
   - Ensure contrast ratios satisfy WCAG AA standards (minimum 4.5:1 for normal text).
+  - **Visual Stage Mobile Scaling Rule:** Audit that visual stages, wheels, canvases, and animated cards specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions (`width: 320px`). Card containers must provide responsive padding (`padding: 1rem` on viewports ≤ 480px) to guarantee zero horizontal scroll on 320px–375px viewports.
 
 ### Gate 4: TypeScript Strictness & Type Safety
 - **The Trap:** Bypassing the type checker with `any`, untyped props, or loose type assertions (`as unknown as ...`).
