@@ -13,23 +13,20 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
-  it('renders icon-only GitHub link in top chrome', () => {
-    render(<App />);
-    const githubLink = screen.getByRole('link', { name: /gitHub repository/i });
-    expect(githubLink).toBeInTheDocument();
-    expect(githubLink).toHaveAttribute('href', 'https://github.com/arunsrin/tools');
-    expect(githubLink).toHaveAttribute('target', '_blank');
-    expect(githubLink).toHaveAttribute('title', 'GitHub Repository');
-    // Ensure no redundant text
-    expect(githubLink).not.toHaveTextContent('GitHub');
-  });
-
-  it('renders footer attribution with author link and co-author note', () => {
+  it('renders footer attribution with author link, co-author note, and icon-only GitHub link', () => {
     render(<App />);
     expect(screen.getByText(/authored by/i)).toBeInTheDocument();
     const arunLink = screen.getByRole('link', { name: /^arun$/i });
     expect(arunLink).toHaveAttribute('href', 'https://www.arunsr.in/');
     expect(screen.getByText(/co-authored by llm/i)).toBeInTheDocument();
+
+    const githubLink = screen.getByRole('link', { name: /gitHub repository/i });
+    expect(githubLink).toBeInTheDocument();
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/arunsrin/tools');
+    expect(githubLink).toHaveAttribute('target', '_blank');
+    expect(githubLink).toHaveAttribute('title', 'GitHub Repository');
+    expect(githubLink).not.toHaveTextContent('GitHub');
+
     // Auxiliary line removed per author review
     expect(screen.queryByText(/gplv3 licensed/i)).not.toBeInTheDocument();
   });
