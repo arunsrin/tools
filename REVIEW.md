@@ -69,10 +69,12 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Verify single-page routing compatibility configured in `wrangler.json`.
 
 ### Gate 7: Modular Isolation & Spec Compliance
-- **The Trap:** New tools polluting root files, lacking a specification, or missing back navigation to the hub.
+- **The Trap:** New tools polluting root files, lacking a specification, missing back navigation to the hub, or failing to register direct shareable URLs.
 - **The Audit:**
   - Modular directory structure enforced: `src/tools/<tool-name>/` containing `<ToolName>.tsx`, `<ToolName>.css`, `<ToolName>.test.tsx`, and `SPEC.md`.
   - Master `SPEC.md` must list the tool in its registered tools section.
+  - `src/routes.ts` must register the tool key and route in `TOOL_ROUTES` and `ROUTE_TO_TOOL`.
+  - Tool card on hub must be an accessible semantic `<a>` link (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}`.
   - Living specification `docs/specs/<feature-name>.md` must match the final implementation exactly.
 
 ### Gate 8: Performance, Zero Bloat & Minimal Dependencies
