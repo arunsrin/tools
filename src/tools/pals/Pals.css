@@ -1,0 +1,373 @@
+.pals-wrapper {
+  min-height: 100vh;
+  background-color: var(--color-bg, #0f172a);
+  color: var(--color-text, #f1f5f9);
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pals-header {
+  width: min(800px, 100%);
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.back-btn {
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.back-btn:hover {
+  background: #1e293b;
+  border-color: #38bdf8;
+  transform: translateX(-2px);
+}
+
+.pals-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pals-badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pals-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.pals-subtitle {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.pals-main {
+  width: min(800px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Controls Bar */
+.pals-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.btn-group {
+  display: inline-flex;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 2px;
+  border: 1px solid #334155;
+}
+
+.pal-select-btn,
+.env-select-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pal-select-btn:hover,
+.env-select-btn:hover {
+  color: #f1f5f9;
+}
+
+.pal-select-btn.active,
+.env-select-btn.active {
+  background: #38bdf8;
+  color: #0f172a;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.sound-control {
+  margin-left: auto;
+}
+
+.sound-btn {
+  background: #0f172a;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sound-btn:hover {
+  border-color: #38bdf8;
+  color: #f8fafc;
+}
+
+.sound-btn.sound-on {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+}
+
+/* Canvas Area */
+.canvas-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 800 / 450;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+}
+
+.pals-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.pals-canvas:active {
+  cursor: grabbing;
+}
+
+/* Floating Canvas HUD */
+.canvas-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  font-size: 0.85rem;
+}
+
+.hud-badge {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.hud-name {
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.hud-mood {
+  color: #e2e8f0;
+  font-size: 0.8rem;
+}
+
+.hud-stats {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-snack {
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.energy-bar {
+  width: 60px;
+  height: 8px;
+  background: #334155;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Action Toolbar */
+.pals-action-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+}
+
+.action-btn {
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+  background: #334155;
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+.pet-btn:hover {
+  border-color: #f43f5e;
+  color: #fda4af;
+}
+
+.ball-btn:hover {
+  border-color: #38bdf8;
+  color: #7dd3fc;
+}
+
+.treat-btn:hover {
+  border-color: #fbbf24;
+  color: #fde68a;
+}
+
+.whistle-btn:hover {
+  border-color: #a855f7;
+  color: #d8b4fe;
+}
+
+.reset-btn {
+  color: #94a3b8;
+}
+
+.reset-btn:hover {
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+/* Tip Card */
+.pals-tip-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px dashed #334155;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.pals-tip-card strong {
+  color: #38bdf8;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .pals-wrapper {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .pals-controls-bar {
+    padding: 0.75rem;
+  }
+
+  .control-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sound-control {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .sound-btn {
+    width: 100%;
+  }
+
+  .canvas-hud {
+    font-size: 0.75rem;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .hud-badge,
+  .hud-stats {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .pals-action-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
