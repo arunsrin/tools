@@ -31,6 +31,9 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const pomoLink = screen.getByRole('link', { name: /cute pomo/i });
     expect(pomoLink).toHaveAttribute('href', TOOL_ROUTES.pomo);
 
+    const palsLink = screen.getByRole('link', { name: /desktop pals/i });
+    expect(palsLink).toHaveAttribute('href', TOOL_ROUTES.pals);
+
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -116,6 +119,23 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
+  it('navigates to Desktop Pals tool and back to hub', () => {
+    render(<App />);
+    const palsCard = screen.getByRole('link', { name: /desktop pals/i });
+    fireEvent.click(palsCard);
+
+    // In Desktop Pals tool & URL updated
+    expect(window.location.pathname).toBe('/pals');
+    expect(screen.getByRole('heading', { level: 1, name: /desktop pals/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+    expect(screen.getByTestId('pals-canvas')).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
   it('mounts directly to Timezone Converter when loading /timezone path', () => {
     window.history.replaceState({}, '', '/timezone');
     render(<App />);
@@ -143,6 +163,14 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     render(<App />);
 
     expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
+  });
+
+  it('mounts directly to Desktop Pals when loading /pals path', () => {
+    window.history.replaceState({}, '', '/pals');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /desktop pals/i })).toBeInTheDocument();
+    expect(screen.getByTestId('pals-canvas')).toBeInTheDocument();
   });
 
   it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
@@ -203,6 +231,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/timezone')).toBe('timezone');
       expect(parseRoute('/picker/')).toBe('picker');
       expect(parseRoute('/pomo')).toBe('pomo');
+      expect(parseRoute('/pals')).toBe('pals');
     });
 
     it('parses hash fallback correctly', () => {
@@ -210,6 +239,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/', '#timezone')).toBe('timezone');
       expect(parseRoute('/', '#picker')).toBe('picker');
       expect(parseRoute('/', '#/pomo')).toBe('pomo');
+      expect(parseRoute('/', '#/pals')).toBe('pals');
     });
 
     it('falls back to hub for unknown or empty paths', () => {
@@ -225,6 +255,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('timezone')).toBe('/timezone');
       expect(getPathForView('picker')).toBe('/picker');
       expect(getPathForView('pomo')).toBe('/pomo');
+      expect(getPathForView('pals')).toBe('/pals');
     });
   });
 });
