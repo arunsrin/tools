@@ -151,24 +151,6 @@ describe('Biomorphs Component & Engine', () => {
     expect(screen.getByText(/new genesis initiated/i)).toBeInTheDocument();
   });
 
-  it('switches mutation drift intensity and defaults to radical', () => {
-    render(<Biomorphs onBack={onBackMock} />);
-
-    const subtleBtn = screen.getByTestId('mutation-btn-subtle');
-    const radicalBtn = screen.getByTestId('mutation-btn-radical');
-
-    // Default is radical
-    expect(radicalBtn).toHaveClass('active');
-    expect(subtleBtn).not.toHaveClass('active');
-
-    fireEvent.click(subtleBtn);
-    expect(subtleBtn).toHaveClass('active');
-    expect(radicalBtn).not.toHaveClass('active');
-
-    fireEvent.click(radicalBtn);
-    expect(radicalBtn).toHaveClass('active');
-  });
-
   it('displays independent mutation traits for both Specimen Alpha and Beta', () => {
     render(<Biomorphs onBack={onBackMock} />);
     const alphaCard = screen.getByTestId('specimen-alpha-card');
@@ -249,14 +231,12 @@ describe('Biomorphs Component & Engine', () => {
       'tools_hub_biomorphs',
       JSON.stringify({
         parentGenome: savedGenome,
-        intensity: 'radical',
         lineage: [savedGenome],
       })
     );
 
     const { unmount } = render(<Biomorphs onBack={onBackMock} />);
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 9/i);
-    expect(screen.getByTestId('mutation-btn-radical')).toHaveClass('active');
     unmount();
 
     // Corrupt JSON in localStorage

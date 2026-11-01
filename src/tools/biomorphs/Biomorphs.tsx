@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   type BiomorphGenome,
-  type MutationIntensity,
   createPrimordialGenome,
   mutateGenome,
   drawBiomorph,
@@ -29,19 +28,6 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     return createPrimordialGenome();
   });
 
-  const [intensity, setIntensity] = useState<MutationIntensity>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed?.intensity) return parsed.intensity;
-      }
-    } catch {
-      // ignore
-    }
-    return 'radical';
-  });
-
   const [lineage, setLineage] = useState<BiomorphGenome[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -56,11 +42,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   });
 
   // Mutated candidates: Both Alpha and Beta are independently mutated from parentGenome by equal amounts
-  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => mutateGenome(parentGenome, intensity).child);
-  const [alphaTraits, setAlphaTraits] = useState<string[]>(() => mutateGenome(parentGenome, intensity).mutatedTraits);
+  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
+  const [alphaTraits, setAlphaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
 
-  const [specimenBeta, setSpecimenBeta] = useState<BiomorphGenome>(() => mutateGenome(parentGenome, intensity).child);
-  const [betaTraits, setBetaTraits] = useState<string[]>(() => mutateGenome(parentGenome, intensity).mutatedTraits);
+  const [specimenBeta, setSpecimenBeta] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
+  const [betaTraits, setBetaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
 
   // UI Modals & Toast
   const [showDnaModal, setShowDnaModal] = useState(false);
@@ -84,14 +70,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     try {
       const data = {
         parentGenome,
-        intensity,
         lineage: lineage.slice(-25), // keep last 25 generations
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {
       // LocalStorage error tolerated gracefully
     }
-  }, [parentGenome, intensity, lineage]);
+  }, [parentGenome, lineage]);
 
   // Animation Loop for both specimen canvases
   useEffect(() => {
@@ -126,15 +111,14 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     };
   }, [specimenAlpha, specimenBeta]);
 
-  // Selection Handler
+  // Selection Handler: Both Alpha and Beta mutate equally from the chosen winner
   const selectSpecimen = useCallback(
     (chosen: BiomorphGenome) => {
       setParentGenome(chosen);
       setLineage((prev) => [...prev, chosen]);
 
-      // Both Alpha and Beta mutate independently by equal amounts from the chosen parent
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(chosen, intensity);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(chosen, intensity);
+      const { child: childA, mutatedTraits: traitsA } = mutateGenome(chosen);
+      const { child: childB, mutatedTraits: traitsB } = mutateGenome(chosen);
 
       setSpecimenAlpha(childA);
       setAlphaTraits(traitsA);
@@ -143,7 +127,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
       showToast(`Selected ${chosen.name}!`);
     },
-    [intensity, showToast]
+    [showToast]
   );
 
   // Restart / New Genesis
@@ -152,8 +136,8 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     setParentGenome(fresh);
     setLineage([fresh]);
 
-    const { child: childA, mutatedTraits: traitsA } = mutateGenome(fresh, intensity);
-    const { child: childB, mutatedTraits: traitsB } = mutateGenome(fresh, intensity);
+    const { child: childA, mutatedTraits: traitsA } = mutateGenome(fresh);
+    const { child: childB, mutatedTraits: traitsB } = mutateGenome(fresh);
 
     setSpecimenAlpha(childA);
     setAlphaTraits(traitsA);
@@ -161,15 +145,15 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     setBetaTraits(traitsB);
 
     showToast('New Genesis initiated: Generation 0 primed.');
-  }, [intensity, showToast]);
+  }, [showToast]);
 
   // Time Travel to Ancestor
   const handleTimeTravel = useCallback(
     (ancestor: BiomorphGenome) => {
       setParentGenome(ancestor);
 
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(ancestor, intensity);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(ancestor, intensity);
+      const { child: childA, mutatedTraits: traitsA } = mutateGenome(ancestor);
+      const { child: childB, mutatedTraits: traitsB } = mutateGenome(ancestor);
 
       setSpecimenAlpha(childA);
       setAlphaTraits(traitsA);
@@ -178,7 +162,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
       showToast(`Rewound to Gen ${ancestor.generation} (${ancestor.name})`);
     },
-    [intensity, showToast]
+    [showToast]
   );
 
   // Keyboard Navigation: ArrowLeft / ArrowRight / 1 / 2 / R
@@ -228,13 +212,14 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         setParentGenome(genome);
         setLineage((prev) => [...prev, genome]);
 
-        const { child: childA, mutatedTraits: traitsA } = mutateGenome(genome, intensity);
-        const { child: childB, mutatedTraits: traitsB } = mutateGenome(genome, intensity);
+        const { child: childA, mutatedTraits: traitsA } = mutateGenome(genome);
+        const { child: childB, mutatedTraits: traitsB } = mutateGenome(genome);
 
         setSpecimenAlpha(childA);
         setAlphaTraits(traitsA);
         setSpecimenBeta(childB);
         setBetaTraits(traitsB);
+
         setShowDnaModal(false);
         setDnaInput('');
         showToast(`Loaded DNA for ${genome.name}`);
@@ -244,7 +229,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     } catch {
       alert('Failed to parse DNA string. Please ensure it is a valid base64 payload.');
     }
-  }, [dnaInput, intensity, showToast]);
+  }, [dnaInput, showToast]);
 
   // HD PNG Export
   const handleExportPNG = useCallback(() => {
@@ -283,7 +268,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
   return (
     <div className="biomorphs-container">
-      {/* Header & Main Nav */}
+      {/* Streamlined Clean Header */}
       <header className="biomorphs-header">
         <div className="biomorphs-title-group">
           <span className="biomorphs-badge">🧬 Artificial Selection</span>
@@ -297,58 +282,8 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           <button className="bio-btn btn-back" onClick={onBack} aria-label="Back to Tools Hub">
             ← Hub
           </button>
-          <button className="bio-btn" onClick={() => setShowDnaModal(true)} title="Import / Export DNA string">
-            🧬 DNA
-          </button>
-          <button className="bio-btn" onClick={handleCopyDNA} title="Copy DNA code to clipboard">
-            📋 Copy DNA
-          </button>
-          <button className="bio-btn" onClick={handleExportPNG} title="Download high-res PNG">
-            📸 Export PNG
-          </button>
-          <button className="bio-btn btn-primary" onClick={handleNewGenesis} title="Restart with a fresh organism (R)">
-            ⚡ New Genesis
-          </button>
         </div>
       </header>
-
-      {/* Toolbar & Mutation Controls */}
-      <section className="biomorphs-toolbar" aria-label="Evolution Status and Mutation Rate Controls">
-        <div className="toolbar-stats">
-          <div className="stat-item">
-            <span className="stat-label">Generation</span>
-            <span className="stat-value" data-testid="generation-counter">
-              Gen {parentGenome.generation}
-            </span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Active Specimen</span>
-            <span className="stat-value" style={{ fontSize: '0.95rem' }}>
-              {parentGenome.name}
-            </span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-label">Ancestors Recorded</span>
-            <span className="stat-value">{lineage.length}</span>
-          </div>
-        </div>
-
-        <div className="mutation-selector">
-          <span>Mutation Drift:</span>
-          <div className="mutation-btn-group" role="group" aria-label="Mutation Intensity Selection">
-            {(['subtle', 'moderate', 'radical'] as MutationIntensity[]).map((mode) => (
-              <button
-                key={mode}
-                className={`mut-opt-btn ${intensity === mode ? 'active' : ''}`}
-                onClick={() => setIntensity(mode)}
-                data-testid={`mutation-btn-${mode}`}
-              >
-                {mode.charAt(0).toUpperCase() + mode.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* 2-Way Comparative Duel Arena */}
       <main className="duel-arena">
@@ -428,7 +363,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       </main>
 
       {/* Ancestor Lineage Scrubber */}
-      <footer className="lineage-section" aria-label="Ancestor Evolutionary Lineage">
+      <section className="lineage-section" aria-label="Ancestor Evolutionary Lineage">
         <div className="lineage-header">
           <div className="lineage-title">
             <span>📜 Lineage & Ancestor Tree</span>
@@ -446,6 +381,43 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               onClick={() => handleTimeTravel(ancestor)}
             />
           ))}
+        </div>
+      </section>
+
+      {/* Bottom Utility Controls Dock */}
+      <footer className="biomorphs-bottom-dock" aria-label="Specimen Utilities and Evolution Actions">
+        <div className="dock-stats">
+          <div className="stat-item">
+            <span className="stat-label">Generation</span>
+            <span className="stat-value" data-testid="generation-counter">
+              Gen {parentGenome.generation}
+            </span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Active Specimen</span>
+            <span className="stat-value specimen-stat-name">
+              {parentGenome.name}
+            </span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Ancestors</span>
+            <span className="stat-value">{lineage.length}</span>
+          </div>
+        </div>
+
+        <div className="dock-actions">
+          <button className="bio-btn" onClick={() => setShowDnaModal(true)} title="Import / Export DNA string">
+            🧬 DNA
+          </button>
+          <button className="bio-btn" onClick={handleCopyDNA} title="Copy DNA code to clipboard">
+            📋 Copy DNA
+          </button>
+          <button className="bio-btn" onClick={handleExportPNG} title="Download high-res PNG">
+            📸 Export PNG
+          </button>
+          <button className="bio-btn btn-primary" onClick={handleNewGenesis} title="Restart with a fresh organism (R)">
+            ⚡ New Genesis
+          </button>
         </div>
       </footer>
 

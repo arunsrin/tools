@@ -37,9 +37,9 @@ export interface BiomorphGenome {
 
 export type MutationIntensity = 'subtle' | 'moderate' | 'radical';
 
-const PREFIXES = ['Xeno', 'Arthro', 'Spectra', 'Chitin', 'Bioluma', 'Astro', 'Vesper', 'Exo', 'Cryo', 'Omni'];
-const ROOTS = ['mandra', 'pede', 'morph', 'saur', 'lisk', 'pod', 'tera', 'myrmex', 'rachnid', 'thorax'];
-const SUFFIXES = ['Alpha', 'Prime', 'Nova', 'Viper', 'Rex', 'Major', 'Nebula', 'Eclipse', 'Apex', 'Helix'];
+const PREFIXES = ['Xeno', 'Arthro', 'Spectra', 'Chitin', 'Bioluma', 'Astro', 'Vesper', 'Exo', 'Cryo', 'Omni', 'Nova', 'Solaris', 'Nebula', 'Zephyr', 'Apex'];
+const ROOTS = ['mandra', 'pede', 'morph', 'saur', 'lisk', 'pod', 'tera', 'myrmex', 'rachnid', 'thorax', 'draco', 'phasma', 'scorpio', 'luma'];
+const SUFFIXES = ['Alpha', 'Prime', 'Nova', 'Viper', 'Rex', 'Major', 'Nebula', 'Eclipse', 'Apex', 'Helix', 'Spectre', 'Vortex', 'Chroma'];
 
 export function generateCreatureName(gen: number): string {
   const p = PREFIXES[Math.floor(Math.random() * PREFIXES.length)];
@@ -48,7 +48,14 @@ export function generateCreatureName(gen: number): string {
   return `${p}${r} ${s} · G${gen}`;
 }
 
+// Expansive starting palettes across the color spectrum
+const BASE_HUES = [195, 280, 145, 38, 330, 215, 88, 18, 255, 170];
+
 export function createPrimordialGenome(): BiomorphGenome {
+  const startHue = BASE_HUES[Math.floor(Math.random() * BASE_HUES.length)];
+  const secHue = (startHue + 120 + Math.random() * 60) % 360;
+  const glowHue = (startHue + 210) % 360;
+
   return {
     id: `bio-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
     generation: 0,
@@ -70,12 +77,12 @@ export function createPrimordialGenome(): BiomorphGenome {
     eyeCount: 2,
     eyeSize: 6,
     eyeSpacing: 16,
-    primaryHue: 195, // Cyan
-    secondaryHue: 220, // Blue
-    glowHue: 180, // Turquoise
+    primaryHue: startHue,
+    secondaryHue: secHue,
+    glowHue: glowHue,
     markingsCount: 4,
     markingsStyle: 'stripes',
-    glowIntensity: 0.8,
+    glowIntensity: 0.85,
     asymmetry: 0,
   };
 }
@@ -84,40 +91,45 @@ function clamp(val: number, min: number, max: number): number {
   return Math.min(Math.max(val, min), max);
 }
 
-export function mutateGenome(parent: BiomorphGenome, intensity: MutationIntensity): { child: BiomorphGenome; mutatedTraits: string[] } {
+export function mutateGenome(
+  parent: BiomorphGenome,
+  intensity: MutationIntensity = 'moderate'
+): { child: BiomorphGenome; mutatedTraits: string[] } {
   const child: BiomorphGenome = JSON.parse(JSON.stringify(parent));
   child.id = `bio-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
   child.generation = parent.generation + 1;
   child.name = generateCreatureName(child.generation);
 
-  const deltaMultiplier = intensity === 'subtle' ? 0.08 : intensity === 'moderate' ? 0.22 : 0.55;
+  const deltaMultiplier = intensity === 'subtle' ? 0.12 : intensity === 'moderate' ? 0.22 : 0.38;
   const traits: string[] = [];
 
-  // Mutate colors
-  if (Math.random() < 0.6) {
-    const shift = (Math.random() - 0.5) * 80 * deltaMultiplier;
+  // 1. Natural chromatic drift: maintain familial color semblance with gentle shifts
+  if (Math.random() < 0.7) {
+    const shift = (Math.random() - 0.5) * 50 * deltaMultiplier;
     child.primaryHue = (child.primaryHue + shift + 360) % 360;
-    child.secondaryHue = (child.secondaryHue + shift * 1.2 + 360) % 360;
-    child.glowHue = (child.glowHue + shift * 0.8 + 360) % 360;
-    traits.push('Spectral Hue');
+    const secShift = (Math.random() - 0.5) * 40 * deltaMultiplier;
+    child.secondaryHue = (child.secondaryHue + secShift + 360) % 360;
+    const glowShift = (Math.random() - 0.5) * 40 * deltaMultiplier;
+    child.glowHue = (child.glowHue + glowShift + 360) % 360;
+    traits.push('Spectral Shift');
   }
 
-  // Mutate limbs
-  if (Math.random() < 0.8) {
+  // 2. Limb articulation drift: subtle length & angle mutations preserving posture
+  if (Math.random() < 0.75) {
     const pairIdx = Math.floor(Math.random() * child.limbPairs.length);
     const limb = child.limbPairs[pairIdx];
     if (limb) {
-      limb.length1 = clamp(limb.length1 * (1 + (Math.random() - 0.5) * deltaMultiplier * 1.5), 18, 65);
-      limb.length2 = clamp(limb.length2 * (1 + (Math.random() - 0.5) * deltaMultiplier * 1.5), 16, 65);
-      limb.angle1 = clamp(limb.angle1 + (Math.random() - 0.5) * 40 * deltaMultiplier, -75, 75);
-      limb.angle2 = clamp(limb.angle2 + (Math.random() - 0.5) * 50 * deltaMultiplier, -90, 90);
-      limb.thickness = clamp(limb.thickness * (1 + (Math.random() - 0.5) * deltaMultiplier), 2, 8);
+      limb.length1 = clamp(limb.length1 * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.8), 18, 65);
+      limb.length2 = clamp(limb.length2 * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.8), 16, 65);
+      limb.angle1 = clamp(limb.angle1 + (Math.random() - 0.5) * 35 * deltaMultiplier, -75, 75);
+      limb.angle2 = clamp(limb.angle2 + (Math.random() - 0.5) * 40 * deltaMultiplier, -90, 90);
+      limb.thickness = clamp(limb.thickness * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.6), 2, 8.5);
       traits.push('Limb Articulation');
     }
   }
 
-  // Radical or moderate chance to add/remove limbs or change tip
-  if (intensity !== 'subtle' && Math.random() < (intensity === 'radical' ? 0.45 : 0.25)) {
+  // 3. Rare macro-mutation: addition or loss of an appendage pair (~10% chance)
+  if (Math.random() < 0.10) {
     if (child.limbPairs.length < 5 && Math.random() > 0.4) {
       const clone = JSON.parse(JSON.stringify(child.limbPairs[0]));
       child.limbPairs.push(clone);
@@ -128,22 +140,22 @@ export function mutateGenome(parent: BiomorphGenome, intensity: MutationIntensit
     }
   }
 
-  // Mutate segments
+  // 4. Body segment morphology: gradual width & height shifts
   if (Math.random() < 0.65) {
     const segIdx = Math.floor(Math.random() * child.segments.length);
     const seg = child.segments[segIdx];
     if (seg) {
-      seg.width = clamp(seg.width * (1 + (Math.random() - 0.5) * deltaMultiplier * 1.2), 16, 60);
-      seg.height = clamp(seg.height * (1 + (Math.random() - 0.5) * deltaMultiplier * 1.2), 14, 60);
+      seg.width = clamp(seg.width * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.75), 16, 60);
+      seg.height = clamp(seg.height * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.75), 14, 60);
       traits.push('Segment Morphology');
     }
   }
 
-  // Mutate antennae
-  if (Math.random() < 0.5) {
-    child.antennaLength = clamp(child.antennaLength * (1 + (Math.random() - 0.5) * deltaMultiplier * 1.5), 15, 80);
-    child.antennaCurve = clamp(child.antennaCurve + (Math.random() - 0.5) * 30 * deltaMultiplier, -50, 50);
-    if (intensity === 'radical' && Math.random() < 0.3) {
+  // 5. Mutate antennae / feelers
+  if (Math.random() < 0.55) {
+    child.antennaLength = clamp(child.antennaLength * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.8), 15, 85);
+    child.antennaCurve = clamp(child.antennaCurve + (Math.random() - 0.5) * 25 * deltaMultiplier, -55, 55);
+    if (Math.random() < 0.10) {
       const tips: ('beaded' | 'bulb' | 'feather')[] = ['beaded', 'bulb', 'feather'];
       child.antennaTip = tips[Math.floor(Math.random() * tips.length)];
       traits.push('Sensory Feeler Tip');
@@ -152,28 +164,31 @@ export function mutateGenome(parent: BiomorphGenome, intensity: MutationIntensit
     }
   }
 
-  // Mutate eyes
-  if (Math.random() < 0.45) {
-    if (intensity === 'radical' && Math.random() < 0.4) {
+  // 6. Mutate eyes
+  if (Math.random() < 0.5) {
+    if (Math.random() < 0.10) {
       const eyeOpts = [1, 2, 4, 6];
       child.eyeCount = eyeOpts[Math.floor(Math.random() * eyeOpts.length)];
       traits.push(`${child.eyeCount}-Eye Array`);
     } else {
-      child.eyeSize = clamp(child.eyeSize * (1 + (Math.random() - 0.5) * deltaMultiplier), 4, 14);
-      child.eyeSpacing = clamp(child.eyeSpacing * (1 + (Math.random() - 0.5) * deltaMultiplier), 6, 34);
+      child.eyeSize = clamp(child.eyeSize * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.6), 4, 15);
+      child.eyeSpacing = clamp(child.eyeSpacing * (1 + (Math.random() - 0.5) * deltaMultiplier * 0.6), 6, 35);
       traits.push('Optical Orbs');
     }
   }
 
-  // Mutate bioluminescent markings
-  if (Math.random() < 0.55) {
-    child.markingsCount = Math.floor(clamp(child.markingsCount + (Math.random() > 0.5 ? 1 : -1), 1, 7));
-    child.glowIntensity = clamp(child.glowIntensity + (Math.random() - 0.5) * 0.3 * deltaMultiplier, 0.3, 1.0);
+  // 7. Mutate bioluminescent markings
+  if (Math.random() < 0.5) {
+    if (Math.random() < 0.12) {
+      const styles: ('stripes' | 'dots' | 'chevrons')[] = ['stripes', 'dots', 'chevrons'];
+      child.markingsStyle = styles[Math.floor(Math.random() * styles.length)];
+    }
+    child.glowIntensity = clamp(child.glowIntensity + (Math.random() - 0.5) * 0.2 * deltaMultiplier, 0.35, 1.0);
     traits.push('Bioluminescent Markings');
   }
 
   if (traits.length === 0) {
-    traits.push('Micro-adaptation');
+    traits.push('Adaptive Drift');
   }
 
   return { child, mutatedTraits: Array.from(new Set(traits)) };
@@ -201,14 +216,14 @@ export function drawBiomorph(
 
   // Background subtle glow under creature
   const bgGlow = ctx.createRadialGradient(0, 0, 10, 0, 0, 120);
-  bgGlow.addColorStop(0, `hsla(${genome.glowHue}, 90%, 50%, ${0.12 * genome.glowIntensity})`);
+  bgGlow.addColorStop(0, `hsla(${genome.glowHue}, 90%, 50%, ${0.14 * genome.glowIntensity})`);
   bgGlow.addColorStop(1, 'transparent');
   ctx.fillStyle = bgGlow;
   ctx.beginPath();
   ctx.arc(0, 0, 120, 0, Math.PI * 2);
   ctx.fill();
 
-  const primaryFill = `hsl(${genome.primaryHue}, 70%, 25%)`;
+  const primaryFill = `hsl(${genome.primaryHue}, 75%, 26%)`;
   const primaryStroke = `hsl(${genome.primaryHue}, 85%, 65%)`;
   const secondaryStroke = `hsl(${genome.secondaryHue}, 90%, 70%)`;
   const glowColor = `hsl(${genome.glowHue}, 95%, ${60 + glowPulse * 15}%)`;
@@ -322,9 +337,9 @@ export function drawBiomorph(
 
     // Segment Gradient
     const segGrad = ctx.createRadialGradient(0, seg.yOffset - 5, 4, 0, seg.yOffset, Math.max(seg.width, seg.height));
-    segGrad.addColorStop(0, `hsl(${genome.primaryHue}, 75%, 35%)`);
+    segGrad.addColorStop(0, `hsl(${genome.primaryHue}, 80%, 36%)`);
     segGrad.addColorStop(0.7, primaryFill);
-    segGrad.addColorStop(1, `hsl(${genome.primaryHue}, 80%, 12%)`);
+    segGrad.addColorStop(1, `hsl(${genome.primaryHue}, 85%, 12%)`);
 
     ctx.fillStyle = segGrad;
     ctx.fill();

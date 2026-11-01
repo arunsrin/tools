@@ -31,14 +31,15 @@ In each generation, the tool displays two candidate organisms (Specimen Alpha vs
   - Fast selection interactions:
     - Click or tap on either card.
     - Keyboard shortcuts: `←` (Left Arrow or `1`) selects Specimen Alpha; `→` (Right Arrow or `2`) selects Specimen Beta.
-- **AC-4 (Mutation Intensity Levels & Radical Default):**
-  - Three user-selectable mutation intensity modes, with **Radical** set as the default initial mode for bold, dynamic evolutionary divergence:
-    - **Subtle (Micro-evolution):** Small 3-8% shifts in morphology parameters; gradual speciation.
-    - **Moderate (Standard):** Balanced 15-25% variations; noticeable adaptive leaps.
-    - **Radical (Cosmic Radiation - Default):** 40-70% drastic mutations with anatomical alterations (adding/losing limbs or segments).
-- **AC-5 (New Genesis / Reroll):**
-  - "New Genesis" / "Restart" button that seeds a fresh Gen 0 primordial organism.
-  - Keyboard shortcut: `Space` or `R` triggers a confirmation/quick reroll.
+- **AC-4 (Natural Evolutionary Drift with Familial Semblance):**
+  - Calibrated evolutionary engine that balances noticeable mutation with clear familial semblance to the parent generation.
+  - Offspring inherit recognizable physical features (stable limb pair counts with rare ~10% addition/loss, gradual segment morphology and limb length/angle shifts) and familial color harmony (subtle hue variation ±15°-25° around parent hue).
+  - Both Specimen Alpha and Specimen Beta mutate independently by equal amounts from the parent, presenting distinct yet recognizably related sibling variants each generation.
+  - Manual subtle/moderate/radical toggles are removed from the UI for a streamlined, clutter-free experience.
+- **AC-5 (Bottom Utility Toolbar & New Genesis):**
+  - Top header is clean and focused: title, badge, and Back to Hub.
+  - All utility actions (Generation Counter, Active Specimen info, Copy DNA, Import DNA, Export HD PNG, and New Genesis) are anchored in an accessible bottom controls dock below the arena and lineage timeline.
+  - Keyboard shortcut: `R` or button triggers New Genesis (restart from fresh Gen 0 primordial organism).
 
 ### 2.3 Lineage History & Time-Travel Rewind
 - **AC-6 (Ancestor Lineage Timeline):**
