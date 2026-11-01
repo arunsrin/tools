@@ -597,35 +597,12 @@ export function calculateFitness(genome: BiomorphGenome, ecosystem: EcosystemCon
   };
 }
 
-export function drawBiomorph(
+export function renderBiomorphBody(
   ctx: CanvasRenderingContext2D,
   genome: BiomorphGenome,
-  width: number,
-  height: number,
   animTime = 0
 ) {
-  ctx.save();
-  ctx.clearRect(0, 0, width, height);
-
-  const cx = width / 2;
-  const cy = height / 2 + 5;
-
-  // Ambient breathing pulse
-  const breath = Math.sin(animTime * 2.5) * 0.03;
   const glowPulse = Math.sin(animTime * 3) * 0.15;
-
-  ctx.translate(cx, cy);
-  ctx.scale(1 + breath, 1 + breath);
-
-  // Background subtle glow under creature
-  const bgGlow = ctx.createRadialGradient(0, 0, 10, 0, 0, 120);
-  bgGlow.addColorStop(0, `hsla(${genome.glowHue}, 90%, 50%, ${0.14 * genome.glowIntensity})`);
-  bgGlow.addColorStop(1, 'transparent');
-  ctx.fillStyle = bgGlow;
-  ctx.beginPath();
-  ctx.arc(0, 0, 120, 0, Math.PI * 2);
-  ctx.fill();
-
   const primaryFill = `hsl(${genome.primaryHue}, 75%, 26%)`;
   const primaryStroke = `hsl(${genome.primaryHue}, 85%, 65%)`;
   const secondaryStroke = `hsl(${genome.secondaryHue}, 90%, 70%)`;
@@ -892,6 +869,36 @@ export function drawBiomorph(
     renderEye(-genome.eyeSpacing * 1.2, headY + 4);
     renderEye(genome.eyeSpacing * 1.2, headY + 4);
   }
+}
+
+export function drawBiomorph(
+  ctx: CanvasRenderingContext2D,
+  genome: BiomorphGenome,
+  width: number,
+  height: number,
+  animTime = 0
+) {
+  ctx.save();
+  ctx.clearRect(0, 0, width, height);
+
+  const cx = width / 2;
+  const cy = height / 2 + 5;
+
+  // Ambient breathing pulse
+  const breath = Math.sin(animTime * 2.5) * 0.03;
+  ctx.translate(cx, cy);
+  ctx.scale(1 + breath, 1 + breath);
+
+  // Background subtle glow under creature
+  const bgGlow = ctx.createRadialGradient(0, 0, 10, 0, 0, 120);
+  bgGlow.addColorStop(0, `hsla(${genome.glowHue}, 90%, 50%, ${0.14 * genome.glowIntensity})`);
+  bgGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = bgGlow;
+  ctx.beginPath();
+  ctx.arc(0, 0, 120, 0, Math.PI * 2);
+  ctx.fill();
+
+  renderBiomorphBody(ctx, genome, animTime);
 
   ctx.restore();
 }
