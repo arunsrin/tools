@@ -4,6 +4,7 @@ import TimezoneConverter from './tools/timezone/TimezoneConverter';
 import ChoicePicker from './tools/picker/ChoicePicker';
 import PomoTimer from './tools/pomo/PomoTimer';
 import Pals from './tools/pals/Pals';
+import FractalExplorer from './tools/fractal/FractalExplorer';
 import Biomorphs from './tools/biomorphs/Biomorphs';
 import ChessWatermark from './components/ChessWatermark';
 import { parseRoute, getPathForView, TOOL_ROUTES, type ToolKey, type View } from './routes';
@@ -69,6 +70,10 @@ export default function App() {
     return <Pals onBack={() => navigate('hub')} />;
   }
 
+  if (view === 'fractal') {
+    return <FractalExplorer onBack={() => navigate('hub')} />;
+  }
+
   if (view === 'biomorphs') {
     return <Biomorphs onBack={() => navigate('hub')} />;
   }
@@ -126,13 +131,23 @@ export default function App() {
           </a>
 
           <a
-href={TOOL_ROUTES.pals}
+            href={TOOL_ROUTES.pals}
             className="tool-card"
             onClick={handleCardClick('pals')}
           >
             <div className="tool-icon">🐾</div>
             <h2>Desktop Pals</h2>
             <p>Playful browser companions, physics playground, obstacles, toys & treats.</p>
+          </a>
+
+          <a
+            href={TOOL_ROUTES.fractal}
+            className="tool-card"
+            onClick={handleCardClick('fractal')}
+          >
+            <div className="tool-icon">🌀</div>
+            <h2>Fractal Explorer</h2>
+            <p>Deep zoom Mandelbrot, Julia & Burning Ship sets with 4K wallpaper studio.</p>
           </a>
 
           <a
