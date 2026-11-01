@@ -61,6 +61,10 @@ export interface BiosphereState {
   isExtinct: boolean;
   extinctionReason: string;
   actionLog: string[];
+  carryingCapacity?: number;
+  minPreyFloor?: number;
+  preyReplenishTimer?: number;
+  predatorRespawnTimer?: number;
 }
 
 // -------------------------------------------------------------
@@ -413,6 +417,10 @@ export function createInitialBiosphere(
       `🚀 ${playerGenome.name} launched into ${ecosystem.terrain} (${playerFitness}% fitness).`,
       '🌿 Grazing on bio-spores sustains energy. Beware of native predators!',
     ],
+    carryingCapacity: 8,
+    minPreyFloor: 4,
+    preyReplenishTimer: 3.5,
+    predatorRespawnTimer: 12.0,
   };
 }
 
@@ -498,8 +506,13 @@ export function stepBiosphere(
     let steerY = 0;
 
     if (agent.role === 'player') {
+      const isApex = agent.fitness >= 85 ||
+        agent.genome.headApparatus === 'fangs' ||
+        agent.genome.headApparatus === 'serrated-jaws' ||
+        agent.genome.serrations;
+
       // Natural gentle seeking toward nearest prey within 280px if not retargeted
-      let nearestPrey: BiosphereAgent | null = null;
+      let nearestTarget: BiosphereAgent | null = null;
       let minDist = 280;
 
       for (const other of agents) {
@@ -507,14 +520,29 @@ export function stepBiosphere(
           const d = Math.hypot(other.x - agent.x, other.y - agent.y);
           if (d < minDist) {
             minDist = d;
-            nearestPrey = other;
+            nearestTarget = other;
           }
         }
       }
 
-      if (nearestPrey) {
-        steerX = (nearestPrey.x - agent.x) / minDist;
-        steerY = (nearestPrey.y - agent.y) / minDist;
+      // If no prey in sight and player is an apex predator, seek nearby predators to hunt!
+      if (!nearestTarget && isApex) {
+        let minPredDist = 220;
+        for (const other of agents) {
+          if (other.role === 'predator' && other.isAlive) {
+            const d = Math.hypot(other.x - agent.x, other.y - agent.y);
+            if (d < minPredDist) {
+              minPredDist = d;
+              nearestTarget = other;
+              minDist = d;
+            }
+          }
+        }
+      }
+
+      if (nearestTarget) {
+        steerX = (nearestTarget.x - agent.x) / minDist;
+        steerY = (nearestTarget.y - agent.y) / minDist;
       } else {
         // Wander toward target
         const dx = agent.targetX - agent.x;
@@ -677,9 +705,26 @@ export function stepBiosphere(
         }
       }
 
-      // Combat: Predator attacks Player
+      // Combat: Predator attacks Player (or Apex Player counters and devours predator!)
       if (other.role === 'predator' && dist < 36 && player.invulnerableTimer <= 0) {
-        if (player.fitness >= 60) {
+        const isApex = player.fitness >= 85 ||
+          player.genome.headApparatus === 'fangs' ||
+          player.genome.headApparatus === 'serrated-jaws' ||
+          player.genome.serrations;
+
+        if (isApex && player.energy > 15) {
+          // Apex player overpowers and consumes hostile predator!
+          other.isAlive = false;
+          repelledDelta += 1;
+          player.energy = Math.min(player.maxEnergy, player.energy + 35);
+          player.invulnerableTimer = 1.0;
+          logEvent(`⚔️ Apex counter-strike! Devoured ${other.name} (+35 energy).`);
+
+          if (!apexDominance && player.fitness >= 90) {
+            apexDominance = true;
+            logEvent(`🏆 APEX DOMINANCE! Master of the ${prevState.ecosystem.terrain} biosphere!`);
+          }
+        } else if (player.fitness >= 60) {
           // High fitness player repels predator!
           repelledDelta += 1;
           player.energy = Math.max(0, player.energy - 6);
@@ -705,7 +750,110 @@ export function stepBiosphere(
     }
   }
 
-  // 4. Update Ambient Particles
+  // 4. Autonomous Prey Replenishment & Population Floor (Ecological Equilibrium)
+  const carryingCapacity = prevState.carryingCapacity ?? 8;
+  const minPreyFloor = prevState.minPreyFloor ?? 4;
+  let replenishTimer = (prevState.preyReplenishTimer ?? 3.5) - effectiveDt;
+
+  const activePrey = agents.filter((a) => a.role === 'prey' && a.isAlive);
+
+  if (activePrey.length < carryingCapacity) {
+    const interval = activePrey.length === 0 ? 0 : activePrey.length < minPreyFloor ? 1.8 : 3.5;
+    if (replenishTimer <= 0 || activePrey.length === 0) {
+      const seedIndex = agents.filter((a) => a.role === 'prey').length;
+      const genome = createPreyGenome(seedIndex);
+
+      let px = 40 + Math.random() * (width - 80);
+      let py = 40 + Math.random() * (height - 80);
+      if (player) {
+        for (let attempt = 0; attempt < 5; attempt++) {
+          if (Math.hypot(px - player.x, py - player.y) >= 90) break;
+          px = 40 + Math.random() * (width - 80);
+          py = 40 + Math.random() * (height - 80);
+        }
+      }
+
+      agents.push({
+        id: `prey-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        role: 'prey',
+        name: genome.name,
+        genome,
+        x: px,
+        y: py,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        heading: Math.random() * Math.PI * 2,
+        speed: 0.9,
+        maxSpeed: 1.8,
+        size: 0.26,
+        energy: 50,
+        maxEnergy: 50,
+        fitness: 45,
+        isAlive: true,
+        invulnerableTimer: 0,
+        animationPhase: Math.random() * 10,
+        targetX: Math.random() * width,
+        targetY: Math.random() * height,
+        retargetTimer: 2.5,
+      });
+
+      if (activePrey.length < minPreyFloor) {
+        logEvent(`🌿 Bio-spore germinated rapidly to restore ecological balance.`);
+      } else {
+        logEvent(`🌿 New bio-spore germinated in the biome.`);
+      }
+      replenishTimer = interval;
+    }
+  } else {
+    replenishTimer = 3.5;
+  }
+
+  // 5. Native Predator Replenishment (Keep ecosystem active if predators slain)
+  let predatorRespawnTimer = (prevState.predatorRespawnTimer ?? 12.0) - effectiveDt;
+  const activePredators = agents.filter((a) => a.role === 'predator' && a.isAlive);
+  if (activePredators.length < 2 && predatorRespawnTimer <= 0) {
+    const genome = createPredatorGenome(prevState.ecosystem.threat, Date.now() % 5);
+    const edgeX = Math.random() < 0.5 ? 40 : width - 40;
+    const edgeY = Math.random() < 0.5 ? 40 : height - 40;
+    agents.push({
+      id: `predator-${Date.now()}`,
+      role: 'predator',
+      name: genome.name,
+      genome,
+      x: edgeX,
+      y: edgeY,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      heading: Math.random() * Math.PI * 2,
+      speed: 1.2,
+      maxSpeed: 2.2,
+      size: 0.42,
+      energy: 100,
+      maxEnergy: 100,
+      fitness: 85,
+      isAlive: true,
+      invulnerableTimer: 0,
+      animationPhase: Math.random() * 10,
+      targetX: Math.random() * width,
+      targetY: Math.random() * height,
+      retargetTimer: 2,
+    });
+    logEvent(`⚠️ A wild ${genome.name} stalker entered the hunting grounds.`);
+    predatorRespawnTimer = 12.0;
+  }
+
+  // 6. Prune excess dead entities so memory remains bounded
+  let deadPreySeen = 0;
+  const prunedAgents = agents.filter((a) => {
+    if (a.isAlive || a.role === 'player') return true;
+    if (a.role === 'prey') {
+      deadPreySeen++;
+      return deadPreySeen <= 2;
+    }
+    return false;
+  });
+
+  // 7. Update Ambient Particles
   const particles = prevState.particles.map((p) => {
     let nx = p.x + p.vx * effectiveDt * 30;
     let ny = p.y + p.vy * effectiveDt * 30;
@@ -718,7 +866,7 @@ export function stepBiosphere(
 
   return {
     ...prevState,
-    agents,
+    agents: prunedAgents,
     particles,
     playerAgent: player,
     elapsedSeconds: newElapsed,
@@ -728,6 +876,10 @@ export function stepBiosphere(
     isExtinct,
     extinctionReason,
     actionLog,
+    carryingCapacity,
+    minPreyFloor,
+    preyReplenishTimer: replenishTimer,
+    predatorRespawnTimer,
   };
 }
 

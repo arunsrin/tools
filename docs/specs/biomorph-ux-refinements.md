@@ -63,3 +63,14 @@ This specification details a comprehensive set of UX, pedagogical, and visual en
   - Thumbnail zoom-out rendering.
   - Enhanced biosphere canvas rendering of flora/elements without crash.
 - Full test suite passes via `./scripts/test.ps1` with >80% coverage and zero diagnostics.
+
+### AC-10: Autonomous Prey Replenishment Floor & Apex Carnivore Devouring
+- **Carrying Capacity & Population Floor:**
+  - Maintain an autonomous prey carrying capacity (`carryingCapacity: 8`, `minPreyFloor: 4`).
+  - When living prey count drops below the floor, flora germinates new bio-spore prey with accelerated intervals (~1.8s, or immediately if depleted) so sustained simulations never run out of food.
+  - Natural carrying capacity replenishes every ~3.5s up to 8.
+- **Apex Carnivore Predation:**
+  - High-fitness apex predators ($\ge 85\%$ fitness, or possessing fangs/serrations) counter-attack and devour hostile native predators upon collision for +35 energy, preventing starvation against native threats.
+  - Slain native predators naturally respawn from arena boundaries every ~12s.
+  - Excess dead entities beyond 2 are pruned from memory to ensure bounded execution.
+  - Clean modular architecture (`carryingCapacity`, `minPreyFloor`, `preyReplenishTimer`) provides a solid foundation for future Lotka-Volterra population oscillation extensions.

@@ -622,5 +622,50 @@ describe('Biomorphs Component & Engine', () => {
       const timeline = screen.getByTestId('lineage-timeline');
       expect(timeline.children).toHaveLength(2);
     });
+
+    it('auto-replenishes prey population when count drops below floor or is depleted', () => {
+      const eco: EcosystemConfig = { terrain: 'swamp', climate: 'oxygen', threat: 'stalkers' };
+      const genome = createPrimordialGenome();
+      let state = createInitialBiosphere(genome, eco, 800, 500);
+
+      // Manually simulate all prey being devoured
+      state.agents = state.agents.map((a) => (a.role === 'prey' ? { ...a, isAlive: false } : a));
+      expect(state.agents.filter((a) => a.role === 'prey' && a.isAlive)).toHaveLength(0);
+
+      // Step simulation: auto-replenishment should kick in immediately
+      state = stepBiosphere(state, 0.1, 800, 500);
+      const activePreyAfter = state.agents.filter((a) => a.role === 'prey' && a.isAlive);
+      expect(activePreyAfter.length).toBeGreaterThan(0);
+      expect(state.actionLog[0]).toMatch(/bio-spore germinated/i);
+    });
+
+    it('enables apex predator counter-strike and devouring of hostile native predators', () => {
+      const eco: EcosystemConfig = { terrain: 'crags', climate: 'geothermal', threat: 'stalkers' };
+      const apexGenome = createPrimordialGenome();
+      apexGenome.headApparatus = 'fangs';
+      apexGenome.serrations = true;
+      let state = createInitialBiosphere(apexGenome, eco, 800, 500);
+
+      if (state.playerAgent) {
+        state.playerAgent.fitness = 95;
+        state.playerAgent.energy = 50;
+      }
+
+      // Position a predator right on top of the apex player
+      const predator = state.agents.find((a) => a.role === 'predator');
+      if (predator && state.playerAgent) {
+        predator.x = state.playerAgent.x + 5;
+        predator.y = state.playerAgent.y + 5;
+      }
+
+      state = stepBiosphere(state, 0.1, 800, 500);
+      expect(state.predatorsRepelled).toBe(1);
+      // Apex player gains energy from devouring predator (+35 minus minor dt drain)
+      expect(state.playerAgent?.energy).toBeGreaterThan(80);
+      expect(state.actionLog.some((m) => /apex counter-strike! devoured/i.test(m))).toBe(true);
+      // Hostile predator is slain
+      const predatorAfter = state.agents.find((a) => a.id === predator?.id);
+      expect(predatorAfter?.isAlive ?? false).toBe(false);
+    });
   });
 });
