@@ -20,8 +20,7 @@
 
 ## 4. Storage & State
 - State is persisted to `localStorage` under key `tools_hub_biomorphs`:
-  - `activeGenome`: Current champion organism DNA
-  - `generation`: Current generation number
-  - `mutationIntensity`: 'subtle' | 'moderate' | 'radical'
-  - `lineage`: Array of past ancestor genomes and generation tags
+  - `parentGenome`: Current champion organism DNA
+  - `lineage`: Array of past ancestor genomes (capped at last 25 generations)
+  - `ecosystem`: Active environmental parameters (`terrain`, `climate`, `threat`)
 - Gracefully handles quota and private browsing restrictions.

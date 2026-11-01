@@ -20,6 +20,11 @@ interface BiomorphsProps {
   onBack: () => void;
 }
 
+interface CandidateSpecimen {
+  genome: BiomorphGenome;
+  traits: string[];
+}
+
 const STORAGE_KEY = 'tools_hub_biomorphs';
 
 export default function Biomorphs({ onBack }: BiomorphsProps) {
@@ -66,12 +71,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     return [parentGenome];
   });
 
-  // Mutated candidates: Both Alpha and Beta mutate equally from parentGenome
-  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
-  const [alphaTraits, setAlphaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
+  // Mutated candidates: Both Alpha and Beta mutate atomically from parentGenome
+  const [candidateAlpha, setCandidateAlpha] = useState<CandidateSpecimen>(() => {
+    const res = mutateGenome(parentGenome);
+    return { genome: res.child, traits: res.mutatedTraits };
+  });
 
-  const [specimenBeta, setSpecimenBeta] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
-  const [betaTraits, setBetaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
+  const [candidateBeta, setCandidateBeta] = useState<CandidateSpecimen>(() => {
+    const res = mutateGenome(parentGenome);
+    return { genome: res.child, traits: res.mutatedTraits };
+  });
+
+  const specimenAlpha = candidateAlpha.genome;
+  const alphaTraits = candidateAlpha.traits;
+  const specimenBeta = candidateBeta.genome;
+  const betaTraits = candidateBeta.traits;
 
   // UI Modals & Toast
   const [showDnaModal, setShowDnaModal] = useState(false);
@@ -81,13 +95,27 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   const canvasRefAlpha = useRef<HTMLCanvasElement | null>(null);
   const canvasRefBeta = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Show temporary toast
+  // Show temporary toast with timer collision avoidance
   const showToast = useCallback((msg: string) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
     setToastMessage(msg);
-    setTimeout(() => {
+    toastTimeoutRef.current = setTimeout(() => {
       setToastMessage(null);
+      toastTimeoutRef.current = null;
     }, 2800);
+  }, []);
+
+  // Cleanup pending toast timer on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
   }, []);
 
   // Sync to localStorage
@@ -165,23 +193,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     showToast(`New Biosphere: ${tObj?.name} + ${cObj?.name} + ${thObj?.name}`);
   }, [showToast]);
 
-  // Selection Handler: Both Alpha and Beta mutate equally from the chosen winner
+  // Selection Handler: Both Alpha and Beta mutate atomically from the chosen winner
   const selectSpecimen = useCallback(
     (chosen: BiomorphGenome) => {
       setParentGenome(chosen);
       setLineage((prev) => [...prev, chosen]);
 
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(chosen);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(chosen);
+      const resA = mutateGenome(chosen);
+      const resB = mutateGenome(chosen);
 
-      setSpecimenAlpha(childA);
-      setAlphaTraits(traitsA);
-      setSpecimenBeta(childB);
-      setBetaTraits(traitsB);
+      setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+      setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
       const chosenFit = calculateFitness(chosen, ecosystem);
       if (chosenFit.score >= 90) {
-        showToast(`🏆 Apex Organism Evolved! ${chosen.name} achieved ${chosenFit.score}% fitness!`);
+        showToast(`🏆 Apex Organism Evolved! Selected ${chosen.name} (${chosenFit.score}% fitness)`);
       } else {
         showToast(`Selected ${chosen.name} (${chosenFit.score}% Adapted)`);
       }
@@ -195,13 +221,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     setParentGenome(fresh);
     setLineage([fresh]);
 
-    const { child: childA, mutatedTraits: traitsA } = mutateGenome(fresh);
-    const { child: childB, mutatedTraits: traitsB } = mutateGenome(fresh);
+    const resA = mutateGenome(fresh);
+    const resB = mutateGenome(fresh);
 
-    setSpecimenAlpha(childA);
-    setAlphaTraits(traitsA);
-    setSpecimenBeta(childB);
-    setBetaTraits(traitsB);
+    setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+    setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
     showToast('New Genesis initiated: Generation 0 primed.');
   }, [showToast]);
@@ -211,13 +235,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     (ancestor: BiomorphGenome) => {
       setParentGenome(ancestor);
 
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(ancestor);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(ancestor);
+      const resA = mutateGenome(ancestor);
+      const resB = mutateGenome(ancestor);
 
-      setSpecimenAlpha(childA);
-      setAlphaTraits(traitsA);
-      setSpecimenBeta(childB);
-      setBetaTraits(traitsB);
+      setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+      setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
       showToast(`Rewound to Gen ${ancestor.generation} (${ancestor.name})`);
     },
@@ -270,13 +292,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         setParentGenome(loaded);
         setLineage((prev) => [...prev, loaded]);
 
-        const { child: childA, mutatedTraits: traitsA } = mutateGenome(loaded);
-        const { child: childB, mutatedTraits: traitsB } = mutateGenome(loaded);
+        const resA = mutateGenome(loaded);
+        const resB = mutateGenome(loaded);
 
-        setSpecimenAlpha(childA);
-        setAlphaTraits(traitsA);
-        setSpecimenBeta(childB);
-        setBetaTraits(traitsB);
+        setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+        setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
         setShowDnaModal(false);
         setDnaInput('');
