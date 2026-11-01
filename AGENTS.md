@@ -177,6 +177,10 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     - Its hub dashboard card in `src/App.tsx` MUST be rendered as an accessible semantic `<a>` anchor (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}` to support middle-click / open-in-new-tab while providing fast SPA transition on standard left-clicks.
     - Its direct URL mount (e.g. `/<tool>`), hub card link attributes, and "Back to Tools Hub" URL synchronization back to `/` MUST be tested with companion automated tests in `src/App.test.tsx`.
     - Enforced automatically by `python scripts/test_tools_structure.py`.
+25. **Modular Component Export Discipline (`react-refresh/only-export-components`):**
+    Main tool component files (`<ToolName>.tsx`) must exclusively export the React component (e.g. `export default function <ToolName>`). Never export helper functions, simulation engines, or data types directly from the component file, which violates Vite's Fast Refresh ESLint rules. Always extract helper functions, mathematical generators, and interfaces into dedicated companion modules (e.g. `<tool>Engine.ts` or `helpers.ts`).
+26. **Scoped Canvas Mock Discipline in Tests:**
+    When authoring tests for canvas-based tools in headless `jsdom`, never globally override `HTMLCanvasElement.prototype.getContext('2d')` in `src/test/setup.ts`, as persistent global canvas mocks can interfere with other tools' timer and animation loops (such as confetti physics in `ChoicePicker`). Always scope canvas mocks strictly within the companion test file (`<ToolName>.test.tsx`) with proper restoration in `afterEach()`, or pass a mock context directly to pure renderer functions.
 
 ---
 

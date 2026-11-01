@@ -32,6 +32,7 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Assert that all `useEffect` hooks with event listeners, intervals, or timeouts return cleanup functions (`return () => ...`).
   - Verify dependencies in `useEffect`, `useCallback`, and `useMemo` are complete and exhaustive (enforced by `eslint-plugin-react-hooks`).
   - Verify `localStorage` operations are wrapped in `try/catch` to avoid crashes in private browsing or storage-disabled environments.
+  - Verify main component files (`<ToolName>.tsx`) exclusively export React components to satisfy Vite Fast Refresh (`react-refresh/only-export-components`). Engines and helpers must reside in companion files.
 
 ### Gate 3: UI/UX & Responsive Scaling
 - **The Trap:** Tools look fine at standard 1080p desktop resolutions, but break or cause horizontal scrollbars on mobile viewports (320px–420px) or ultrawide screens.
@@ -89,6 +90,7 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Verify companion tests exist in `src/tools/<tool-name>/<ToolName>.test.tsx`.
   - Test coverage for the new tool module must exceed 80% (validated via `npm run coverage`).
   - Verify negative assertions: invalid inputs handled gracefully, preset buttons update state correctly, reset/clear actions function properly.
+  - Verify canvas 2D mocks are scoped strictly to the companion test file and not registered globally in `setup.ts`, avoiding cross-test animation leaks.
 
 ### Gate 10: Interruption-Free Subagent Protocol
 - **The Trap:** Subagents running arbitrary interactive shell commands (`git log`, `git diff`, `grep`) and spamming the author with CLI permission prompts.
