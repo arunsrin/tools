@@ -20,7 +20,7 @@
   gap: 1rem;
   max-width: 1200px;
   width: 100%;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 1.25rem;
 }
 
 .biomorphs-title-group {
@@ -119,63 +119,109 @@
   box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
 }
 
-/* Bottom Utility Dock */
-.biomorphs-bottom-dock {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
+/* Ecosystem & Environmental Pressures Bar */
+.ecosystem-bar {
   max-width: 1200px;
   width: 100%;
-  margin: 1.5rem auto 0;
-  background: rgba(15, 23, 42, 0.85);
+  margin: 0 auto 1.5rem;
+  background: rgba(15, 23, 42, 0.75);
   border: 1px solid #1e293b;
   border-radius: 0.85rem;
-  padding: 0.9rem 1.4rem;
-  backdrop-filter: blur(10px);
+  padding: 0.85rem 1.25rem;
   box-sizing: border-box;
 }
 
-.dock-stats {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.specimen-stat-name {
-  font-size: 0.9rem;
-  max-width: 220px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dock-actions {
+.ecosystem-controls-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
-.stat-item {
+.ecosystem-select-group {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.stat-label {
-  font-size: 0.7rem;
+.ecosystem-label {
+  font-size: 0.78rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748b;
-  font-weight: 700;
+  color: #94a3b8;
 }
 
-.stat-value {
-  font-size: 1.15rem;
-  font-weight: 800;
+.ecosystem-dropdown {
+  background: #0b1120;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.18s ease;
+}
+
+.ecosystem-dropdown:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.ecosystem-dropdown option {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.btn-random-ecosystem {
+  margin-left: auto;
+  background: rgba(30, 41, 59, 0.9);
+  color: #e2e8f0;
+}
+
+.btn-random-ecosystem:hover {
+  background: #334155;
   color: #38bdf8;
-  font-variant-numeric: tabular-nums;
+  border-color: #38bdf8;
+}
+
+.ecosystem-narrative-bar {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.narrative-headline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.narrative-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+}
+
+.narrative-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.narrative-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
 }
 
 /* 2-Way Duel Arena */
@@ -185,7 +231,7 @@
   gap: 1.5rem;
   max-width: 1200px;
   width: 100%;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.5rem;
   position: relative;
 }
 
@@ -214,6 +260,28 @@
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
 }
 
+/* Apex Specimen Highlight */
+.specimen-card.apex-specimen {
+  border-color: #f59e0b;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
+}
+
+.specimen-card.apex-specimen:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 0 35px rgba(251, 191, 36, 0.45);
+}
+
+.apex-banner {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.5);
+}
+
 .card-header-bar {
   display: flex;
   align-items: center;
@@ -230,26 +298,13 @@
 }
 
 .tag-badge {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.55rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
   border-radius: 0.35rem;
-  background: #1e293b;
-  color: #94a3b8;
-  border: 1px solid #334155;
-}
-
-.specimen-card:first-child .tag-badge {
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.3);
-  background: rgba(56, 189, 248, 0.1);
-}
-
-.specimen-card:last-child .tag-badge {
-  color: #a855f7;
-  border-color: rgba(168, 85, 247, 0.3);
-  background: rgba(168, 85, 247, 0.1);
+  background: #38bdf8;
+  color: #020617;
 }
 
 .specimen-name {
@@ -259,66 +314,141 @@
 }
 
 .shortcut-indicator {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
   color: #94a3b8;
-  background: #0f172a;
+  background: #1e293b;
   border: 1px solid #334155;
+  padding: 0.2rem 0.55rem;
   border-radius: 0.35rem;
-  padding: 0.2rem 0.5rem;
-  font-family: ui-monospace, monospace;
 }
 
-/* Canvas Viewport */
+/* Fitness & Adaptation Metrics Bar */
+.specimen-fitness-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.25rem;
+  background: #070d18;
+  border-bottom: 1px solid #1e293b;
+}
+
+.fitness-score-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.fitness-score-tag.apex-score {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+
+.fitness-icon {
+  font-size: 0.95rem;
+}
+
+.fitness-val {
+  font-variant-numeric: tabular-nums;
+}
+
+.adaptive-delta-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.adaptive-delta-badge.delta-pos {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.adaptive-delta-badge.delta-neg {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.adaptive-delta-badge.delta-neu {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Canvas Display */
 .canvas-wrapper {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  min-height: 280px;
-  max-height: 440px;
-  background: radial-gradient(circle at 50% 50%, #0f172a 0%, #060911 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #0c162d 0%, #070c18 80%, #03060d 100%);
+  min-height: 280px;
 }
 
 .specimen-canvas {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
   display: block;
 }
 
-/* Trait Mutations List */
+/* Adaptation Diagnostics */
+.adaptation-diagnostics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.6rem 1.25rem;
+  background: #090e1a;
+  border-top: 1px solid #1e293b;
+  min-height: 42px;
+  box-sizing: border-box;
+}
+
+.diagnostic-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.18rem 0.45rem;
+  border-radius: 0.3rem;
+  line-height: 1.2;
+}
+
+.diagnostic-tag.tag-pro {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.diagnostic-tag.tag-con {
+  color: #fde047;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+/* Traits Bar */
 .card-traits-bar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.75rem 1.25rem;
+  gap: 0.35rem;
+  padding: 0.6rem 1.25rem;
   background: #0b1120;
   border-top: 1px solid #1e293b;
-  min-height: 48px;
+  min-height: 44px;
   box-sizing: border-box;
 }
 
 .trait-pill {
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.2rem 0.55rem;
+  padding: 0.18rem 0.5rem;
   border-radius: 9999px;
   background: rgba(56, 189, 248, 0.08);
   color: #38bdf8;
   border: 1px solid rgba(56, 189, 248, 0.2);
-}
-
-.trait-pill.ancestor-pill {
-  background: rgba(148, 163, 184, 0.1);
-  color: #94a3b8;
-  border-color: rgba(148, 163, 184, 0.25);
 }
 
 .card-select-footer {
@@ -449,6 +579,70 @@
   text-align: center;
 }
 
+/* Bottom Utility Dock */
+.biomorphs-bottom-dock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 1.5rem auto 0;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #1e293b;
+  border-radius: 0.85rem;
+  padding: 0.9rem 1.4rem;
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+}
+
+.dock-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-variant-numeric: tabular-nums;
+}
+
+.champion-name {
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fitness-highlight {
+  color: #4ade80;
+}
+
+.dock-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 /* Modals & Overlays */
 .dna-modal-backdrop {
   position: fixed;
@@ -551,6 +745,25 @@
   .biomorphs-top-actions {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .ecosystem-controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ecosystem-select-group {
+    justify-content: space-between;
+  }
+
+  .ecosystem-dropdown {
+    width: 65%;
+  }
+
+  .btn-random-ecosystem {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
   }
 
   .duel-arena {

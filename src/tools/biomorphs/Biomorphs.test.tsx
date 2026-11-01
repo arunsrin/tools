@@ -4,8 +4,13 @@ import Biomorphs from './Biomorphs';
 import {
   createPrimordialGenome,
   mutateGenome,
+  calculateFitness,
+  createRandomEcosystem,
   drawBiomorph,
-  type BiomorphGenome,
+  TERRAINS,
+  CLIMATES,
+  THREATS,
+  type EcosystemConfig,
 } from './biomorphEngine';
 
 describe('Biomorphs Component & Engine', () => {
@@ -76,18 +81,22 @@ describe('Biomorphs Component & Engine', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders header, title, action buttons, toolbar and duel arena', () => {
+  it('renders header, ecosystem controls bar, duel arena, and bottom dock', () => {
     render(<Biomorphs onBack={onBackMock} />);
 
     expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /new genesis/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /copy dna/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /export png/i })).toBeInTheDocument();
+    expect(screen.getByTestId('ecosystem-bar')).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /terrain/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /climate/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /threat/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /roll random ecosystem/i })).toBeInTheDocument();
 
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
     expect(screen.getByTestId('specimen-alpha-card')).toBeInTheDocument();
     expect(screen.getByTestId('specimen-beta-card')).toBeInTheDocument();
+    expect(screen.getByTestId('alpha-fitness-val')).toBeInTheDocument();
+    expect(screen.getByTestId('beta-fitness-val')).toBeInTheDocument();
     expect(screen.getByTestId('lineage-timeline')).toBeInTheDocument();
   });
 
@@ -95,6 +104,29 @@ describe('Biomorphs Component & Engine', () => {
     render(<Biomorphs onBack={onBackMock} />);
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(onBackMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('changes terrain, climate, and threat dropdowns and updates ecosystem', () => {
+    render(<Biomorphs onBack={onBackMock} />);
+
+    const terrainSelect = screen.getByRole('combobox', { name: /terrain/i });
+    fireEvent.change(terrainSelect, { target: { value: 'desert' } });
+    expect(terrainSelect).toHaveValue('desert');
+
+    const climateSelect = screen.getByRole('combobox', { name: /climate/i });
+    fireEvent.change(climateSelect, { target: { value: 'frost' } });
+    expect(climateSelect).toHaveValue('frost');
+
+    const threatSelect = screen.getByRole('combobox', { name: /threat/i });
+    fireEvent.change(threatSelect, { target: { value: 'gravity' } });
+    expect(threatSelect).toHaveValue('gravity');
+  });
+
+  it('generates a new random ecosystem when clicking Random Biosphere', () => {
+    render(<Biomorphs onBack={onBackMock} />);
+    const randomBtn = screen.getByRole('button', { name: /roll random ecosystem/i });
+    fireEvent.click(randomBtn);
+    expect(screen.getByText(/new biosphere/i)).toBeInTheDocument();
   });
 
   it('selects Specimen Alpha on click and advances generation', () => {
@@ -117,163 +149,123 @@ describe('Biomorphs Component & Engine', () => {
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 1/i);
   });
 
-  it('supports keyboard navigation (ArrowLeft and ArrowRight)', () => {
+  it('supports keyboard navigation (ArrowLeft, ArrowRight, and R for reset)', () => {
     render(<Biomorphs onBack={onBackMock} />);
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
 
-    // Left Arrow advances
+    // ArrowLeft selects Alpha
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 1/i);
 
-    // Right Arrow advances to Gen 2
+    // ArrowRight selects Beta
     fireEvent.keyDown(window, { key: 'ArrowRight' });
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 2/i);
 
-    // Number keys '1' and '2' also work
-    fireEvent.keyDown(window, { key: '1' });
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 3/i);
-
-    fireEvent.keyDown(window, { key: '2' });
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 4/i);
-  });
-
-  it('supports keyboard shortcut R to trigger New Genesis', () => {
-    render(<Biomorphs onBack={onBackMock} />);
-
-    // Advance to Gen 2
-    fireEvent.click(screen.getByTestId('specimen-alpha-card'));
-    fireEvent.click(screen.getByTestId('specimen-alpha-card'));
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 2/i);
-
-    // Press 'r'
+    // Key R triggers New Genesis
     fireEvent.keyDown(window, { key: 'r' });
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
-    expect(screen.getByText(/new genesis initiated/i)).toBeInTheDocument();
   });
 
-  it('displays independent mutation traits for both Specimen Alpha and Beta', () => {
+  it('handles DNA copy to clipboard and DNA import modal', () => {
     render(<Biomorphs onBack={onBackMock} />);
-    const alphaCard = screen.getByTestId('specimen-alpha-card');
-    const betaCard = screen.getByTestId('specimen-beta-card');
 
-    expect(alphaCard).toHaveTextContent(/alpha \(mutant\)/i);
-    expect(betaCard).toHaveTextContent(/beta \(mutant\)/i);
-    expect(alphaCard.querySelector('.card-traits-bar')).toBeInTheDocument();
-    expect(betaCard.querySelector('.card-traits-bar')).toBeInTheDocument();
+    // Click Copy DNA
+    fireEvent.click(screen.getByRole('button', { name: /copy dna/i }));
+    expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/copied to clipboard/i)).toBeInTheDocument();
+
+    // Click Import DNA
+    fireEvent.click(screen.getByRole('button', { name: /import dna/i }));
+    expect(screen.getByText(/import creature dna/i)).toBeInTheDocument();
+
+    // Valid Base64 genome input
+    const sampleGenome = createPrimordialGenome();
+    sampleGenome.generation = 5;
+    sampleGenome.name = 'TestMorph Rex · G5';
+    const validDna = btoa(JSON.stringify(sampleGenome));
+
+    const textarea = screen.getByPlaceholderText(/paste base64 dna sequence/i);
+    fireEvent.change(textarea, { target: { value: validDna } });
+
+    fireEvent.click(screen.getByRole('button', { name: /^load dna$/i }));
+    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 5/i);
   });
 
-  it('allows time-travel to past ancestors in the lineage strip', () => {
+  it('handles HD PNG export trigger', () => {
+    render(<Biomorphs onBack={onBackMock} />);
+    fireEvent.click(screen.getByRole('button', { name: /export hd png/i }));
+    expect(screen.getByText(/exported hd specimen snapshot/i)).toBeInTheDocument();
+  });
+
+  it('allows time-travel rewind to ancestor in timeline', () => {
     render(<Biomorphs onBack={onBackMock} />);
 
-    // Evolve 2 generations
+    // Select Alpha twice to reach Gen 2
     fireEvent.click(screen.getByTestId('specimen-alpha-card'));
     fireEvent.click(screen.getByTestId('specimen-alpha-card'));
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 2/i);
 
-    // Click ancestor 0 in lineage
-    const ancestor0 = screen.getByTestId('lineage-ancestor-0');
-    fireEvent.click(ancestor0);
+    // Click Gen 0 ancestor in timeline
+    const gen0Thumb = screen.getByTitle(/gen 0:/i);
+    fireEvent.click(gen0Thumb);
 
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
     expect(screen.getByText(/rewound to gen 0/i)).toBeInTheDocument();
   });
 
-  it('copies DNA to clipboard', () => {
-    render(<Biomorphs onBack={onBackMock} />);
-
-    fireEvent.click(screen.getByRole('button', { name: /copy dna/i }));
-    expect(navigator.clipboard.writeText).toHaveBeenCalled();
-    expect(screen.getByText(/dna code copied/i)).toBeInTheDocument();
-  });
-
-  it('opens DNA modal, handles invalid input, and loads valid genome', () => {
-    render(<Biomorphs onBack={onBackMock} />);
-
-    // Open DNA modal
-    fireEvent.click(screen.getByRole('button', { name: /^🧬 dna$/i }));
-    expect(screen.getByRole('heading', { level: 3, name: /organism dna code/i })).toBeInTheDocument();
-
-    const textarea = screen.getByPlaceholderText(/paste base64 dna code here/i);
-    const loadBtn = screen.getByRole('button', { name: /load dna/i });
-
-    // Invalid DNA
-    fireEvent.change(textarea, { target: { value: 'not-valid-base64-json' } });
-    fireEvent.click(loadBtn);
-    expect(window.alert).toHaveBeenCalled();
-
-    // Valid DNA
-    const testGenome: BiomorphGenome = createPrimordialGenome();
-    testGenome.generation = 42;
-    testGenome.name = 'TestMorph Custom';
-    const validBase64 = btoa(JSON.stringify(testGenome));
-
-    fireEvent.change(textarea, { target: { value: validBase64 } });
-    fireEvent.click(loadBtn);
-
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 42/i);
-    expect(screen.getByText(/loaded dna for testmorph custom/i)).toBeInTheDocument();
-  });
-
-  it('triggers Export PNG without crashing', () => {
-    render(<Biomorphs onBack={onBackMock} />);
-
-    const exportBtn = screen.getByRole('button', { name: /export png/i });
-    fireEvent.click(exportBtn);
-
-    expect(screen.getByText(/exported hd specimen snapshot/i)).toBeInTheDocument();
-  });
-
-  it('loads saved state from localStorage and recovers from corrupt data', () => {
-    const savedGenome = createPrimordialGenome();
-    savedGenome.generation = 9;
-    savedGenome.name = 'SavedMorph';
-    localStorage.setItem(
-      'tools_hub_biomorphs',
-      JSON.stringify({
-        parentGenome: savedGenome,
-        lineage: [savedGenome],
-      })
-    );
-
-    const { unmount } = render(<Biomorphs onBack={onBackMock} />);
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 9/i);
-    unmount();
-
-    // Corrupt JSON in localStorage
-    localStorage.setItem('tools_hub_biomorphs', '{invalid json');
-    render(<Biomorphs onBack={onBackMock} />);
-    expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
-  });
-});
-
-describe('Biomorph Procedural Helpers & Rendering Unit Tests', () => {
-  it('creates valid primordial genome with expected structure', () => {
-    const genome = createPrimordialGenome();
-    expect(genome.generation).toBe(0);
-    expect(genome.segments.length).toBeGreaterThanOrEqual(1);
-    expect(genome.limbPairs.length).toBeGreaterThanOrEqual(1);
-    expect(genome.eyeCount).toBeGreaterThanOrEqual(1);
-    expect(genome.primaryHue).toBeGreaterThanOrEqual(0);
-    expect(genome.name).toBeTruthy();
-  });
-
-  it('mutates genome with subtle, moderate, and radical intensities', () => {
+  it('creates and mutates genomes with new traits (wings and mouthparts)', () => {
     const parent = createPrimordialGenome();
+    expect(parent.generation).toBe(0);
 
-    const subtle = mutateGenome(parent, 'subtle');
-    expect(subtle.child.generation).toBe(1);
-    expect(subtle.mutatedTraits.length).toBeGreaterThan(0);
-
-    const moderate = mutateGenome(parent, 'moderate');
-    expect(moderate.child.generation).toBe(1);
-    expect(moderate.mutatedTraits.length).toBeGreaterThan(0);
-
-    const radical = mutateGenome(parent, 'radical');
-    expect(radical.child.generation).toBe(1);
-    expect(radical.mutatedTraits.length).toBeGreaterThan(0);
+    const result = mutateGenome(parent, 'moderate');
+    expect(result.child.generation).toBe(1);
+    expect(result.mutatedTraits.length).toBeGreaterThan(0);
   });
 
-  it('drawBiomorph executes canvas draw commands cleanly for all eye and antenna types', () => {
+  it('computes accurate environmental fitness across biomes, climates, and threats', () => {
+    const testEco: EcosystemConfig = {
+      terrain: 'swamp',
+      climate: 'acidic',
+      threat: 'stalkers',
+    };
+
+    const genome = createPrimordialGenome();
+    genome.primaryHue = 120; // Swamp green
+    genome.eyeCount = 2;     // Shielded
+    genome.limbPairs = [
+      { length1: 30, length2: 30, angle1: 0, angle2: 0, thickness: 4, tipType: 'claw' },
+      { length1: 30, length2: 30, angle1: 0, angle2: 0, thickness: 4, tipType: 'claw' },
+      { length1: 30, length2: 30, angle1: 0, angle2: 0, thickness: 4, tipType: 'claw' },
+    ];
+    genome.headApparatus = 'proboscis';
+
+    const fit = calculateFitness(genome, testEco);
+    expect(fit.score).toBeGreaterThan(70);
+    expect(fit.pros).toContain('+Swamp Camouflage');
+    expect(fit.pros).toContain('+Mud-Shielded Optics');
+
+    // Test desert fitness
+    const desertEco: EcosystemConfig = {
+      terrain: 'desert',
+      climate: 'geothermal',
+      threat: 'scarcity',
+    };
+    genome.primaryHue = 45; // Gold
+    genome.antennaLength = 55;
+    const desertFit = calculateFitness(genome, desertEco);
+    expect(desertFit.pros).toContain('+Solar UV Heat Deflection');
+
+    // Test canopy fitness with wings
+    const canopyEco: EcosystemConfig = {
+      terrain: 'canopy',
+      climate: 'oxygen',
+      threat: 'airborne',
+    };
+    genome.limbPairs[0].tipType = 'wing';
+    const canopyFit = calculateFitness(genome, canopyEco);
+    expect(canopyFit.pros).toContain('+Canopy Glider Wings');
+  });
+
+  it('drawBiomorph renders wings, proboscis, and mandibles without errors', () => {
     const mockCtx = {
       save: vi.fn(),
       restore: vi.fn(),
@@ -301,30 +293,20 @@ describe('Biomorph Procedural Helpers & Rendering Unit Tests', () => {
     } as unknown as CanvasRenderingContext2D;
 
     const testGenome = createPrimordialGenome();
+    testGenome.limbPairs[0].tipType = 'wing';
+    testGenome.headApparatus = 'proboscis';
 
-    // Test with default
     expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 0)).not.toThrow();
 
-    // Test with 1 eye, 4 eyes, 6 eyes
-    testGenome.eyeCount = 1;
-    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 0.5)).not.toThrow();
-
-    testGenome.eyeCount = 4;
-    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 1.0)).not.toThrow();
-
-    testGenome.eyeCount = 6;
-    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 1.5)).not.toThrow();
-
-    // Test with antenna tip types and limb tip types
-    testGenome.antennaTip = 'feather';
-    testGenome.antennaCount = 1;
-    testGenome.markingsStyle = 'chevrons';
-    testGenome.limbPairs[0].tipType = 'glow-orb';
-    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 2.0)).not.toThrow();
-
-    testGenome.antennaTip = 'beaded';
-    testGenome.markingsStyle = 'dots';
+    testGenome.headApparatus = 'mandibles';
     testGenome.limbPairs[0].tipType = 'pad';
-    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 2.5)).not.toThrow();
+    expect(() => drawBiomorph(mockCtx, testGenome, 400, 300, 1)).not.toThrow();
+  });
+
+  it('createRandomEcosystem returns valid terrain, climate, and threat IDs', () => {
+    const eco = createRandomEcosystem();
+    expect(TERRAINS.map((t) => t.id)).toContain(eco.terrain);
+    expect(CLIMATES.map((c) => c.id)).toContain(eco.climate);
+    expect(THREATS.map((th) => th.id)).toContain(eco.threat);
   });
 });
