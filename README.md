@@ -15,6 +15,7 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 - **[Random Picker](./src/tools/picker/SPEC.md)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
 - **[Cute Pomo](./src/tools/pomo/SPEC.md)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
 - **[Desktop Pals](./src/tools/pals/SPEC.md)**: An interactive canvas companion toy with physics playgrounds, obstacles, toys & treats (Pip the Penguin, Barnaby the Pup, Sprout the Sprite).
+- **[Fractal Explorer](./src/tools/fractal/SPEC.md)**: An interactive Mandelbrot, Julia, and Burning Ship fractal explorer with deep continuous zoom and 4K wallpaper export studio.
 
 ---
 
@@ -81,6 +82,7 @@ This project is designed to be hosted as a static-only Worker using **Cloudflare
   - `src/tools/picker/`: The Random Picker and Decision Maker tool module.
   - `src/tools/pomo/`: The Cute Pomo / Focus Timer tool module.
   - `src/tools/pals/`: The Desktop Pals interactive companion sandbox tool module.
+  - `src/tools/fractal/`: The Fractal Explorer and wallpaper studio tool module.
 - `docs/specs/`: Feature specifications authored during autonomous sprints.
 - `scripts/`: Local verification, CI parity, and sprint lifecycle automation.
 

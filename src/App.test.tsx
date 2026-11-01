@@ -34,6 +34,9 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const palsLink = screen.getByRole('link', { name: /desktop pals/i });
     expect(palsLink).toHaveAttribute('href', TOOL_ROUTES.pals);
 
+    const fractalLink = screen.getByRole('link', { name: /fractal explorer/i });
+    expect(fractalLink).toHaveAttribute('href', TOOL_ROUTES.fractal);
+
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -136,6 +139,23 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
+  it('navigates to Fractal Explorer tool and back to hub', () => {
+    render(<App />);
+    const fractalCard = screen.getByRole('link', { name: /fractal explorer/i });
+    fireEvent.click(fractalCard);
+
+    // In Fractal Explorer tool & URL updated
+    expect(window.location.pathname).toBe('/fractal');
+    expect(screen.getByRole('heading', { level: 1, name: /fractal explorer/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+    expect(screen.getByTestId('fractal-canvas')).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
   it('mounts directly to Timezone Converter when loading /timezone path', () => {
     window.history.replaceState({}, '', '/timezone');
     render(<App />);
@@ -171,6 +191,14 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: /desktop pals/i })).toBeInTheDocument();
     expect(screen.getByTestId('pals-canvas')).toBeInTheDocument();
+  });
+
+  it('mounts directly to Fractal Explorer when loading /fractal path', () => {
+    window.history.replaceState({}, '', '/fractal');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /fractal explorer/i })).toBeInTheDocument();
+    expect(screen.getByTestId('fractal-canvas')).toBeInTheDocument();
   });
 
   it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
@@ -232,6 +260,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/picker/')).toBe('picker');
       expect(parseRoute('/pomo')).toBe('pomo');
       expect(parseRoute('/pals')).toBe('pals');
+      expect(parseRoute('/fractal')).toBe('fractal');
     });
 
     it('parses hash fallback correctly', () => {
@@ -240,6 +269,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/', '#picker')).toBe('picker');
       expect(parseRoute('/', '#/pomo')).toBe('pomo');
       expect(parseRoute('/', '#/pals')).toBe('pals');
+      expect(parseRoute('/', '#/fractal')).toBe('fractal');
     });
 
     it('falls back to hub for unknown or empty paths', () => {
@@ -256,6 +286,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('picker')).toBe('/picker');
       expect(getPathForView('pomo')).toBe('/pomo');
       expect(getPathForView('pals')).toBe('/pals');
+      expect(getPathForView('fractal')).toBe('/fractal');
     });
   });
 });
