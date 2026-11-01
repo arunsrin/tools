@@ -11,6 +11,8 @@ import {
   CLIMATES,
   THREATS,
   type EcosystemConfig,
+  type TerrainType,
+  type ThreatType,
 } from './biomorphEngine';
 import {
   createInitialBiosphere,
@@ -104,6 +106,13 @@ describe('Biomorphs Component & Engine', () => {
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
     expect(screen.getByTestId('specimen-alpha-card')).toBeInTheDocument();
     expect(screen.getByTestId('specimen-beta-card')).toBeInTheDocument();
+    expect(screen.getByText('OFFSPRING 1')).toBeInTheDocument();
+    expect(screen.getByText('OFFSPRING 2')).toBeInTheDocument();
+    expect(screen.getByTestId('how-to-play-guide')).toBeInTheDocument();
+    expect(screen.getAllByText(/active biosphere adaptation:/i)).toHaveLength(2);
+    expect(screen.getAllByText(/next-gen mutations:/i)).toHaveLength(2);
+    expect(screen.queryByText('← / 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('→ / 2')).not.toBeInTheDocument();
     expect(screen.getByTestId('alpha-fitness-val')).toBeInTheDocument();
     expect(screen.getByTestId('beta-fitness-val')).toBeInTheDocument();
     expect(screen.getByTestId('lineage-timeline')).toBeInTheDocument();
@@ -341,7 +350,7 @@ describe('Biomorphs Component & Engine', () => {
     it('launches specimen directly into biosphere from candidate card', () => {
       render(<Biomorphs onBack={onBackMock} />);
 
-      const launchAlphaBtn = screen.getByRole('button', { name: /^launch alpha:/i });
+      const launchAlphaBtn = screen.getByRole('button', { name: /^launch offspring 1:/i });
       fireEvent.click(launchAlphaBtn);
 
       expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
@@ -551,6 +560,67 @@ describe('Biomorphs Component & Engine', () => {
       const state = createInitialBiosphere(genome, eco, 800, 500);
 
       expect(() => drawBiosphere(mockCtx, state, 800, 500, 1.0)).not.toThrow();
+    });
+
+    it('renders all 6 terrain backdrops with environmental flora and features without errors', () => {
+      const mockCtx = {
+        save: vi.fn(),
+        restore: vi.fn(),
+        clearRect: vi.fn(),
+        translate: vi.fn(),
+        rotate: vi.fn(),
+        scale: vi.fn(),
+        beginPath: vi.fn(),
+        closePath: vi.fn(),
+        moveTo: vi.fn(),
+        lineTo: vi.fn(),
+        quadraticCurveTo: vi.fn(),
+        bezierCurveTo: vi.fn(),
+        arc: vi.fn(),
+        ellipse: vi.fn(),
+        fill: vi.fn(),
+        stroke: vi.fn(),
+        fillRect: vi.fn(),
+        strokeRect: vi.fn(),
+        fillText: vi.fn(),
+        setLineDash: vi.fn(),
+        createRadialGradient: vi.fn(() => ({
+          addColorStop: vi.fn(),
+        })),
+        createLinearGradient: vi.fn(() => ({
+          addColorStop: vi.fn(),
+        })),
+      } as unknown as CanvasRenderingContext2D;
+
+      const terrains: TerrainType[] = ['swamp', 'canopy', 'crags', 'desert', 'abyss', 'cavern'];
+      const genome = createPrimordialGenome();
+
+      terrains.forEach((terrain) => {
+        const state = createInitialBiosphere(genome, { terrain, climate: 'oxygen', threat: 'stalkers' }, 800, 500);
+        expect(() => drawBiosphere(mockCtx, state, 800, 500, 1.5)).not.toThrow();
+      });
+    });
+
+    it('generates predators with fangs, serrated jaws, or needle proboscis and dorsal serrations', () => {
+      const threats: ThreatType[] = ['stalkers', 'airborne', 'parasites'];
+      threats.forEach((th) => {
+        const state = createInitialBiosphere(createPrimordialGenome(), { terrain: 'swamp', climate: 'acidic', threat: th }, 800, 500);
+        const predator = state.agents.find((a) => a.role === 'predator');
+        expect(predator).toBeDefined();
+        expect(predator?.genome.serrations).toBe(true);
+        expect(['fangs', 'serrated-jaws', 'proboscis', 'mandibles']).toContain(predator?.genome.headApparatus);
+      });
+    });
+
+    it('selects offspring when clicking the Select as Champion button without event bubbling duplicates', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      const selectBtn = screen.getByRole('button', { name: /^select offspring 1: .* as champion$/i });
+      fireEvent.click(selectBtn);
+      expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 1/i);
+
+      // Lineage timeline must have exactly 2 nodes: initial Gen 0 + chosen Gen 1 (no duplicate from bubbling)
+      const timeline = screen.getByTestId('lineage-timeline');
+      expect(timeline.children).toHaveLength(2);
     });
   });
 });

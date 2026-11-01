@@ -33,7 +33,8 @@ export interface BiomorphGenome {
   markingsStyle: 'stripes' | 'dots' | 'chevrons';
   glowIntensity: number;
   asymmetry: number;
-  headApparatus?: 'none' | 'proboscis' | 'mandibles';
+  headApparatus?: 'none' | 'proboscis' | 'mandibles' | 'fangs' | 'serrated-jaws';
+  serrations?: boolean;
 }
 
 export type MutationIntensity = 'subtle' | 'moderate' | 'radical';
@@ -249,12 +250,32 @@ export function mutateGenome(
     traits.push('Bioluminescent Markings');
   }
 
-  // 9. Mutate head apparatus (proboscis, mandibles, none)
-  if (Math.random() < 0.16) {
-    const mouthOpts: ('none' | 'proboscis' | 'mandibles')[] = ['none', 'proboscis', 'mandibles'];
+  // 9. Mutate head apparatus (proboscis, mandibles, fangs, serrated-jaws, none)
+  if (Math.random() < 0.2) {
+    const mouthOpts: ('none' | 'proboscis' | 'mandibles' | 'fangs' | 'serrated-jaws')[] = [
+      'none',
+      'proboscis',
+      'mandibles',
+      'fangs',
+      'serrated-jaws',
+    ];
     child.headApparatus = mouthOpts[Math.floor(Math.random() * mouthOpts.length)];
     if (child.headApparatus !== 'none') {
-      traits.push(child.headApparatus === 'proboscis' ? 'Feeding Proboscis' : 'Predatory Mandibles');
+      const labels: Record<string, string> = {
+        proboscis: 'Feeding Proboscis',
+        mandibles: 'Predatory Mandibles',
+        fangs: 'Razor Fangs',
+        'serrated-jaws': 'Serrated Jaws',
+      };
+      traits.push(labels[child.headApparatus] || 'Predatory Mouthparts');
+    }
+  }
+
+  // 10. Mutate dorsal serrations
+  if (Math.random() < 0.15) {
+    child.serrations = !child.serrations;
+    if (child.serrations) {
+      traits.push('Dorsal Serrations');
     }
   }
 
@@ -530,7 +551,13 @@ export function calculateFitness(genome: BiomorphGenome, ecosystem: EcosystemCon
         score += 12;
         pros.push('+Ambush Escape Speed');
       }
-      if (hasClaws || genome.headApparatus === 'mandibles') {
+      if (
+        hasClaws ||
+        genome.headApparatus === 'mandibles' ||
+        genome.headApparatus === 'fangs' ||
+        genome.headApparatus === 'serrated-jaws' ||
+        genome.serrations
+      ) {
         score += 12;
         pros.push('+Defensive Counter-Weapons');
       }
@@ -730,7 +757,7 @@ export function renderBiomorphBody(
     });
   }
 
-  // 3. Draw Cranial Mouthparts (Proboscis / Mandibles)
+  // 3. Draw Cranial Mouthparts (Proboscis / Mandibles / Fangs / Serrated Jaws)
   if (genome.headApparatus === 'proboscis') {
     ctx.save();
     ctx.beginPath();
@@ -763,6 +790,55 @@ export function renderBiomorphBody(
       ctx.fill();
       ctx.restore();
     });
+  } else if (genome.headApparatus === 'fangs') {
+    [-1, 1].forEach((fside) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#f8fafc';
+      ctx.fillStyle = '#f8fafc';
+      // Upper primary fang
+      ctx.moveTo(fside * 6, headY + 10);
+      ctx.lineTo(fside * 11, headY + 23);
+      ctx.lineTo(fside * 3, headY + 13);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Secondary outer barb
+      ctx.beginPath();
+      ctx.moveTo(fside * 12, headY + 11);
+      ctx.lineTo(fside * 16, headY + 22);
+      ctx.lineTo(fside * 9, headY + 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    });
+  } else if (genome.headApparatus === 'serrated-jaws') {
+    [-1, 1].forEach((mside) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = primaryStroke;
+      ctx.lineCap = 'round';
+      ctx.moveTo(mside * 8, headY + 10);
+      ctx.quadraticCurveTo(mside * 26, headY + 22, mside * 8, headY + 38);
+      ctx.stroke();
+      // Serration teeth along the inner jaw
+      ctx.fillStyle = '#f8fafc';
+      for (let s = 1; s <= 4; s++) {
+        const t = s / 5;
+        const jx = mside * (8 * (1 - t) * (1 - t) + 26 * 2 * (1 - t) * t + 8 * t * t);
+        const jy = headY + (10 * (1 - t) * (1 - t) + 22 * 2 * (1 - t) * t + 38 * t * t);
+        ctx.beginPath();
+        ctx.moveTo(jx, jy);
+        ctx.lineTo(jx - mside * 5, jy + 2);
+        ctx.lineTo(jx, jy + 4);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    });
   }
 
   // 4. Draw Body Segments (Head, Thorax, Abdomen)
@@ -783,6 +859,29 @@ export function renderBiomorphBody(
     ctx.lineWidth = 2.5;
     ctx.strokeStyle = primaryStroke;
     ctx.stroke();
+
+    // Dorsal Chitinous Serrations
+    if (genome.serrations && i > 0) {
+      [-1, 1].forEach((side) => {
+        ctx.save();
+        ctx.fillStyle = primaryStroke;
+        ctx.strokeStyle = secondaryStroke;
+        ctx.lineWidth = 1.2;
+        const spineCount = 3;
+        for (let s = 0; s < spineCount; s++) {
+          const sy = seg.yOffset - seg.height * 0.45 + ((s + 1) * seg.height * 0.9) / (spineCount + 1);
+          const sx = side * seg.width * 0.88;
+          ctx.beginPath();
+          ctx.moveTo(sx, sy - 3.5);
+          ctx.lineTo(sx + side * 8, sy);
+          ctx.lineTo(sx, sy + 3.5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+      });
+    }
 
     // Dorsal bioluminescent markings
     if (genome.markingsCount > 0 && i > 0) {
@@ -876,7 +975,8 @@ export function drawBiomorph(
   genome: BiomorphGenome,
   width: number,
   height: number,
-  animTime = 0
+  animTime = 0,
+  scaleOverride?: number
 ) {
   ctx.save();
   ctx.clearRect(0, 0, width, height);
@@ -886,8 +986,9 @@ export function drawBiomorph(
 
   // Ambient breathing pulse
   const breath = Math.sin(animTime * 2.5) * 0.03;
+  const baseScale = scaleOverride ?? (width < 120 ? Math.min(width / 240, height / 180) : 1);
   ctx.translate(cx, cy);
-  ctx.scale(1 + breath, 1 + breath);
+  ctx.scale((1 + breath) * baseScale, (1 + breath) * baseScale);
 
   // Background subtle glow under creature
   const bgGlow = ctx.createRadialGradient(0, 0, 10, 0, 0, 120);
