@@ -1,4 +1,4 @@
-export type ToolKey = 'big' | 'timezone' | 'picker' | 'pomo' | 'pals';
+export type ToolKey = 'big' | 'timezone' | 'picker' | 'pomo' | 'pals' | 'fractal';
 export type View = 'hub' | ToolKey;
 
 export const TOOL_ROUTES: Record<ToolKey, string> = {
@@ -7,6 +7,7 @@ export const TOOL_ROUTES: Record<ToolKey, string> = {
   picker: '/picker',
   pomo: '/pomo',
   pals: '/pals',
+  fractal: '/fractal',
 };
 
 const ROUTE_TO_TOOL: Record<string, ToolKey> = {
@@ -15,6 +16,7 @@ const ROUTE_TO_TOOL: Record<string, ToolKey> = {
   picker: 'picker',
   pomo: 'pomo',
   pals: 'pals',
+  fractal: 'fractal',
 };
 
 export function parseRoute(pathname: string, hash = ''): View {

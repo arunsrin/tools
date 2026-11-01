@@ -30,3 +30,4 @@ A centralized static hub for hosting multiple small, self-contained tools.
 3. **[Random Picker](./src/tools/picker/SPEC.md)**: A playful decision maker with coin toss, multi-dice roll, and spinning wheel / raffle picker.
 4. **[Cute Pomo](./src/tools/pomo/SPEC.md)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, chimes & cycle tracking.
 5. **[Desktop Pals](./src/tools/pals/SPEC.md)**: An interactive canvas companion toy with physics playgrounds, obstacles, toys & treats.
+6. **[Fractal Explorer](./src/tools/fractal/SPEC.md)**: An interactive Mandelbrot, Julia & Burning Ship explorer with deep zoom & 4K wallpaper studio.
