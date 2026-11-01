@@ -25,17 +25,17 @@ In each generation, the tool displays two candidate organisms (Specimen Alpha vs
   - Specimen canvas includes subtle ambient breathing animation or idle micro-flexing of limbs to give an organic, living feel.
 
 ### 2.2 Evolutionary Engine & Mutation Dynamics
-- **AC-3 (2-Way Duel Selection):**
-  - Dual-card layout: **Specimen Alpha** (Left) vs. **Specimen Beta** (Right).
-  - High-visibility comparison badges showing key mutated traits (e.g., "+Limb length", "+Dorsal ridge", "Eye cluster", "Pigment shift").
+- **AC-3 (2-Way Dual-Mutant Selection):**
+  - Dual-card layout: **Specimen Alpha** vs. **Specimen Beta**. Both specimens are distinct, independently mutated offspring originating from the active parent champion, mutating by equal amounts each generation.
+  - High-visibility comparison badges on both cards showing key mutated traits (e.g., "+Limb length", "+Dorsal ridge", "Eye cluster", "Pigment shift").
   - Fast selection interactions:
     - Click or tap on either card.
     - Keyboard shortcuts: `←` (Left Arrow or `1`) selects Specimen Alpha; `→` (Right Arrow or `2`) selects Specimen Beta.
-- **AC-4 (Mutation Intensity Levels):**
-  - Three user-selectable mutation intensity modes:
+- **AC-4 (Mutation Intensity Levels & Radical Default):**
+  - Three user-selectable mutation intensity modes, with **Radical** set as the default initial mode for bold, dynamic evolutionary divergence:
     - **Subtle (Micro-evolution):** Small 3-8% shifts in morphology parameters; gradual speciation.
     - **Moderate (Standard):** Balanced 15-25% variations; noticeable adaptive leaps.
-    - **Radical (Cosmic Radiation):** 40-70% drastic mutations with possible anatomical alterations (adding/losing limbs or segments).
+    - **Radical (Cosmic Radiation - Default):** 40-70% drastic mutations with anatomical alterations (adding/losing limbs or segments).
 - **AC-5 (New Genesis / Reroll):**
   - "New Genesis" / "Restart" button that seeds a fresh Gen 0 primordial organism.
   - Keyboard shortcut: `Space` or `R` triggers a confirmation/quick reroll.

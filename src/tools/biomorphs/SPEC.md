@@ -5,8 +5,8 @@
 
 ## 2. Key Features
 - **Parametric Anatomy & Genome:** Procedural segmented bodies, articulated jointed appendages, sensory eye clusters, antennae feelers, bioluminescent markings, and radiant alien color palettes.
-- **2-Way Evolutionary Duel:** Side-by-side Alpha vs Beta comparison cards with rapid keyboard shortcuts (`←` / `→` or `1` / `2`).
-- **Mutation Dynamics:** User-selectable mutation intensity (Subtle, Moderate, Radical) adjusting genetic drift rates.
+- **2-Way Dual-Mutant Duel:** Side-by-side Alpha vs Beta comparison cards where both specimens mutate equally from the parent champion, with rapid keyboard shortcuts (`←` / `→` or `1` / `2`).
+- **Mutation Dynamics:** User-selectable mutation intensity (Subtle, Moderate, Radical) with Radical as default for bold cosmic mutations.
 - **Evolutionary Lineage Timeline:** Visual ancestor timeline tracking generations from Gen 0 onward with time-travel rewind to branch alternate evolutionary trees.
 - **DNA Sharing & HD Image Export:** Shareable DNA code copy/import and one-click 1024x1024 HD PNG specimen snapshot export.
 - **Zero Bloat & Dark Theme:** Pure HTML5 Canvas 2D engine with zero external libraries, optimized for 60fps rendering and mobile responsiveness.

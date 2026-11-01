@@ -151,18 +151,33 @@ describe('Biomorphs Component & Engine', () => {
     expect(screen.getByText(/new genesis initiated/i)).toBeInTheDocument();
   });
 
-  it('switches mutation drift intensity', () => {
+  it('switches mutation drift intensity and defaults to radical', () => {
     render(<Biomorphs onBack={onBackMock} />);
 
     const subtleBtn = screen.getByTestId('mutation-btn-subtle');
     const radicalBtn = screen.getByTestId('mutation-btn-radical');
 
+    // Default is radical
+    expect(radicalBtn).toHaveClass('active');
+    expect(subtleBtn).not.toHaveClass('active');
+
     fireEvent.click(subtleBtn);
     expect(subtleBtn).toHaveClass('active');
+    expect(radicalBtn).not.toHaveClass('active');
 
     fireEvent.click(radicalBtn);
     expect(radicalBtn).toHaveClass('active');
-    expect(subtleBtn).not.toHaveClass('active');
+  });
+
+  it('displays independent mutation traits for both Specimen Alpha and Beta', () => {
+    render(<Biomorphs onBack={onBackMock} />);
+    const alphaCard = screen.getByTestId('specimen-alpha-card');
+    const betaCard = screen.getByTestId('specimen-beta-card');
+
+    expect(alphaCard).toHaveTextContent(/alpha \(mutant\)/i);
+    expect(betaCard).toHaveTextContent(/beta \(mutant\)/i);
+    expect(alphaCard.querySelector('.card-traits-bar')).toBeInTheDocument();
+    expect(betaCard.querySelector('.card-traits-bar')).toBeInTheDocument();
   });
 
   it('allows time-travel to past ancestors in the lineage strip', () => {

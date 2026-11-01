@@ -3,7 +3,6 @@ import {
   type BiomorphGenome,
   type MutationIntensity,
   createPrimordialGenome,
-  generateCreatureName,
   mutateGenome,
   drawBiomorph,
 } from './biomorphEngine';
@@ -40,7 +39,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     } catch {
       // ignore
     }
-    return 'moderate';
+    return 'radical';
   });
 
   const [lineage, setLineage] = useState<BiomorphGenome[]>(() => {
@@ -56,8 +55,10 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     return [parentGenome];
   });
 
-  // Mutated candidates: Alpha (current parent or variant) vs Beta (mutated child)
-  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => parentGenome);
+  // Mutated candidates: Both Alpha and Beta are independently mutated from parentGenome by equal amounts
+  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => mutateGenome(parentGenome, intensity).child);
+  const [alphaTraits, setAlphaTraits] = useState<string[]>(() => mutateGenome(parentGenome, intensity).mutatedTraits);
+
   const [specimenBeta, setSpecimenBeta] = useState<BiomorphGenome>(() => mutateGenome(parentGenome, intensity).child);
   const [betaTraits, setBetaTraits] = useState<string[]>(() => mutateGenome(parentGenome, intensity).mutatedTraits);
 
@@ -128,25 +129,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   // Selection Handler
   const selectSpecimen = useCallback(
     (chosen: BiomorphGenome) => {
-      const nextGen = parentGenome.generation + 1;
-      const evolvedSurvivor: BiomorphGenome = {
-        ...JSON.parse(JSON.stringify(chosen)),
-        generation: nextGen,
-        name: generateCreatureName(nextGen),
-      };
+      setParentGenome(chosen);
+      setLineage((prev) => [...prev, chosen]);
 
-      setParentGenome(evolvedSurvivor);
-      setLineage((prev) => [...prev, evolvedSurvivor]);
+      // Both Alpha and Beta mutate independently by equal amounts from the chosen parent
+      const { child: childA, mutatedTraits: traitsA } = mutateGenome(chosen, intensity);
+      const { child: childB, mutatedTraits: traitsB } = mutateGenome(chosen, intensity);
 
-      // Alpha becomes the chosen parent; Beta becomes freshly mutated offspring
-      setSpecimenAlpha(evolvedSurvivor);
-      const { child, mutatedTraits } = mutateGenome(evolvedSurvivor, intensity);
-      setSpecimenBeta(child);
-      setBetaTraits(mutatedTraits);
+      setSpecimenAlpha(childA);
+      setAlphaTraits(traitsA);
+      setSpecimenBeta(childB);
+      setBetaTraits(traitsB);
 
-      showToast(`Selected ${evolvedSurvivor.name}!`);
+      showToast(`Selected ${chosen.name}!`);
     },
-    [parentGenome.generation, intensity, showToast]
+    [intensity, showToast]
   );
 
   // Restart / New Genesis
@@ -154,10 +151,15 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     const fresh = createPrimordialGenome();
     setParentGenome(fresh);
     setLineage([fresh]);
-    setSpecimenAlpha(fresh);
-    const { child, mutatedTraits } = mutateGenome(fresh, intensity);
-    setSpecimenBeta(child);
-    setBetaTraits(mutatedTraits);
+
+    const { child: childA, mutatedTraits: traitsA } = mutateGenome(fresh, intensity);
+    const { child: childB, mutatedTraits: traitsB } = mutateGenome(fresh, intensity);
+
+    setSpecimenAlpha(childA);
+    setAlphaTraits(traitsA);
+    setSpecimenBeta(childB);
+    setBetaTraits(traitsB);
+
     showToast('New Genesis initiated: Generation 0 primed.');
   }, [intensity, showToast]);
 
@@ -165,10 +167,15 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   const handleTimeTravel = useCallback(
     (ancestor: BiomorphGenome) => {
       setParentGenome(ancestor);
-      setSpecimenAlpha(ancestor);
-      const { child, mutatedTraits } = mutateGenome(ancestor, intensity);
-      setSpecimenBeta(child);
-      setBetaTraits(mutatedTraits);
+
+      const { child: childA, mutatedTraits: traitsA } = mutateGenome(ancestor, intensity);
+      const { child: childB, mutatedTraits: traitsB } = mutateGenome(ancestor, intensity);
+
+      setSpecimenAlpha(childA);
+      setAlphaTraits(traitsA);
+      setSpecimenBeta(childB);
+      setBetaTraits(traitsB);
+
       showToast(`Rewound to Gen ${ancestor.generation} (${ancestor.name})`);
     },
     [intensity, showToast]
@@ -220,10 +227,14 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       if (genome && genome.segments && genome.limbPairs) {
         setParentGenome(genome);
         setLineage((prev) => [...prev, genome]);
-        setSpecimenAlpha(genome);
-        const { child, mutatedTraits } = mutateGenome(genome, intensity);
-        setSpecimenBeta(child);
-        setBetaTraits(mutatedTraits);
+
+        const { child: childA, mutatedTraits: traitsA } = mutateGenome(genome, intensity);
+        const { child: childB, mutatedTraits: traitsB } = mutateGenome(genome, intensity);
+
+        setSpecimenAlpha(childA);
+        setAlphaTraits(traitsA);
+        setSpecimenBeta(childB);
+        setBetaTraits(traitsB);
         setShowDnaModal(false);
         setDnaInput('');
         showToast(`Loaded DNA for ${genome.name}`);
@@ -353,7 +364,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         >
           <div className="card-header-bar">
             <div className="specimen-tag">
-              <span className="tag-badge">ALPHA</span>
+              <span className="tag-badge">ALPHA (MUTANT)</span>
               <span className="specimen-name">{specimenAlpha.name}</span>
             </div>
             <span className="shortcut-indicator" title="Keyboard shortcut: Left Arrow or 1">
@@ -366,9 +377,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           </div>
 
           <div className="card-traits-bar">
-            <span className="trait-pill ancestor-pill">Parent Champion</span>
-            <span className="trait-pill">{specimenAlpha.limbPairs.length * 2} Limbs</span>
-            <span className="trait-pill">{specimenAlpha.eyeCount} Eyes</span>
+            {alphaTraits.map((t, idx) => (
+              <span key={idx} className="trait-pill">
+                ✦ {t}
+              </span>
+            ))}
           </div>
 
           <div className="card-select-footer">
