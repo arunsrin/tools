@@ -61,6 +61,10 @@ export interface BiosphereState {
   isExtinct: boolean;
   extinctionReason: string;
   actionLog: string[];
+  carryingCapacity?: number;
+  minPreyFloor?: number;
+  preyReplenishTimer?: number;
+  predatorRespawnTimer?: number;
 }
 
 // -------------------------------------------------------------
@@ -69,22 +73,53 @@ export interface BiosphereState {
 
 function createPreyGenome(seedIndex: number): BiomorphGenome {
   const base = createPrimordialGenome();
-  // Herbivore / Prey adaptations: bright, gentle colors, slender segments, light wings or bulbs
   base.name = `Critter-${seedIndex + 1}`;
   base.primaryHue = (110 + seedIndex * 35) % 360;
   base.secondaryHue = (base.primaryHue + 60) % 360;
   base.glowHue = (base.primaryHue + 180) % 360;
-  base.segments = [
-    { width: 20, height: 16, yOffset: -18 },
-    { width: 26, height: 24, yOffset: 6 },
-  ];
-  base.limbPairs = [
-    { length1: 18, length2: 16, angle1: -20, angle2: 30, thickness: 2.5, tipType: 'taper' },
-    { length1: 22, length2: 18, angle1: 25, angle2: 20, thickness: 2.5, tipType: seedIndex % 2 === 0 ? 'wing' : 'taper' },
-  ];
-  base.antennaCount = 2;
-  base.antennaLength = 28;
-  base.antennaTip = 'bulb';
+
+  // Diverse Prey Archetypes (Medusa Spore, Winged Flutterer, Darting Nymph)
+  const preyType = seedIndex % 3;
+  if (preyType === 0) {
+    // Medusa Bell Spore: umbrella bell, trailing tentacle pads
+    base.segments = [
+      { width: 28, height: 20, yOffset: -8 },
+      { width: 18, height: 12, yOffset: 8 },
+    ];
+    base.limbPairs = [
+      { length1: 24, length2: 20, angle1: -15, angle2: 15, thickness: 2, tipType: 'glow-orb' },
+      { length1: 28, length2: 24, angle1: 10, angle2: 10, thickness: 1.8, tipType: 'glow-orb' },
+    ];
+    base.antennaCount = 0;
+  } else if (preyType === 1) {
+    // Winged Micro-Flutterer: light wings, bulb feelers
+    base.segments = [
+      { width: 16, height: 14, yOffset: -14 },
+      { width: 22, height: 20, yOffset: 4 },
+    ];
+    base.limbPairs = [
+      { length1: 26, length2: 30, angle1: -35, angle2: 45, thickness: 2.2, tipType: 'wing' },
+      { length1: 18, length2: 16, angle1: 30, angle2: 20, thickness: 2, tipType: 'taper' },
+    ];
+    base.antennaCount = 2;
+    base.antennaLength = 26;
+    base.antennaTip = 'bulb';
+  } else {
+    // Darting Nymph: sleek tapered body
+    base.segments = [
+      { width: 14, height: 14, yOffset: -16 },
+      { width: 20, height: 22, yOffset: 2 },
+      { width: 12, height: 16, yOffset: 20 },
+    ];
+    base.limbPairs = [
+      { length1: 16, length2: 16, angle1: -20, angle2: 30, thickness: 2.2, tipType: 'pad' },
+      { length1: 20, length2: 18, angle1: 25, angle2: 25, thickness: 2.2, tipType: 'taper' },
+    ];
+    base.antennaCount = 2;
+    base.antennaLength = 32;
+    base.antennaTip = 'beaded';
+  }
+
   base.eyeCount = 2;
   base.eyeSize = 4;
   base.headApparatus = 'none';
@@ -100,37 +135,56 @@ function createPredatorGenome(threat: ThreatType, seedIndex: number): BiomorphGe
       base.primaryHue = (180 + seedIndex * 40) % 360;
       base.secondaryHue = 45;
       base.glowHue = 30;
-      base.limbPairs = [
-        { length1: 35, length2: 45, angle1: -45, angle2: 50, thickness: 4, tipType: 'wing' },
-        { length1: 30, length2: 35, angle1: 15, angle2: 30, thickness: 3.5, tipType: 'wing' },
-        { length1: 25, length2: 25, angle1: 50, angle2: -20, thickness: 3, tipType: 'claw' },
+      base.segments = [
+        { width: 26, height: 24, yOffset: -22 },
+        { width: 38, height: 32, yOffset: 8 },
       ];
-      base.headApparatus = 'mandibles';
+      base.limbPairs = [
+        { length1: 42, length2: 50, angle1: -45, angle2: 50, thickness: 4.5, tipType: 'wing' },
+        { length1: 34, length2: 38, angle1: 15, angle2: 30, thickness: 3.5, tipType: 'wing' },
+        { length1: 26, length2: 28, angle1: 50, angle2: -20, thickness: 3.5, tipType: 'claw' },
+      ];
+      base.headApparatus = 'serrated-jaws';
+      base.serrations = true;
       break;
 
     case 'parasites':
       base.primaryHue = (290 + seedIndex * 50) % 360;
       base.secondaryHue = 330;
       base.glowHue = 310;
+      // Serpentine undulating multi-segment body
+      base.segments = [
+        { width: 20, height: 18, yOffset: -28 },
+        { width: 26, height: 22, yOffset: -10 },
+        { width: 24, height: 22, yOffset: 10 },
+        { width: 18, height: 18, yOffset: 28 },
+      ];
       base.limbPairs = [
-        { length1: 22, length2: 22, angle1: -30, angle2: 40, thickness: 2.5, tipType: 'taper' },
-        { length1: 26, length2: 24, angle1: 0, angle2: 35, thickness: 2.5, tipType: 'taper' },
-        { length1: 24, length2: 26, angle1: 30, angle2: 25, thickness: 2.5, tipType: 'taper' },
-        { length1: 20, length2: 22, angle1: 60, angle2: 20, thickness: 2, tipType: 'taper' },
+        { length1: 24, length2: 22, angle1: -30, angle2: 40, thickness: 2.8, tipType: 'claw' },
+        { length1: 28, length2: 26, angle1: 0, angle2: 35, thickness: 2.8, tipType: 'claw' },
+        { length1: 26, length2: 26, angle1: 30, angle2: 25, thickness: 2.8, tipType: 'claw' },
+        { length1: 22, length2: 22, angle1: 60, angle2: 20, thickness: 2.5, tipType: 'claw' },
       ];
       base.headApparatus = 'proboscis';
+      base.serrations = true;
       break;
 
     default: // stalkers, gravity, scarcity
       base.primaryHue = (345 + seedIndex * 30) % 360; // Crimson / Obsidian
       base.secondaryHue = 15;
       base.glowHue = 0;
-      base.limbPairs = [
-        { length1: 40, length2: 35, angle1: -25, angle2: 55, thickness: 6, tipType: 'claw' },
-        { length1: 45, length2: 40, angle1: 15, angle2: 40, thickness: 5.5, tipType: 'claw' },
-        { length1: 38, length2: 42, angle1: 45, angle2: 25, thickness: 5, tipType: 'claw' },
+      base.segments = [
+        { width: 34, height: 28, yOffset: -24 },
+        { width: 48, height: 42, yOffset: 6 },
+        { width: 38, height: 34, yOffset: 38 },
       ];
-      base.headApparatus = 'mandibles';
+      base.limbPairs = [
+        { length1: 44, length2: 38, angle1: -25, angle2: 55, thickness: 6.5, tipType: 'claw' },
+        { length1: 48, length2: 42, angle1: 15, angle2: 40, thickness: 6, tipType: 'claw' },
+        { length1: 40, length2: 44, angle1: 45, angle2: 25, thickness: 5.5, tipType: 'claw' },
+      ];
+      base.headApparatus = 'fangs';
+      base.serrations = true;
       base.eyeCount = 4;
       break;
   }
@@ -363,6 +417,10 @@ export function createInitialBiosphere(
       `🚀 ${playerGenome.name} launched into ${ecosystem.terrain} (${playerFitness}% fitness).`,
       '🌿 Grazing on bio-spores sustains energy. Beware of native predators!',
     ],
+    carryingCapacity: 8,
+    minPreyFloor: 4,
+    preyReplenishTimer: 3.5,
+    predatorRespawnTimer: 12.0,
   };
 }
 
@@ -448,8 +506,13 @@ export function stepBiosphere(
     let steerY = 0;
 
     if (agent.role === 'player') {
+      const isApex = agent.fitness >= 85 ||
+        agent.genome.headApparatus === 'fangs' ||
+        agent.genome.headApparatus === 'serrated-jaws' ||
+        agent.genome.serrations;
+
       // Natural gentle seeking toward nearest prey within 280px if not retargeted
-      let nearestPrey: BiosphereAgent | null = null;
+      let nearestTarget: BiosphereAgent | null = null;
       let minDist = 280;
 
       for (const other of agents) {
@@ -457,14 +520,29 @@ export function stepBiosphere(
           const d = Math.hypot(other.x - agent.x, other.y - agent.y);
           if (d < minDist) {
             minDist = d;
-            nearestPrey = other;
+            nearestTarget = other;
           }
         }
       }
 
-      if (nearestPrey) {
-        steerX = (nearestPrey.x - agent.x) / minDist;
-        steerY = (nearestPrey.y - agent.y) / minDist;
+      // If no prey in sight and player is an apex predator, seek nearby predators to hunt!
+      if (!nearestTarget && isApex) {
+        let minPredDist = 220;
+        for (const other of agents) {
+          if (other.role === 'predator' && other.isAlive) {
+            const d = Math.hypot(other.x - agent.x, other.y - agent.y);
+            if (d < minPredDist) {
+              minPredDist = d;
+              nearestTarget = other;
+              minDist = d;
+            }
+          }
+        }
+      }
+
+      if (nearestTarget) {
+        steerX = (nearestTarget.x - agent.x) / minDist;
+        steerY = (nearestTarget.y - agent.y) / minDist;
       } else {
         // Wander toward target
         const dx = agent.targetX - agent.x;
@@ -627,9 +705,26 @@ export function stepBiosphere(
         }
       }
 
-      // Combat: Predator attacks Player
+      // Combat: Predator attacks Player (or Apex Player counters and devours predator!)
       if (other.role === 'predator' && dist < 36 && player.invulnerableTimer <= 0) {
-        if (player.fitness >= 60) {
+        const isApex = player.fitness >= 85 ||
+          player.genome.headApparatus === 'fangs' ||
+          player.genome.headApparatus === 'serrated-jaws' ||
+          player.genome.serrations;
+
+        if (isApex && player.energy > 15) {
+          // Apex player overpowers and consumes hostile predator!
+          other.isAlive = false;
+          repelledDelta += 1;
+          player.energy = Math.min(player.maxEnergy, player.energy + 35);
+          player.invulnerableTimer = 1.0;
+          logEvent(`⚔️ Apex counter-strike! Devoured ${other.name} (+35 energy).`);
+
+          if (!apexDominance && player.fitness >= 90) {
+            apexDominance = true;
+            logEvent(`🏆 APEX DOMINANCE! Master of the ${prevState.ecosystem.terrain} biosphere!`);
+          }
+        } else if (player.fitness >= 60) {
           // High fitness player repels predator!
           repelledDelta += 1;
           player.energy = Math.max(0, player.energy - 6);
@@ -655,7 +750,110 @@ export function stepBiosphere(
     }
   }
 
-  // 4. Update Ambient Particles
+  // 4. Autonomous Prey Replenishment & Population Floor (Ecological Equilibrium)
+  const carryingCapacity = prevState.carryingCapacity ?? 8;
+  const minPreyFloor = prevState.minPreyFloor ?? 4;
+  let replenishTimer = (prevState.preyReplenishTimer ?? 3.5) - effectiveDt;
+
+  const activePrey = agents.filter((a) => a.role === 'prey' && a.isAlive);
+
+  if (activePrey.length < carryingCapacity) {
+    const interval = activePrey.length === 0 ? 0 : activePrey.length < minPreyFloor ? 1.8 : 3.5;
+    if (replenishTimer <= 0 || activePrey.length === 0) {
+      const seedIndex = agents.filter((a) => a.role === 'prey').length;
+      const genome = createPreyGenome(seedIndex);
+
+      let px = 40 + Math.random() * (width - 80);
+      let py = 40 + Math.random() * (height - 80);
+      if (player) {
+        for (let attempt = 0; attempt < 5; attempt++) {
+          if (Math.hypot(px - player.x, py - player.y) >= 90) break;
+          px = 40 + Math.random() * (width - 80);
+          py = 40 + Math.random() * (height - 80);
+        }
+      }
+
+      agents.push({
+        id: `prey-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        role: 'prey',
+        name: genome.name,
+        genome,
+        x: px,
+        y: py,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        heading: Math.random() * Math.PI * 2,
+        speed: 0.9,
+        maxSpeed: 1.8,
+        size: 0.26,
+        energy: 50,
+        maxEnergy: 50,
+        fitness: 45,
+        isAlive: true,
+        invulnerableTimer: 0,
+        animationPhase: Math.random() * 10,
+        targetX: Math.random() * width,
+        targetY: Math.random() * height,
+        retargetTimer: 2.5,
+      });
+
+      if (activePrey.length < minPreyFloor) {
+        logEvent(`🌿 Bio-spore germinated rapidly to restore ecological balance.`);
+      } else {
+        logEvent(`🌿 New bio-spore germinated in the biome.`);
+      }
+      replenishTimer = interval;
+    }
+  } else {
+    replenishTimer = 3.5;
+  }
+
+  // 5. Native Predator Replenishment (Keep ecosystem active if predators slain)
+  let predatorRespawnTimer = (prevState.predatorRespawnTimer ?? 12.0) - effectiveDt;
+  const activePredators = agents.filter((a) => a.role === 'predator' && a.isAlive);
+  if (activePredators.length < 2 && predatorRespawnTimer <= 0) {
+    const genome = createPredatorGenome(prevState.ecosystem.threat, Date.now() % 5);
+    const edgeX = Math.random() < 0.5 ? 40 : width - 40;
+    const edgeY = Math.random() < 0.5 ? 40 : height - 40;
+    agents.push({
+      id: `predator-${Date.now()}`,
+      role: 'predator',
+      name: genome.name,
+      genome,
+      x: edgeX,
+      y: edgeY,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      heading: Math.random() * Math.PI * 2,
+      speed: 1.2,
+      maxSpeed: 2.2,
+      size: 0.42,
+      energy: 100,
+      maxEnergy: 100,
+      fitness: 85,
+      isAlive: true,
+      invulnerableTimer: 0,
+      animationPhase: Math.random() * 10,
+      targetX: Math.random() * width,
+      targetY: Math.random() * height,
+      retargetTimer: 2,
+    });
+    logEvent(`⚠️ A wild ${genome.name} stalker entered the hunting grounds.`);
+    predatorRespawnTimer = 12.0;
+  }
+
+  // 6. Prune excess dead entities so memory remains bounded
+  let deadPreySeen = 0;
+  const prunedAgents = agents.filter((a) => {
+    if (a.isAlive || a.role === 'player') return true;
+    if (a.role === 'prey') {
+      deadPreySeen++;
+      return deadPreySeen <= 2;
+    }
+    return false;
+  });
+
+  // 7. Update Ambient Particles
   const particles = prevState.particles.map((p) => {
     let nx = p.x + p.vx * effectiveDt * 30;
     let ny = p.y + p.vy * effectiveDt * 30;
@@ -668,7 +866,7 @@ export function stepBiosphere(
 
   return {
     ...prevState,
-    agents,
+    agents: prunedAgents,
     particles,
     playerAgent: player,
     elapsedSeconds: newElapsed,
@@ -678,6 +876,10 @@ export function stepBiosphere(
     isExtinct,
     extinctionReason,
     actionLog,
+    carryingCapacity,
+    minPreyFloor,
+    preyReplenishTimer: replenishTimer,
+    predatorRespawnTimer,
   };
 }
 
@@ -980,25 +1182,225 @@ function drawBiomeBackground(
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, width, height);
 
-  // Subtle terrain accents
+  // Environmental flora, geological vents & terrain features
   ctx.save();
   if (terrain === 'swamp') {
-    // Water ripple rings
+    // 1. Submerged swaying kelp / algae ribbons
+    const kelpPositions = [0.12, 0.28, 0.55, 0.72, 0.88];
+    kelpPositions.forEach((kxRatio, idx) => {
+      const kx = width * kxRatio;
+      const baseH = height * 0.45 + (idx % 3) * 35;
+      const sway = Math.sin(animTime * 1.8 + idx * 1.5) * 14;
+
+      ctx.beginPath();
+      ctx.moveTo(kx, height);
+      ctx.quadraticCurveTo(kx + sway * 0.6, height - baseH * 0.5, kx + sway, height - baseH);
+      ctx.lineWidth = 4.5;
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.18)';
+      ctx.stroke();
+
+      // Kelp leaf nodes
+      for (let l = 1; l <= 3; l++) {
+        const ly = height - (baseH * l) / 4;
+        const lx = kx + sway * (l / 4);
+        ctx.beginPath();
+        ctx.ellipse(lx + (l % 2 === 0 ? 8 : -8), ly, 7, 3, l % 2 === 0 ? 0.3 : -0.3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(74, 222, 128, 0.14)';
+        ctx.fill();
+      }
+    });
+
+    // 2. Floating lily pads
+    const lilyPads = [
+      { x: width * 0.22, y: height * 0.35, r: 16 },
+      { x: width * 0.68, y: height * 0.28, r: 22 },
+      { x: width * 0.82, y: height * 0.65, r: 14 },
+    ];
+    lilyPads.forEach((lp) => {
+      ctx.beginPath();
+      ctx.arc(lp.x, lp.y, lp.r, 0.25, Math.PI * 1.85);
+      ctx.lineTo(lp.x, lp.y);
+      ctx.fillStyle = 'rgba(21, 128, 61, 0.22)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Floating marsh flower
+      ctx.beginPath();
+      ctx.arc(lp.x, lp.y - 2, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(244, 114, 182, 0.45)';
+      ctx.fill();
+    });
+
+    // 3. Water ripple rings
     ctx.strokeStyle = 'rgba(74, 222, 128, 0.08)';
     ctx.lineWidth = 1.5;
     for (let r = 1; r <= 3; r++) {
       const rippleSize = ((animTime * 20 + r * 60) % 180) + 20;
       ctx.beginPath();
-      ctx.ellipse(width * 0.3, height * 0.4, rippleSize, rippleSize * 0.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(width * 0.35, height * 0.45, rippleSize, rippleSize * 0.45, 0, 0, Math.PI * 2);
       ctx.stroke();
     }
+  } else if (terrain === 'canopy') {
+    // Layered fern fronds & hanging jungle vines
+    const vinePositions = [0.08, 0.25, 0.78, 0.92];
+    vinePositions.forEach((vxRatio, idx) => {
+      const vx = width * vxRatio;
+      const vLen = height * 0.42 + (idx % 2) * 40;
+      const sway = Math.sin(animTime * 1.5 + idx * 2) * 10;
+
+      ctx.beginPath();
+      ctx.moveTo(vx, 0);
+      ctx.quadraticCurveTo(vx + sway * 0.5, vLen * 0.6, vx + sway, vLen);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
+      ctx.stroke();
+
+      // Hanging flower / bulb
+      ctx.beginPath();
+      ctx.arc(vx + sway, vLen, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(52, 211, 153, 0.5)';
+      ctx.fill();
+    });
+
+    // Bottom fern clusters
+    [0.15, 0.85].forEach((fxRatio, fidx) => {
+      const fx = width * fxRatio;
+      for (let p = -3; p <= 3; p++) {
+        const pAngle = -Math.PI / 2 + p * 0.25 + Math.sin(animTime * 2 + p) * 0.04;
+        const pLen = 45 + Math.abs(p) * 6;
+        ctx.beginPath();
+        ctx.moveTo(fx, height);
+        ctx.lineTo(fx + Math.cos(pAngle) * pLen, height + Math.sin(pAngle) * pLen);
+        ctx.strokeStyle = fidx === 0 ? 'rgba(34, 197, 94, 0.22)' : 'rgba(5, 150, 105, 0.22)';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+      }
+    });
+  } else if (terrain === 'crags') {
+    // Jagged basalt pillars and smoking thermal vents
+    const pillars = [
+      { x: width * 0.15, w: 38, h: height * 0.35 },
+      { x: width * 0.75, w: 45, h: height * 0.42 },
+      { x: width * 0.48, w: 32, h: height * 0.25 },
+    ];
+    pillars.forEach((p) => {
+      ctx.fillStyle = 'rgba(41, 37, 36, 0.5)';
+      ctx.strokeStyle = 'rgba(120, 113, 108, 0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x - p.w / 2, height);
+      ctx.lineTo(p.x - p.w / 2 + 5, height - p.h);
+      ctx.lineTo(p.x + p.w / 2 - 5, height - p.h + 8);
+      ctx.lineTo(p.x + p.w / 2, height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Thermal vent top with glowing heat & rising smoke
+      const ventGlow = ctx.createRadialGradient(p.x, height - p.h, 2, p.x, height - p.h, 20);
+      ventGlow.addColorStop(0, 'rgba(249, 115, 22, 0.5)');
+      ventGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = ventGlow;
+      ctx.beginPath();
+      ctx.arc(p.x, height - p.h, 20, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  } else if (terrain === 'desert') {
+    // Wind dunes ripple lines & desert glass spires
+    ctx.strokeStyle = 'rgba(234, 179, 8, 0.12)';
+    ctx.lineWidth = 1.5;
+    for (let d = 1; d <= 4; d++) {
+      const dy = height * 0.45 + d * (height * 0.12);
+      ctx.beginPath();
+      ctx.moveTo(0, dy);
+      ctx.bezierCurveTo(width * 0.3, dy - 15, width * 0.7, dy + 18, width, dy - 5);
+      ctx.stroke();
+    }
+
+    // Prismatic desert glass spires
+    [0.2, 0.58, 0.85].forEach((sxRatio) => {
+      const sx = width * sxRatio;
+      const sy = height * 0.78;
+      ctx.beginPath();
+      ctx.moveTo(sx - 10, sy);
+      ctx.lineTo(sx, sy - 40);
+      ctx.lineTo(sx + 10, sy);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(250, 204, 21, 0.18)';
+      ctx.strokeStyle = 'rgba(253, 224, 71, 0.35)';
+      ctx.fill();
+      ctx.stroke();
+    });
   } else if (terrain === 'abyss') {
-    // Bioluminescent glow spot
-    const abyssGlow = ctx.createRadialGradient(width * 0.7, height * 0.6, 20, width * 0.7, height * 0.6, 220);
-    abyssGlow.addColorStop(0, 'rgba(56, 189, 248, 0.12)');
-    abyssGlow.addColorStop(1, 'transparent');
-    ctx.fillStyle = abyssGlow;
-    ctx.fillRect(0, 0, width, height);
+    // Hydrothermal sea chimneys & bioluminescent stalks
+    const chimneyX = width * 0.65;
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+    ctx.beginPath();
+    ctx.moveTo(chimneyX - 25, height);
+    ctx.lineTo(chimneyX - 12, height - 90);
+    ctx.lineTo(chimneyX + 12, height - 90);
+    ctx.lineTo(chimneyX + 25, height);
+    ctx.closePath();
+    ctx.fill();
+
+    // Chimney dark plume
+    const plumeGrad = ctx.createRadialGradient(chimneyX, height - 100, 5, chimneyX, height - 120, 45);
+    plumeGrad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+    plumeGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = plumeGrad;
+    ctx.beginPath();
+    ctx.arc(chimneyX, height - 110, 45, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Deep bioluminescent stalk lilies
+    [0.18, 0.38, 0.85].forEach((axRatio, aidx) => {
+      const ax = width * axRatio;
+      const stalkH = height * 0.38 + (aidx % 2) * 30;
+      const asway = Math.sin(animTime * 1.2 + aidx * 2) * 8;
+
+      ctx.beginPath();
+      ctx.moveTo(ax, height);
+      ctx.quadraticCurveTo(ax + asway * 0.4, height - stalkH * 0.5, ax + asway, height - stalkH);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Glowing lily bell
+      ctx.beginPath();
+      ctx.arc(ax + asway, height - stalkH, 5.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.6)';
+      ctx.fill();
+    });
+  } else if (terrain === 'cavern') {
+    // Faceted crystal clusters
+    const crystalSpots = [
+      { x: width * 0.15, y: height * 0.85, rot: -0.3 },
+      { x: width * 0.82, y: height * 0.82, rot: 0.25 },
+      { x: width * 0.28, y: height * 0.18, rot: 3.14 },
+    ];
+    crystalSpots.forEach((cs) => {
+      ctx.save();
+      ctx.translate(cs.x, cs.y);
+      ctx.rotate(cs.rot);
+      [-8, 0, 8].forEach((offset, ci) => {
+        const cLen = 28 + (ci % 2) * 12;
+        ctx.beginPath();
+        ctx.moveTo(offset - 4, 0);
+        ctx.lineTo(offset - 4, -cLen * 0.7);
+        ctx.lineTo(offset, -cLen);
+        ctx.lineTo(offset + 4, -cLen * 0.7);
+        ctx.lineTo(offset + 4, 0);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(192, 132, 252, 0.25)';
+        ctx.strokeStyle = 'rgba(216, 180, 254, 0.5)';
+        ctx.lineWidth = 1.2;
+        ctx.fill();
+        ctx.stroke();
+      });
+      ctx.restore();
+    });
   }
   ctx.restore();
 }

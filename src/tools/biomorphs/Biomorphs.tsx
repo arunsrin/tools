@@ -520,6 +520,14 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           <p className="biomorphs-subtitle">
             Guide the morphology of generative organisms and test their survival in living autonomous biospheres.
           </p>
+          <div className="how-to-play-guide" data-testid="how-to-play-guide">
+            <span className="guide-title">💡 How to Play:</span>
+            <div className="guide-steps">
+              <span>1. Study the <strong>Active Biosphere</strong> pressures (Terrain, Climate, Threat).</span>
+              <span>2. Compare candidate offspring and select the one with adaptive strengths (<code>+pros</code>) that counter these hazards.</span>
+              <span>3. Breed through generations to maximize fitness, then click <strong>🚀 Launch</strong> (or press <strong>L</strong>) to watch it hunt and survive!</span>
+            </div>
+          </div>
         </div>
 
         <div className="biomorphs-top-actions">
@@ -642,7 +650,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
           {/* 2-Way Comparative Duel Arena */}
           <main className="duel-arena">
-            {/* Specimen Alpha (Left) */}
+            {/* Specimen Offspring 1 (Left) */}
             <div
               className={`specimen-card ${alphaFitness.score >= 90 ? 'apex-specimen' : ''}`}
               role="button"
@@ -650,7 +658,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               onClick={() => selectSpecimen(specimenAlpha)}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectSpecimen(specimenAlpha)}
               data-testid="specimen-alpha-card"
-              aria-label={`Select Specimen Alpha: ${specimenAlpha.name}`}
+              aria-label={`Select Offspring 1: ${specimenAlpha.name}`}
             >
               {alphaFitness.score >= 90 && (
                 <div className="apex-banner">🏆 APEX ORGANISM</div>
@@ -658,26 +666,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
               <div className="card-header-bar">
                 <div className="specimen-tag">
-                  <span className="tag-badge">ALPHA</span>
+                  <span className="tag-badge">OFFSPRING 1</span>
                   <span className="specimen-name">{specimenAlpha.name}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <button
-                    type="button"
-                    className="btn-launch-specimen"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLaunchBiosphere(specimenAlpha);
-                    }}
-                    title="Launch Specimen Alpha into living biosphere"
-                    aria-label={`Launch Alpha: ${specimenAlpha.name}`}
-                  >
-                    🚀 Launch
-                  </button>
-                  <span className="shortcut-indicator" title="Keyboard shortcut: Left Arrow or 1">
-                    ← / 1
-                  </span>
-                </div>
+                <button
+                  type="button"
+                  className="btn-select-champion"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    selectSpecimen(specimenAlpha);
+                  }}
+                  title="Select Offspring 1 as Champion to breed next generation"
+                  aria-label={`Select Offspring 1: ${specimenAlpha.name} as Champion`}
+                >
+                  👑 Select as Champion
+                </button>
               </div>
 
               {/* Fitness & Adaptation Metrics Bar */}
@@ -694,39 +697,57 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 </span>
               </div>
 
+              {/* Environmental Adaptation Diagnostics (ABOVE Canvas) */}
+              <div className="adaptation-diagnostics-section">
+                <span className="trait-section-label">Active Biosphere Adaptation:</span>
+                <div className="adaptation-diagnostics">
+                  {alphaFitness.pros.map((p, idx) => (
+                    <span key={`alpha-pro-${idx}`} className="diagnostic-tag tag-pro">
+                      {p}
+                    </span>
+                  ))}
+                  {alphaFitness.cons.map((c, idx) => (
+                    <span key={`alpha-con-${idx}`} className="diagnostic-tag tag-con">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="canvas-wrapper">
                 <canvas ref={canvasRefAlpha} width={400} height={300} className="specimen-canvas" />
               </div>
 
-              {/* Environmental Adaptation Diagnostics */}
-              <div className="adaptation-diagnostics">
-                {alphaFitness.pros.map((p, idx) => (
-                  <span key={`alpha-pro-${idx}`} className="diagnostic-tag tag-pro">
-                    {p}
-                  </span>
-                ))}
-                {alphaFitness.cons.map((c, idx) => (
-                  <span key={`alpha-con-${idx}`} className="diagnostic-tag tag-con">
-                    {c}
-                  </span>
-                ))}
+              {/* Mutated Traits Bar (BELOW Canvas) */}
+              <div className="mutations-section">
+                <span className="trait-section-label">✦ Next-Gen Mutations:</span>
+                <div className="card-traits-bar">
+                  {alphaTraits.map((t, idx) => (
+                    <span key={idx} className="trait-pill">
+                      ✦ {t}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              {/* Mutated Traits Bar */}
-              <div className="card-traits-bar">
-                {alphaTraits.map((t, idx) => (
-                  <span key={idx} className="trait-pill">
-                    ✦ {t}
-                  </span>
-                ))}
-              </div>
-
-              <div className="card-select-footer">
-                <span className="select-action-text">Select as Champion →</span>
+              <div className="card-action-footer">
+                <span className="card-click-hint">Click card to select</span>
+                <button
+                  type="button"
+                  className="btn-launch-specimen"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLaunchBiosphere(specimenAlpha);
+                  }}
+                  title="Launch Offspring 1 into living biosphere"
+                  aria-label={`Launch Offspring 1: ${specimenAlpha.name}`}
+                >
+                  🚀 Launch
+                </button>
               </div>
             </div>
 
-            {/* Specimen Beta (Right) */}
+            {/* Specimen Offspring 2 (Right) */}
             <div
               className={`specimen-card ${betaFitness.score >= 90 ? 'apex-specimen' : ''}`}
               role="button"
@@ -734,7 +755,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               onClick={() => selectSpecimen(specimenBeta)}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectSpecimen(specimenBeta)}
               data-testid="specimen-beta-card"
-              aria-label={`Select Specimen Beta: ${specimenBeta.name}`}
+              aria-label={`Select Offspring 2: ${specimenBeta.name}`}
             >
               {betaFitness.score >= 90 && (
                 <div className="apex-banner">🏆 APEX ORGANISM</div>
@@ -742,26 +763,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
               <div className="card-header-bar">
                 <div className="specimen-tag">
-                  <span className="tag-badge">BETA</span>
+                  <span className="tag-badge">OFFSPRING 2</span>
                   <span className="specimen-name">{specimenBeta.name}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <button
-                    type="button"
-                    className="btn-launch-specimen"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLaunchBiosphere(specimenBeta);
-                    }}
-                    title="Launch Specimen Beta into living biosphere"
-                    aria-label={`Launch Beta: ${specimenBeta.name}`}
-                  >
-                    🚀 Launch
-                  </button>
-                  <span className="shortcut-indicator" title="Keyboard shortcut: Right Arrow or 2">
-                    → / 2
-                  </span>
-                </div>
+                <button
+                  type="button"
+                  className="btn-select-champion"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    selectSpecimen(specimenBeta);
+                  }}
+                  title="Select Offspring 2 as Champion to breed next generation"
+                  aria-label={`Select Offspring 2: ${specimenBeta.name} as Champion`}
+                >
+                  👑 Select as Champion
+                </button>
               </div>
 
               {/* Fitness & Adaptation Metrics Bar */}
@@ -778,35 +794,53 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 </span>
               </div>
 
+              {/* Environmental Adaptation Diagnostics (ABOVE Canvas) */}
+              <div className="adaptation-diagnostics-section">
+                <span className="trait-section-label">Active Biosphere Adaptation:</span>
+                <div className="adaptation-diagnostics">
+                  {betaFitness.pros.map((p, idx) => (
+                    <span key={`beta-pro-${idx}`} className="diagnostic-tag tag-pro">
+                      {p}
+                    </span>
+                  ))}
+                  {betaFitness.cons.map((c, idx) => (
+                    <span key={`beta-con-${idx}`} className="diagnostic-tag tag-con">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="canvas-wrapper">
                 <canvas ref={canvasRefBeta} width={400} height={300} className="specimen-canvas" />
               </div>
 
-              {/* Environmental Adaptation Diagnostics */}
-              <div className="adaptation-diagnostics">
-                {betaFitness.pros.map((p, idx) => (
-                  <span key={`beta-pro-${idx}`} className="diagnostic-tag tag-pro">
-                    {p}
-                  </span>
-                ))}
-                {betaFitness.cons.map((c, idx) => (
-                  <span key={`beta-con-${idx}`} className="diagnostic-tag tag-con">
-                    {c}
-                  </span>
-                ))}
+              {/* Mutated Traits Bar (BELOW Canvas) */}
+              <div className="mutations-section">
+                <span className="trait-section-label">✦ Next-Gen Mutations:</span>
+                <div className="card-traits-bar">
+                  {betaTraits.map((t, idx) => (
+                    <span key={idx} className="trait-pill">
+                      ✦ {t}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              {/* Mutated Traits Bar */}
-              <div className="card-traits-bar">
-                {betaTraits.map((t, idx) => (
-                  <span key={idx} className="trait-pill">
-                    ✦ {t}
-                  </span>
-                ))}
-              </div>
-
-              <div className="card-select-footer">
-                <span className="select-action-text">Select as Champion →</span>
+              <div className="card-action-footer">
+                <span className="card-click-hint">Click card to select</span>
+                <button
+                  type="button"
+                  className="btn-launch-specimen"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLaunchBiosphere(specimenBeta);
+                  }}
+                  title="Launch Offspring 2 into living biosphere"
+                  aria-label={`Launch Offspring 2: ${specimenBeta.name}`}
+                >
+                  🚀 Launch
+                </button>
               </div>
             </div>
           </main>
