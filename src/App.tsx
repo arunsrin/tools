@@ -1,30 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, type MouseEvent } from 'react';
 import BigText from './tools/big/BigText';
 import TimezoneConverter from './tools/timezone/TimezoneConverter';
 import ChoicePicker from './tools/picker/ChoicePicker';
 import PomoTimer from './tools/pomo/PomoTimer';
 import ChessWatermark from './components/ChessWatermark';
+import { parseRoute, getPathForView, TOOL_ROUTES, type ToolKey, type View } from './routes';
 import './index.css';
 
-type View = 'hub' | 'big' | 'timezone' | 'picker' | 'pomo';
-
 export default function App() {
-  const [view, setView] = useState<View>('hub');
+  const [view, setView] = useState<View>(() => parseRoute(window.location.pathname, window.location.hash));
+
+  // Sync state on browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      setView(parseRoute(window.location.pathname, window.location.hash));
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  // Normalize URL bar if an invalid route redirected to hub or if hash was used
+  useEffect(() => {
+    const targetPath = getPathForView(view);
+    if (window.location.pathname !== targetPath || window.location.hash) {
+      window.history.replaceState({}, '', targetPath);
+    }
+  }, [view]);
+
+  const navigate = useCallback((nextView: View) => {
+    const nextPath = getPathForView(nextView);
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    }
+    setView(nextView);
+  }, []);
+
+  const handleCardClick = (targetView: ToolKey) => (e: MouseEvent<HTMLAnchorElement>) => {
+    // Retain default browser behavior for modifier clicks or middle clicks (open in new tab)
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
+      return;
+    }
+    e.preventDefault();
+    navigate(targetView);
+  };
 
   if (view === 'big') {
-    return <BigText onBack={() => setView('hub')} />;
+    return <BigText onBack={() => navigate('hub')} />;
   }
 
   if (view === 'timezone') {
-    return <TimezoneConverter onBack={() => setView('hub')} />;
+    return <TimezoneConverter onBack={() => navigate('hub')} />;
   }
 
   if (view === 'picker') {
-    return <ChoicePicker onBack={() => setView('hub')} />;
+    return <ChoicePicker onBack={() => navigate('hub')} />;
   }
 
   if (view === 'pomo') {
-    return <PomoTimer onBack={() => setView('hub')} />;
+    return <PomoTimer onBack={() => navigate('hub')} />;
   }
 
   return (
@@ -39,29 +75,45 @@ export default function App() {
         </header>
 
         <main className="tools-grid">
-          <button className="tool-card" onClick={() => setView('big')} type="button">
+          <a
+            href={TOOL_ROUTES.big}
+            className="tool-card"
+            onClick={handleCardClick('big')}
+          >
             <div className="tool-icon">🔠</div>
             <h2>Big Text</h2>
             <p>Display large text to fill your entire screen. Perfect for noisy places.</p>
-          </button>
+          </a>
 
-          <button className="tool-card" onClick={() => setView('timezone')} type="button">
+          <a
+            href={TOOL_ROUTES.timezone}
+            className="tool-card"
+            onClick={handleCardClick('timezone')}
+          >
             <div className="tool-icon">🌐</div>
             <h2>Timezone Converter</h2>
             <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
-          </button>
+          </a>
 
-          <button className="tool-card" onClick={() => setView('picker')} type="button">
+          <a
+            href={TOOL_ROUTES.picker}
+            className="tool-card"
+            onClick={handleCardClick('picker')}
+          >
             <div className="tool-icon">🎯</div>
             <h2>Random Picker</h2>
             <p>Playful coin flips, multi-dice rolls, and customizable spinning wheel picker.</p>
-          </button>
+          </a>
 
-          <button className="tool-card" onClick={() => setView('pomo')} type="button">
+          <a
+            href={TOOL_ROUTES.pomo}
+            className="tool-card"
+            onClick={handleCardClick('pomo')}
+          >
             <div className="tool-icon">🍅</div>
             <h2>Cute Pomo</h2>
             <p>Playful Pomodoro timer with Sprouting Tomato Buddy, chimes & cycle tracking.</p>
-          </button>
+          </a>
 
           {/* Placeholder for future tools */}
           <div className="tool-card coming-soon" aria-disabled="true">

@@ -1,17 +1,36 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import App from './App';
+import { parseRoute, getPathForView, TOOL_ROUTES } from './routes';
 
-describe('App (Tools Hub Dashboard)', () => {
-  it('renders the hub header, badge, and featured tools', () => {
+describe('App (Tools Hub Dashboard & URL Routing)', () => {
+  beforeEach(() => {
+    // Reset path to root before each test
+    window.history.replaceState({}, '', '/');
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders the hub header, badge, and featured tools as accessible links', () => {
     render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
     expect(screen.getByText(/simple, self-contained utilities/i)).toBeInTheDocument();
     expect(screen.getByText(/utility toolkit/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /big text/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /timezone converter/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /random picker/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /cute pomo/i })).toBeInTheDocument();
+
+    const bigLink = screen.getByRole('link', { name: /big text/i });
+    expect(bigLink).toHaveAttribute('href', TOOL_ROUTES.big);
+
+    const tzLink = screen.getByRole('link', { name: /timezone converter/i });
+    expect(tzLink).toHaveAttribute('href', TOOL_ROUTES.timezone);
+
+    const pickerLink = screen.getByRole('link', { name: /random picker/i });
+    expect(pickerLink).toHaveAttribute('href', TOOL_ROUTES.picker);
+
+    const pomoLink = screen.getByRole('link', { name: /cute pomo/i });
+    expect(pomoLink).toHaveAttribute('href', TOOL_ROUTES.pomo);
+
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -32,60 +51,180 @@ describe('App (Tools Hub Dashboard)', () => {
     expect(screen.queryByText(/gplv3 licensed/i)).not.toBeInTheDocument();
   });
 
-  it('navigates to Timezone Converter tool and back to hub', () => {
+  it('navigates to Timezone Converter tool on click and updates URL, then returns to hub', () => {
     render(<App />);
-    const tzCard = screen.getByRole('button', { name: /timezone converter/i });
+    const tzCard = screen.getByRole('link', { name: /timezone converter/i });
     fireEvent.click(tzCard);
 
-    // In TimezoneConverter tool
+    // In TimezoneConverter tool & URL updated
+    expect(window.location.pathname).toBe('/timezone');
     expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
     // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
   it('navigates to Big Text tool when its card is clicked and back to hub', () => {
     render(<App />);
-    const bigTextCard = screen.getByRole('button', { name: /big text/i });
+    const bigTextCard = screen.getByRole('link', { name: /big text/i });
     fireEvent.click(bigTextCard);
 
-    // In BigText tool
+    // In BigText tool & URL updated
+    expect(window.location.pathname).toBe('/big');
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
 
     // Navigate back
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
   it('navigates to Random Picker tool when its card is clicked and back to hub', () => {
     render(<App />);
-    const pickerCard = screen.getByRole('button', { name: /random picker/i });
+    const pickerCard = screen.getByRole('link', { name: /random picker/i });
     fireEvent.click(pickerCard);
 
-    // In ChoicePicker tool
+    // In ChoicePicker tool & URL updated
+    expect(window.location.pathname).toBe('/picker');
     expect(screen.getByRole('heading', { level: 1, name: /random picker & decision maker/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
     // Navigate back
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
   it('navigates to Cute Pomo tool and back to hub', () => {
     render(<App />);
-    const pomoCard = screen.getByRole('button', { name: /cute pomo/i });
+    const pomoCard = screen.getByRole('link', { name: /cute pomo/i });
     fireEvent.click(pomoCard);
 
-    // In PomoTimer tool
+    // In PomoTimer tool & URL updated
+    expect(window.location.pathname).toBe('/pomo');
     expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
 
     // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  it('mounts directly to Timezone Converter when loading /timezone path', () => {
+    window.history.replaceState({}, '', '/timezone');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+  });
+
+  it('mounts directly to Big Text when loading /big path', () => {
+    window.history.replaceState({}, '', '/big');
+    render(<App />);
+
+    expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+  });
+
+  it('mounts directly to Random Picker when loading /picker path', () => {
+    window.history.replaceState({}, '', '/picker');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /random picker & decision maker/i })).toBeInTheDocument();
+  });
+
+  it('mounts directly to Cute Pomo when loading /pomo path', () => {
+    window.history.replaceState({}, '', '/pomo');
+    render(<App />);
+
+    expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
+  });
+
+  it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
+    window.history.replaceState({}, '', '/#/timezone');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/timezone');
+    expect(window.location.hash).toBe('');
+  });
+
+  it('falls back gracefully to hub view on unrecognized path (e.g. /unknown-tool)', () => {
+    window.history.replaceState({}, '', '/unknown-tool');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
+  });
+
+  it('responds to browser back and forward popstate events', () => {
+    render(<App />);
+    const bigCard = screen.getByRole('link', { name: /big text/i });
+    fireEvent.click(bigCard);
+    expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/big');
+
+    // Simulate browser Back button: URL goes to /
+    window.history.replaceState({}, '', '/');
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+
+    // Simulate browser Forward button: URL goes to /big
+    window.history.replaceState({}, '', '/big');
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+  });
+
+  it('allows modifier clicks (Ctrl, Cmd, Shift, middle-click) without preventDefault', () => {
+    render(<App />);
+    const pomoCard = screen.getByRole('link', { name: /cute pomo/i });
+
+    // Ctrl+click should not navigate via SPA (lets browser handle new tab)
+    fireEvent.click(pomoCard, { ctrlKey: true });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+
+    // Middle click (button 1) should not navigate via SPA
+    fireEvent.click(pomoCard, { button: 1 });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  describe('Route helper functions (parseRoute and getPathForView)', () => {
+    it('parses valid paths correctly', () => {
+      expect(parseRoute('/big')).toBe('big');
+      expect(parseRoute('/timezone')).toBe('timezone');
+      expect(parseRoute('/picker/')).toBe('picker');
+      expect(parseRoute('/pomo')).toBe('pomo');
+    });
+
+    it('parses hash fallback correctly', () => {
+      expect(parseRoute('/', '#/big')).toBe('big');
+      expect(parseRoute('/', '#timezone')).toBe('timezone');
+      expect(parseRoute('/', '#picker')).toBe('picker');
+      expect(parseRoute('/', '#/pomo')).toBe('pomo');
+    });
+
+    it('falls back to hub for unknown or empty paths', () => {
+      expect(parseRoute('/')).toBe('hub');
+      expect(parseRoute('', '')).toBe('hub');
+      expect(parseRoute('/nonexistent-tool')).toBe('hub');
+      expect(parseRoute('/', '#unknown')).toBe('hub');
+    });
+
+    it('returns proper paths for views', () => {
+      expect(getPathForView('hub')).toBe('/');
+      expect(getPathForView('big')).toBe('/big');
+      expect(getPathForView('timezone')).toBe('/timezone');
+      expect(getPathForView('picker')).toBe('/picker');
+      expect(getPathForView('pomo')).toBe('/pomo');
+    });
   });
 });

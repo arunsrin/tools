@@ -171,6 +171,12 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     Whenever a new tool is introduced, `README.md` MUST be updated under Featured Tools and Project Structure to maintain public documentation integrity. Enforced automatically by `python scripts/test_tools_structure.py`.
 23. **Dark Theme Standard:**
     The Tools Hub and all tools strictly adopt a high-contrast dark theme by default, matching the dark theme of the main `arunsr.in` Hugo site (deep slate/navy `#0f172a`, card surfaces `#1e293b`, borders `#334155`, text `#f1f5f9` / `#94a3b8`, and vivid cyan accents `#38bdf8` / `#7dd3fc`). Avoid introducing global light/dark mode toggles unless explicitly requested for a specific tool.
+24. **Mandatory Direct Link & Route Registration for New Tools:**
+    Whenever a new tool is introduced:
+    - It MUST be registered in `src/routes.ts` (`ToolKey`, `TOOL_ROUTES`, and `ROUTE_TO_TOOL`).
+    - Its hub dashboard card in `src/App.tsx` MUST be rendered as an accessible semantic `<a>` anchor (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}` to support middle-click / open-in-new-tab while providing fast SPA transition on standard left-clicks.
+    - Its direct URL mount (e.g. `/<tool>`), hub card link attributes, and "Back to Tools Hub" URL synchronization back to `/` MUST be tested with companion automated tests in `src/App.test.tsx`.
+    - Enforced automatically by `python scripts/test_tools_structure.py`.
 
 ---
 

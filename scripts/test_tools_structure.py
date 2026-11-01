@@ -18,6 +18,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS_DIR = os.path.join(ROOT_DIR, "src", "tools")
 MASTER_SPEC = os.path.join(ROOT_DIR, "SPEC.md")
 README_FILE = os.path.join(ROOT_DIR, "README.md")
+ROUTES_FILE = os.path.join(ROOT_DIR, "src", "routes.ts")
 
 
 def main():
@@ -34,6 +35,11 @@ def main():
 
     with open(README_FILE, "r", encoding="utf-8") as f:
         readme_text = f.read()
+
+    routes_text = ""
+    if os.path.exists(ROUTES_FILE):
+        with open(ROUTES_FILE, "r", encoding="utf-8") as f:
+            routes_text = f.read()
 
     if not os.path.exists(TOOLS_DIR):
         print(f"Error: Tools directory not found at {TOOLS_DIR}", file=sys.stderr)
@@ -72,6 +78,10 @@ def main():
         # 5. Check that README.md mentions this tool
         if tool.lower() not in readme_text.lower():
             errors.append(f"README.md does not reference tool '{tool}'.")
+
+        # 6. Check that src/routes.ts registers direct route for this tool
+        if routes_text and tool.lower() not in routes_text.lower():
+            errors.append(f"src/routes.ts does not register direct route for tool '{tool}'.")
 
     if errors:
         print("❌ Tool Structure Validation Failed:", file=sys.stderr)
