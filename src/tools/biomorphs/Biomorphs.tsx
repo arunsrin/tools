@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   type BiomorphGenome,
+  type EcosystemConfig,
+  type TerrainType,
+  type ClimateType,
+  type ThreatType,
+  TERRAINS,
+  CLIMATES,
+  THREATS,
+  createRandomEcosystem,
+  calculateFitness,
   createPrimordialGenome,
   mutateGenome,
   drawBiomorph,
@@ -11,9 +20,30 @@ interface BiomorphsProps {
   onBack: () => void;
 }
 
+interface CandidateSpecimen {
+  genome: BiomorphGenome;
+  traits: string[];
+}
+
 const STORAGE_KEY = 'tools_hub_biomorphs';
 
 export default function Biomorphs({ onBack }: BiomorphsProps) {
+  // Initialize ecosystem configuration
+  const [ecosystem, setEcosystem] = useState<EcosystemConfig>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.ecosystem?.terrain && parsed?.ecosystem?.climate && parsed?.ecosystem?.threat) {
+          return parsed.ecosystem;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return createRandomEcosystem();
+  });
+
   // Initialize state with persistence
   const [parentGenome, setParentGenome] = useState<BiomorphGenome>(() => {
     try {
@@ -41,12 +71,21 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     return [parentGenome];
   });
 
-  // Mutated candidates: Both Alpha and Beta are independently mutated from parentGenome by equal amounts
-  const [specimenAlpha, setSpecimenAlpha] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
-  const [alphaTraits, setAlphaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
+  // Mutated candidates: Both Alpha and Beta mutate atomically from parentGenome
+  const [candidateAlpha, setCandidateAlpha] = useState<CandidateSpecimen>(() => {
+    const res = mutateGenome(parentGenome);
+    return { genome: res.child, traits: res.mutatedTraits };
+  });
 
-  const [specimenBeta, setSpecimenBeta] = useState<BiomorphGenome>(() => mutateGenome(parentGenome).child);
-  const [betaTraits, setBetaTraits] = useState<string[]>(() => mutateGenome(parentGenome).mutatedTraits);
+  const [candidateBeta, setCandidateBeta] = useState<CandidateSpecimen>(() => {
+    const res = mutateGenome(parentGenome);
+    return { genome: res.child, traits: res.mutatedTraits };
+  });
+
+  const specimenAlpha = candidateAlpha.genome;
+  const alphaTraits = candidateAlpha.traits;
+  const specimenBeta = candidateBeta.genome;
+  const betaTraits = candidateBeta.traits;
 
   // UI Modals & Toast
   const [showDnaModal, setShowDnaModal] = useState(false);
@@ -56,13 +95,27 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   const canvasRefAlpha = useRef<HTMLCanvasElement | null>(null);
   const canvasRefBeta = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Show temporary toast
+  // Show temporary toast with timer collision avoidance
   const showToast = useCallback((msg: string) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
     setToastMessage(msg);
-    setTimeout(() => {
+    toastTimeoutRef.current = setTimeout(() => {
       setToastMessage(null);
+      toastTimeoutRef.current = null;
     }, 2800);
+  }, []);
+
+  // Cleanup pending toast timer on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
   }, []);
 
   // Sync to localStorage
@@ -71,12 +124,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       const data = {
         parentGenome,
         lineage: lineage.slice(-25), // keep last 25 generations
+        ecosystem,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {
       // LocalStorage error tolerated gracefully
     }
-  }, [parentGenome, lineage]);
+  }, [parentGenome, lineage, ecosystem]);
 
   // Animation Loop for both specimen canvases
   useEffect(() => {
@@ -111,23 +165,54 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     };
   }, [specimenAlpha, specimenBeta]);
 
-  // Selection Handler: Both Alpha and Beta mutate equally from the chosen winner
+  // Environmental Fitness Calculations
+  const parentFitness = calculateFitness(parentGenome, ecosystem);
+  const alphaFitness = calculateFitness(specimenAlpha, ecosystem);
+  const betaFitness = calculateFitness(specimenBeta, ecosystem);
+
+  const alphaDelta = alphaFitness.score - parentFitness.score;
+  const betaDelta = betaFitness.score - parentFitness.score;
+
+  // Ecosystem Dimension Change Handlers
+  const handleEcosystemChange = useCallback(
+    <K extends keyof EcosystemConfig>(dimension: K, value: EcosystemConfig[K]) => {
+      setEcosystem((prev) => ({
+        ...prev,
+        [dimension]: value,
+      }));
+    },
+    []
+  );
+
+  const handleRandomizeEcosystem = useCallback(() => {
+    const newEco = createRandomEcosystem();
+    setEcosystem(newEco);
+    const tObj = TERRAINS.find((t) => t.id === newEco.terrain);
+    const cObj = CLIMATES.find((c) => c.id === newEco.climate);
+    const thObj = THREATS.find((th) => th.id === newEco.threat);
+    showToast(`New Biosphere: ${tObj?.name} + ${cObj?.name} + ${thObj?.name}`);
+  }, [showToast]);
+
+  // Selection Handler: Both Alpha and Beta mutate atomically from the chosen winner
   const selectSpecimen = useCallback(
     (chosen: BiomorphGenome) => {
       setParentGenome(chosen);
       setLineage((prev) => [...prev, chosen]);
 
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(chosen);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(chosen);
+      const resA = mutateGenome(chosen);
+      const resB = mutateGenome(chosen);
 
-      setSpecimenAlpha(childA);
-      setAlphaTraits(traitsA);
-      setSpecimenBeta(childB);
-      setBetaTraits(traitsB);
+      setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+      setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
-      showToast(`Selected ${chosen.name}!`);
+      const chosenFit = calculateFitness(chosen, ecosystem);
+      if (chosenFit.score >= 90) {
+        showToast(`🏆 Apex Organism Evolved! Selected ${chosen.name} (${chosenFit.score}% fitness)`);
+      } else {
+        showToast(`Selected ${chosen.name} (${chosenFit.score}% Adapted)`);
+      }
     },
-    [showToast]
+    [ecosystem, showToast]
   );
 
   // Restart / New Genesis
@@ -136,13 +221,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     setParentGenome(fresh);
     setLineage([fresh]);
 
-    const { child: childA, mutatedTraits: traitsA } = mutateGenome(fresh);
-    const { child: childB, mutatedTraits: traitsB } = mutateGenome(fresh);
+    const resA = mutateGenome(fresh);
+    const resB = mutateGenome(fresh);
 
-    setSpecimenAlpha(childA);
-    setAlphaTraits(traitsA);
-    setSpecimenBeta(childB);
-    setBetaTraits(traitsB);
+    setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+    setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
     showToast('New Genesis initiated: Generation 0 primed.');
   }, [showToast]);
@@ -152,13 +235,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     (ancestor: BiomorphGenome) => {
       setParentGenome(ancestor);
 
-      const { child: childA, mutatedTraits: traitsA } = mutateGenome(ancestor);
-      const { child: childB, mutatedTraits: traitsB } = mutateGenome(ancestor);
+      const resA = mutateGenome(ancestor);
+      const resB = mutateGenome(ancestor);
 
-      setSpecimenAlpha(childA);
-      setAlphaTraits(traitsA);
-      setSpecimenBeta(childB);
-      setBetaTraits(traitsB);
+      setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+      setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
       showToast(`Rewound to Gen ${ancestor.generation} (${ancestor.name})`);
     },
@@ -191,40 +272,37 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     };
   }, [selectSpecimen, handleNewGenesis, specimenAlpha, specimenBeta]);
 
-  // DNA Export & Import
+  // DNA Export & Copy
   const handleCopyDNA = useCallback(() => {
     try {
-      const json = JSON.stringify(parentGenome);
-      const encoded = btoa(json);
-      navigator.clipboard.writeText(encoded);
-      showToast('DNA code copied to clipboard!');
+      const payload = btoa(JSON.stringify(parentGenome));
+      navigator.clipboard.writeText(payload);
+      showToast('DNA sequence copied to clipboard!');
     } catch {
-      showToast('Could not copy DNA to clipboard.');
+      showToast('Could not copy DNA payload.');
     }
   }, [parentGenome, showToast]);
 
-  const handleApplyDNA = useCallback(() => {
+  // DNA Load
+  const handleLoadDNA = useCallback(() => {
     try {
-      const trimmed = dnaInput.trim();
-      const decoded = atob(trimmed);
-      const genome = JSON.parse(decoded) as BiomorphGenome;
-      if (genome && genome.segments && genome.limbPairs) {
-        setParentGenome(genome);
-        setLineage((prev) => [...prev, genome]);
+      const decoded = atob(dnaInput.trim());
+      const loaded: BiomorphGenome = JSON.parse(decoded);
+      if (loaded.id && Array.isArray(loaded.segments) && Array.isArray(loaded.limbPairs)) {
+        setParentGenome(loaded);
+        setLineage((prev) => [...prev, loaded]);
 
-        const { child: childA, mutatedTraits: traitsA } = mutateGenome(genome);
-        const { child: childB, mutatedTraits: traitsB } = mutateGenome(genome);
+        const resA = mutateGenome(loaded);
+        const resB = mutateGenome(loaded);
 
-        setSpecimenAlpha(childA);
-        setAlphaTraits(traitsA);
-        setSpecimenBeta(childB);
-        setBetaTraits(traitsB);
+        setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+        setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
         setShowDnaModal(false);
         setDnaInput('');
-        showToast(`Loaded DNA for ${genome.name}`);
+        showToast(`Loaded creature: ${loaded.name}`);
       } else {
-        alert('Invalid genome format.');
+        alert('Invalid genome DNA format.');
       }
     } catch {
       alert('Failed to parse DNA string. Please ensure it is a valid base64 payload.');
@@ -266,15 +344,19 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     showToast('Exported HD specimen snapshot!');
   }, [parentGenome, showToast]);
 
+  const activeTerrain = TERRAINS.find((t) => t.id === ecosystem.terrain) || TERRAINS[0];
+  const activeClimate = CLIMATES.find((c) => c.id === ecosystem.climate) || CLIMATES[0];
+  const activeThreat = THREATS.find((th) => th.id === ecosystem.threat) || THREATS[0];
+
   return (
     <div className="biomorphs-container">
       {/* Streamlined Clean Header */}
       <header className="biomorphs-header">
         <div className="biomorphs-title-group">
-          <span className="biomorphs-badge">🧬 Artificial Selection</span>
+          <span className="biomorphs-badge">🧬 Ecosystem Adaptation</span>
           <h1>Biomorphs: The Evolutionary Watchmaker</h1>
           <p className="biomorphs-subtitle">
-            Guide the procedural morphology of alien organisms across generations through comparative duels.
+            Guide the procedural morphology of alien organisms to adapt to dynamic planetary biospheres.
           </p>
         </div>
 
@@ -285,11 +367,95 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         </div>
       </header>
 
+      {/* Combinable Ecosystem Environmental Pressures Bar */}
+      <section className="ecosystem-bar" aria-label="Ecosystem & Environmental Pressures" data-testid="ecosystem-bar">
+        <div className="ecosystem-controls-row">
+          <div className="ecosystem-select-group">
+            <label htmlFor="terrain-select" className="ecosystem-label">
+              Terrain:
+            </label>
+            <select
+              id="terrain-select"
+              aria-label="Terrain"
+              value={ecosystem.terrain}
+              onChange={(e) => handleEcosystemChange('terrain', e.target.value as TerrainType)}
+              className="ecosystem-dropdown"
+            >
+              {TERRAINS.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.icon} {t.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="ecosystem-select-group">
+            <label htmlFor="climate-select" className="ecosystem-label">
+              Climate:
+            </label>
+            <select
+              id="climate-select"
+              aria-label="Climate"
+              value={ecosystem.climate}
+              onChange={(e) => handleEcosystemChange('climate', e.target.value as ClimateType)}
+              className="ecosystem-dropdown"
+            >
+              {CLIMATES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.icon} {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="ecosystem-select-group">
+            <label htmlFor="threat-select" className="ecosystem-label">
+              Threat:
+            </label>
+            <select
+              id="threat-select"
+              aria-label="Threat"
+              value={ecosystem.threat}
+              onChange={(e) => handleEcosystemChange('threat', e.target.value as ThreatType)}
+              className="ecosystem-dropdown"
+            >
+              {THREATS.map((th) => (
+                <option key={th.id} value={th.id}>
+                  {th.icon} {th.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            className="bio-btn btn-random-ecosystem"
+            onClick={handleRandomizeEcosystem}
+            title="Roll random new biosphere"
+            aria-label="Roll random ecosystem"
+          >
+            🎲 Random Biosphere
+          </button>
+        </div>
+
+        {/* Dynamic Biome Narrative & Pressure Guidance */}
+        <div className="ecosystem-narrative-bar">
+          <div className="narrative-headline">
+            <span className="narrative-tag">Active Biosphere:</span>
+            <span className="narrative-title">
+              {activeTerrain.icon} {activeTerrain.name} · {activeClimate.icon} {activeClimate.name} · {activeThreat.icon} {activeThreat.name}
+            </span>
+          </div>
+          <p className="narrative-desc">
+            {activeTerrain.desc} {activeClimate.desc} {activeThreat.desc}
+          </p>
+        </div>
+      </section>
+
       {/* 2-Way Comparative Duel Arena */}
       <main className="duel-arena">
         {/* Specimen Alpha (Left) */}
         <div
-          className="specimen-card"
+          className={`specimen-card ${alphaFitness.score >= 90 ? 'apex-specimen' : ''}`}
           role="button"
           tabIndex={0}
           onClick={() => selectSpecimen(specimenAlpha)}
@@ -297,9 +463,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           data-testid="specimen-alpha-card"
           aria-label={`Select Specimen Alpha: ${specimenAlpha.name}`}
         >
+          {alphaFitness.score >= 90 && (
+            <div className="apex-banner">🏆 APEX ORGANISM</div>
+          )}
+
           <div className="card-header-bar">
             <div className="specimen-tag">
-              <span className="tag-badge">ALPHA (MUTANT)</span>
+              <span className="tag-badge">ALPHA</span>
               <span className="specimen-name">{specimenAlpha.name}</span>
             </div>
             <span className="shortcut-indicator" title="Keyboard shortcut: Left Arrow or 1">
@@ -307,10 +477,39 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
             </span>
           </div>
 
+          {/* Fitness & Adaptation Metrics Bar */}
+          <div className="specimen-fitness-badge-row">
+            <div className={`fitness-score-tag ${alphaFitness.score >= 90 ? 'apex-score' : ''}`}>
+              <span className="fitness-icon">🌿</span>
+              <span className="fitness-val" data-testid="alpha-fitness-val">{alphaFitness.score}% Adapted</span>
+            </div>
+            <span
+              className={`adaptive-delta-badge ${alphaDelta > 0 ? 'delta-pos' : alphaDelta < 0 ? 'delta-neg' : 'delta-neu'}`}
+              title="Adaptive shift relative to parent champion"
+            >
+              {alphaDelta > 0 ? `+${alphaDelta}% vs Parent` : alphaDelta < 0 ? `${alphaDelta}% vs Parent` : '0% vs Parent'}
+            </span>
+          </div>
+
           <div className="canvas-wrapper">
             <canvas ref={canvasRefAlpha} width={400} height={300} className="specimen-canvas" />
           </div>
 
+          {/* Environmental Adaptation Diagnostics */}
+          <div className="adaptation-diagnostics">
+            {alphaFitness.pros.map((p, idx) => (
+              <span key={`alpha-pro-${idx}`} className="diagnostic-tag tag-pro">
+                {p}
+              </span>
+            ))}
+            {alphaFitness.cons.map((c, idx) => (
+              <span key={`alpha-con-${idx}`} className="diagnostic-tag tag-con">
+                {c}
+              </span>
+            ))}
+          </div>
+
+          {/* Mutated Traits Bar */}
           <div className="card-traits-bar">
             {alphaTraits.map((t, idx) => (
               <span key={idx} className="trait-pill">
@@ -320,13 +519,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           </div>
 
           <div className="card-select-footer">
-            <span className="select-action-text">Select as Parent →</span>
+            <span className="select-action-text">Select as Champion →</span>
           </div>
         </div>
 
         {/* Specimen Beta (Right) */}
         <div
-          className="specimen-card"
+          className={`specimen-card ${betaFitness.score >= 90 ? 'apex-specimen' : ''}`}
           role="button"
           tabIndex={0}
           onClick={() => selectSpecimen(specimenBeta)}
@@ -334,9 +533,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           data-testid="specimen-beta-card"
           aria-label={`Select Specimen Beta: ${specimenBeta.name}`}
         >
+          {betaFitness.score >= 90 && (
+            <div className="apex-banner">🏆 APEX ORGANISM</div>
+          )}
+
           <div className="card-header-bar">
             <div className="specimen-tag">
-              <span className="tag-badge">BETA (MUTANT)</span>
+              <span className="tag-badge">BETA</span>
               <span className="specimen-name">{specimenBeta.name}</span>
             </div>
             <span className="shortcut-indicator" title="Keyboard shortcut: Right Arrow or 2">
@@ -344,10 +547,39 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
             </span>
           </div>
 
+          {/* Fitness & Adaptation Metrics Bar */}
+          <div className="specimen-fitness-badge-row">
+            <div className={`fitness-score-tag ${betaFitness.score >= 90 ? 'apex-score' : ''}`}>
+              <span className="fitness-icon">🌿</span>
+              <span className="fitness-val" data-testid="beta-fitness-val">{betaFitness.score}% Adapted</span>
+            </div>
+            <span
+              className={`adaptive-delta-badge ${betaDelta > 0 ? 'delta-pos' : betaDelta < 0 ? 'delta-neg' : 'delta-neu'}`}
+              title="Adaptive shift relative to parent champion"
+            >
+              {betaDelta > 0 ? `+${betaDelta}% vs Parent` : betaDelta < 0 ? `${betaDelta}% vs Parent` : '0% vs Parent'}
+            </span>
+          </div>
+
           <div className="canvas-wrapper">
             <canvas ref={canvasRefBeta} width={400} height={300} className="specimen-canvas" />
           </div>
 
+          {/* Environmental Adaptation Diagnostics */}
+          <div className="adaptation-diagnostics">
+            {betaFitness.pros.map((p, idx) => (
+              <span key={`beta-pro-${idx}`} className="diagnostic-tag tag-pro">
+                {p}
+              </span>
+            ))}
+            {betaFitness.cons.map((c, idx) => (
+              <span key={`beta-con-${idx}`} className="diagnostic-tag tag-con">
+                {c}
+              </span>
+            ))}
+          </div>
+
+          {/* Mutated Traits Bar */}
           <div className="card-traits-bar">
             {betaTraits.map((t, idx) => (
               <span key={idx} className="trait-pill">
@@ -357,7 +589,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           </div>
 
           <div className="card-select-footer">
-            <span className="select-action-text">Select as Parent →</span>
+            <span className="select-action-text">Select as Champion →</span>
           </div>
         </div>
       </main>
@@ -384,52 +616,51 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         </div>
       </section>
 
-      {/* Bottom Utility Controls Dock */}
-      <footer className="biomorphs-bottom-dock" aria-label="Specimen Utilities and Evolution Actions">
+      {/* Streamlined Bottom Utility Dock */}
+      <div className="biomorphs-bottom-dock">
         <div className="dock-stats">
-          <div className="stat-item">
+          <div className="stat-item" data-testid="generation-counter">
             <span className="stat-label">Generation</span>
-            <span className="stat-value" data-testid="generation-counter">
-              Gen {parentGenome.generation}
-            </span>
+            <span className="stat-value">Gen {parentGenome.generation}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">Active Specimen</span>
-            <span className="stat-value specimen-stat-name">
-              {parentGenome.name}
-            </span>
+            <span className="stat-label">Champion</span>
+            <span className="stat-value champion-name">{parentGenome.name}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">Ancestors</span>
-            <span className="stat-value">{lineage.length}</span>
+            <span className="stat-label">Champion Fitness</span>
+            <span className="stat-value fitness-highlight">{parentFitness.score}%</span>
           </div>
         </div>
 
         <div className="dock-actions">
-          <button className="bio-btn" onClick={() => setShowDnaModal(true)} title="Import / Export DNA string">
-            🧬 DNA
-          </button>
-          <button className="bio-btn" onClick={handleCopyDNA} title="Copy DNA code to clipboard">
+          <button className="bio-btn" onClick={handleCopyDNA} title="Copy DNA sequence payload">
             📋 Copy DNA
           </button>
-          <button className="bio-btn" onClick={handleExportPNG} title="Download high-res PNG">
-            📸 Export PNG
+          <button className="bio-btn" onClick={() => setShowDnaModal(true)} title="Load DNA from sequence payload">
+            🧬 Import DNA
           </button>
-          <button className="bio-btn btn-primary" onClick={handleNewGenesis} title="Restart with a fresh organism (R)">
-            ⚡ New Genesis
+          <button className="bio-btn" onClick={handleExportPNG} title="Export off-screen HD specimen image">
+            🖼️ Export HD PNG
+          </button>
+          <button className="bio-btn" onClick={handleRandomizeEcosystem} title="Migrate species to a new random biosphere">
+            🌍 Migrate Biome
+          </button>
+          <button className="bio-btn btn-primary" onClick={handleNewGenesis} title="Restart simulation from Gen 0">
+            🌱 New Genesis (R)
           </button>
         </div>
-      </footer>
+      </div>
 
-      {/* DNA Modal */}
+      {/* DNA Load Modal */}
       {showDnaModal && (
         <div className="dna-modal-backdrop" onClick={() => setShowDnaModal(false)}>
           <div className="dna-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>🧬 Organism DNA Code</h3>
-            <p>Paste an encoded genome string below to restore a specimen, or copy the active champion DNA.</p>
+            <h3>🧬 Import Creature DNA</h3>
+            <p>Paste a base64 encoded genome string to reconstruct an ancestor organism.</p>
             <textarea
               className="dna-textarea"
-              placeholder="Paste base64 DNA code here..."
+              placeholder="Paste base64 DNA sequence here..."
               value={dnaInput}
               onChange={(e) => setDnaInput(e.target.value)}
             />
@@ -437,7 +668,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               <button className="bio-btn" onClick={() => setShowDnaModal(false)}>
                 Cancel
               </button>
-              <button className="bio-btn btn-primary" onClick={handleApplyDNA}>
+              <button className="bio-btn btn-primary" onClick={handleLoadDNA} disabled={!dnaInput.trim()}>
                 Load DNA
               </button>
             </div>
@@ -445,32 +676,27 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         </div>
       )}
 
-      {/* Toast Notification */}
+      {/* Temporary Toast */}
       {toastMessage && <div className="bio-toast">{toastMessage}</div>}
     </div>
   );
 }
 
-// Lineage Thumbnail sub-component
-function LineageThumbnail({
-  ancestor,
-  isActive,
-  onClick,
-}: {
+// Lineage Thumbnail Component
+interface LineageThumbnailProps {
   ancestor: BiomorphGenome;
   isActive: boolean;
   onClick: () => void;
-}) {
-  const thumbRef = useRef<HTMLCanvasElement | null>(null);
+}
+
+function LineageThumbnail({ ancestor, isActive, onClick }: LineageThumbnailProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if (thumbRef.current) {
-      const ctx = thumbRef.current.getContext('2d');
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
       if (ctx) {
-        ctx.save();
-        ctx.scale(0.38, 0.38);
-        drawBiomorph(ctx, ancestor, thumbRef.current.width / 0.38, thumbRef.current.height / 0.38, 0);
-        ctx.restore();
+        drawBiomorph(ctx, ancestor, 76, 60, 0);
       }
     }
   }, [ancestor]);
@@ -478,16 +704,15 @@ function LineageThumbnail({
   return (
     <div
       className={`lineage-card ${isActive ? 'active-ancestor' : ''}`}
+      onClick={onClick}
       role="button"
       tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick()}
-      data-testid={`lineage-ancestor-${ancestor.generation}`}
       title={`Gen ${ancestor.generation}: ${ancestor.name}`}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick()}
     >
-      <canvas ref={thumbRef} width={76} height={60} className="lineage-thumb-canvas" />
+      <canvas ref={canvasRef} width={76} height={60} className="lineage-thumb-canvas" />
       <span className="lineage-gen-label">Gen {ancestor.generation}</span>
-      <span className="lineage-name-label">{ancestor.name.split('·')[0]}</span>
+      <span className="lineage-name-label">{ancestor.name.split(' ')[0]}</span>
     </div>
   );
 }
