@@ -101,23 +101,14 @@ export default function App() {
           </a>
 
           <a
-            href={TOOL_ROUTES.timezone}
-            className="tool-card"
-            onClick={handleCardClick('timezone')}
+            href={TOOL_ROUTES.biomorphs}
+            className="tool-card featured"
+            onClick={handleCardClick('biomorphs')}
           >
-            <div className="tool-icon">🌐</div>
-            <h2>Timezone Converter</h2>
-            <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
-          </a>
-
-          <a
-            href={TOOL_ROUTES.picker}
-            className="tool-card"
-            onClick={handleCardClick('picker')}
-          >
-            <div className="tool-icon">🎯</div>
-            <h2>Random Picker</h2>
-            <p>Playful coin flips, multi-dice rolls, and customizable spinning wheel picker.</p>
+            <span className="tool-badge-featured">Featured</span>
+            <div className="tool-icon">🧬</div>
+            <h2>Biomorphs</h2>
+            <p>Evolutionary Watchmaker: guide alien organism morphology through comparative duels.</p>
           </a>
 
           <a
@@ -151,13 +142,23 @@ export default function App() {
           </a>
 
           <a
-            href={TOOL_ROUTES.biomorphs}
+            href={TOOL_ROUTES.picker}
             className="tool-card"
-            onClick={handleCardClick('biomorphs')}
+            onClick={handleCardClick('picker')}
           >
-            <div className="tool-icon">🧬</div>
-            <h2>Biomorphs</h2>
-            <p>Evolutionary Watchmaker: guide alien organism morphology through comparative duels.</p>
+            <div className="tool-icon">🎯</div>
+            <h2>Random Picker</h2>
+            <p>Playful coin flips, multi-dice rolls, and customizable spinning wheel picker.</p>
+          </a>
+
+          <a
+            href={TOOL_ROUTES.timezone}
+            className="tool-card"
+            onClick={handleCardClick('timezone')}
+          >
+            <div className="tool-icon">🌐</div>
+            <h2>Timezone Converter</h2>
+            <p>Visual 3-day world clock, overlapping working hours & meeting planner.</p>
           </a>
 
           {/* Placeholder for future tools */}

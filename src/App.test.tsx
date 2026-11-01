@@ -43,6 +43,34 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
+  it('renders active tool cards in strictly alphabetical order', () => {
+    const { container } = render(<App />);
+    const cardHeadings = Array.from(
+      container.querySelectorAll('.tools-grid .tool-card:not(.coming-soon) h2')
+    ).map((el) => el.textContent?.trim() || '');
+
+    expect(cardHeadings).toEqual([
+      'Big Text',
+      'Biomorphs',
+      'Cute Pomo',
+      'Desktop Pals',
+      'Fractal Explorer',
+      'Random Picker',
+      'Timezone Converter',
+    ]);
+
+    // Explicitly verify alphabetical sequence
+    const sortedHeadings = [...cardHeadings].sort((a, b) => a.localeCompare(b));
+    expect(cardHeadings).toEqual(sortedHeadings);
+  });
+
+  it('renders a Featured badge on the Biomorphs card', () => {
+    render(<App />);
+    const biomorphsCard = screen.getByRole('link', { name: /biomorphs/i });
+    expect(biomorphsCard).toHaveClass('featured');
+    expect(biomorphsCard).toHaveTextContent(/featured/i);
+  });
+
   it('renders footer attribution with author link, co-author note, and icon-only GitHub link', () => {
     render(<App />);
     expect(screen.getByText(/authored by/i)).toBeInTheDocument();

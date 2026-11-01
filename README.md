@@ -10,13 +10,13 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 
 ## 🚀 Featured Tools
 
-- **[Big Text](./src/tools/big/SPEC.md)**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments, presentations, or at a distance.
-- **[Timezone Converter](./src/tools/timezone/SPEC.md)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
-- **[Random Picker](./src/tools/picker/SPEC.md)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
-- **[Cute Pomo](./src/tools/pomo/SPEC.md)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
-- **[Desktop Pals](./src/tools/pals/SPEC.md)**: An interactive canvas companion toy with physics playgrounds, obstacles, toys & treats (Pip the Penguin, Barnaby the Pup, Sprout the Sprite).
-- **[Fractal Explorer](./src/tools/fractal/SPEC.md)**: An interactive Mandelbrot, Julia, and Burning Ship fractal explorer with deep continuous zoom and 4K wallpaper export studio.
-- **[Biomorphs](./src/tools/biomorphs/SPEC.md)**: Evolutionary Watchmaker artificial selection sandbox guiding morphology of generative alien organisms through 2-way comparative duels, timeline rewind, and DNA sharing.
+- **[Big Text](https://tools.arunsr.in/big)**: A high-visibility full-screen text display. Scale text to fill your entire screen for use in noisy environments, presentations, or at a distance.
+- **[Biomorphs](https://tools.arunsr.in/biomorphs)**: Evolutionary Watchmaker artificial selection sandbox guiding morphology of generative alien organisms through 2-way comparative duels, timeline rewind, and DNA sharing.
+- **[Cute Pomo](https://tools.arunsr.in/pomo)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
+- **[Desktop Pals](https://tools.arunsr.in/pals)**: An interactive canvas companion toy with physics playgrounds, obstacles, toys & treats (Pip the Penguin, Barnaby the Pup, Sprout the Sprite).
+- **[Fractal Explorer](https://tools.arunsr.in/fractal)**: An interactive Mandelbrot, Julia, and Burning Ship fractal explorer with deep continuous zoom and 4K wallpaper export studio.
+- **[Random Picker](https://tools.arunsr.in/picker)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
+- **[Timezone Converter](https://tools.arunsr.in/timezone)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
 
 ---
 
@@ -79,12 +79,12 @@ This project is designed to be hosted as a static-only Worker using **Cloudflare
 - `src/theme/`: ThemeContext and localStorage persistence hooks.
 - `src/tools/`: Directory containing individual modular tools:
   - `src/tools/big/`: The Big Text tool module.
-  - `src/tools/timezone/`: The Timezone Converter tool module.
+  - `src/tools/biomorphs/`: The Biomorphs Evolutionary Watchmaker artificial selection sandbox tool module.
+  - `src/tools/fractal/`: The Fractal Explorer and wallpaper studio tool module.
+  - `src/tools/pals/`: The Desktop Pals interactive companion sandbox tool module.
   - `src/tools/picker/`: The Random Picker and Decision Maker tool module.
   - `src/tools/pomo/`: The Cute Pomo / Focus Timer tool module.
-  - `src/tools/pals/`: The Desktop Pals interactive companion sandbox tool module.
-  - `src/tools/fractal/`: The Fractal Explorer and wallpaper studio tool module.
-  - `src/tools/biomorphs/`: The Biomorphs Evolutionary Watchmaker artificial selection sandbox tool module.
+  - `src/tools/timezone/`: The Timezone Converter tool module.
 - `docs/specs/`: Feature specifications authored during autonomous sprints.
 - `scripts/`: Local verification, CI parity, and sprint lifecycle automation.
 

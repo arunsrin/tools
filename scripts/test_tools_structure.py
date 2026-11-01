@@ -6,6 +6,7 @@ Validates Modular Tool Structure and Specifications for Tools Hub:
 - Master SPEC.md must reference all active tools.
 """
 import os
+import re
 import sys
 
 # Ensure UTF-8 output
@@ -82,6 +83,58 @@ def main():
         # 6. Check that src/routes.ts registers direct route for this tool
         if routes_text and tool.lower() not in routes_text.lower():
             errors.append(f"src/routes.ts does not register direct route for tool '{tool}'.")
+
+    # 7. Check README Featured Tools links and alphabetical ordering
+    featured_match = re.search(
+        r"##\s*🚀?\s*Featured Tools\s*\n(.*?)(?=\n##|\n---|\Z)", readme_text, re.DOTALL
+    )
+    featured_titles = []
+    if not featured_match:
+        errors.append("README.md is missing 'Featured Tools' section.")
+    else:
+        featured_lines = [
+            line.strip()
+            for line in featured_match.group(1).strip().splitlines()
+            if line.strip().startswith("-")
+        ]
+        for line in featured_lines:
+            m = re.match(r"^-\s*\*\*\[([^\]]+)\]\(([^)]+)\)\*\*:\s*(.+)$", line)
+            if not m:
+                errors.append(f"README.md featured tool line format invalid: '{line}'")
+                continue
+            title, url, _ = m.groups()
+            featured_titles.append(title.strip())
+            if not url.startswith("https://tools.arunsr.in/"):
+                errors.append(
+                    f"README.md tool '{title}' must link to live deployed URL (got: '{url}')"
+                )
+
+        if featured_titles:
+            sorted_titles = sorted(featured_titles, key=lambda s: s.lower())
+            if featured_titles != sorted_titles:
+                errors.append(
+                    f"README.md Featured Tools are not in alphabetical order. Expected: {sorted_titles}, got: {featured_titles}"
+                )
+
+    # 8. Check src/App.tsx tool cards alphabetical ordering and parity
+    app_file = os.path.join(ROOT_DIR, "src", "App.tsx")
+    if os.path.exists(app_file):
+        with open(app_file, "r", encoding="utf-8") as f:
+            app_text = f.read()
+
+        grid_match = re.search(r'<main className="tools-grid">\s*(.*?)\s*</main>', app_text, re.DOTALL)
+        if grid_match:
+            h2_titles = re.findall(r"<h2>([^<]+)</h2>", grid_match.group(1))
+            active_tool_titles = [t.strip() for t in h2_titles if t.strip() != "More Tools"]
+            sorted_app_titles = sorted(active_tool_titles, key=lambda s: s.lower())
+            if active_tool_titles != sorted_app_titles:
+                errors.append(
+                    f"src/App.tsx tool cards are not in alphabetical order. Expected: {sorted_app_titles}, got: {active_tool_titles}"
+                )
+            if featured_titles and active_tool_titles != featured_titles:
+                errors.append(
+                    f"Tool order mismatch between README.md ({featured_titles}) and src/App.tsx ({active_tool_titles})"
+                )
 
     if errors:
         print("❌ Tool Structure Validation Failed:", file=sys.stderr)
