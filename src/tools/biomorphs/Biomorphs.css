@@ -1,0 +1,601 @@
+/* Biomorphs: The Evolutionary Watchmaker Styles */
+
+.biomorphs-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 10%, #172554 0%, #090d16 65%, #05070c 100%);
+  color: #f8fafc;
+  font-family: inherit;
+  padding: 1.5rem 1.25rem 3rem;
+  box-sizing: border-box;
+}
+
+/* Header & Controls Bar */
+.biomorphs-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto 1.5rem;
+}
+
+.biomorphs-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.biomorphs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.biomorphs-title-group h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0;
+  background: linear-gradient(135deg, #f8fafc 30%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.biomorphs-subtitle {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.biomorphs-top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.bio-btn:hover {
+  background: #334155;
+  border-color: #475569;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.bio-btn:active {
+  transform: translateY(0);
+}
+
+.bio-btn.btn-back {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+.bio-btn.btn-back:hover {
+  background: #1e293b;
+  color: #38bdf8;
+  border-color: #38bdf8;
+}
+
+.bio-btn.btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.25);
+}
+
+.bio-btn.btn-primary:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+}
+
+/* Control Strip */
+.biomorphs-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto 1.5rem;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid #1e293b;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.toolbar-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-variant-numeric: tabular-nums;
+}
+
+.mutation-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mutation-selector span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.mutation-btn-group {
+  display: flex;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  padding: 0.2rem;
+  gap: 0.2rem;
+}
+
+.mut-opt-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mut-opt-btn:hover {
+  color: #f1f5f9;
+}
+
+.mut-opt-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 1px 6px rgba(56, 189, 248, 0.3);
+}
+
+/* 2-Way Duel Arena */
+.duel-arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto 2rem;
+  position: relative;
+}
+
+.specimen-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #0b1120;
+  border: 2px solid #1e293b;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.specimen-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(56, 189, 248, 0.18);
+}
+
+.specimen-card:focus-visible {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
+}
+
+.card-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: rgba(15, 23, 42, 0.8);
+  border-bottom: 1px solid #1e293b;
+}
+
+.specimen-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tag-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.35rem;
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+.specimen-card:first-child .tag-badge {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.specimen-card:last-child .tag-badge {
+  color: #a855f7;
+  border-color: rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.specimen-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.shortcut-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  font-family: ui-monospace, monospace;
+}
+
+/* Canvas Viewport */
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 280px;
+  max-height: 440px;
+  background: radial-gradient(circle at 50% 50%, #0f172a 0%, #060911 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.specimen-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Trait Mutations List */
+.card-traits-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.25rem;
+  background: #0b1120;
+  border-top: 1px solid #1e293b;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.trait-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.trait-pill.ancestor-pill {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.card-select-footer {
+  padding: 0.85rem 1.25rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-action-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.15s ease;
+}
+
+.specimen-card:hover .select-action-text {
+  color: #38bdf8;
+}
+
+/* Ancestor Lineage Section */
+.lineage-section {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  box-sizing: border-box;
+}
+
+.lineage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.lineage-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.lineage-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.lineage-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+.lineage-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.lineage-scroll::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+.lineage-card {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  outline: none;
+  min-width: 90px;
+}
+
+.lineage-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+  background: #1e293b;
+}
+
+.lineage-card.active-ancestor {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+.lineage-thumb-canvas {
+  width: 76px;
+  height: 60px;
+  border-radius: 0.35rem;
+  background: #090e17;
+  display: block;
+}
+
+.lineage-gen-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-top: 0.35rem;
+}
+
+.lineage-name-label {
+  font-size: 0.65rem;
+  color: #64748b;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* Modals & Overlays */
+.dna-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.dna-modal {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.dna-modal h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #f1f5f9;
+}
+
+.dna-modal p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 1rem;
+}
+
+.dna-textarea {
+  width: 100%;
+  height: 100px;
+  background: #090e17;
+  border: 1px solid #334155;
+  border-radius: 0.5rem;
+  color: #38bdf8;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.dna-textarea:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+.dna-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+/* Toast Notification */
+.bio-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #0284c7;
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  animation: toastFadeIn 0.25s ease-out;
+}
+
+@keyframes toastFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .biomorphs-container {
+    padding: 1rem 0.75rem 2.5rem;
+  }
+
+  .biomorphs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .biomorphs-top-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .duel-arena {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .canvas-wrapper {
+    min-height: 240px;
+  }
+
+  .biomorphs-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mutation-selector {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -31,6 +31,9 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const pomoLink = screen.getByRole('link', { name: /cute pomo/i });
     expect(pomoLink).toHaveAttribute('href', TOOL_ROUTES.pomo);
 
+    const biomorphsLink = screen.getByRole('link', { name: /biomorphs/i });
+    expect(biomorphsLink).toHaveAttribute('href', TOOL_ROUTES.biomorphs);
+
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -116,6 +119,22 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
+  it('navigates to Biomorphs tool when its card is clicked and back to hub', () => {
+    render(<App />);
+    const biomorphsCard = screen.getByRole('link', { name: /biomorphs/i });
+    fireEvent.click(biomorphsCard);
+
+    // In Biomorphs tool & URL updated
+    expect(window.location.pathname).toBe('/biomorphs');
+    expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
   it('mounts directly to Timezone Converter when loading /timezone path', () => {
     window.history.replaceState({}, '', '/timezone');
     render(<App />);
@@ -143,6 +162,13 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     render(<App />);
 
     expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
+  });
+
+  it('mounts directly to Biomorphs when loading /biomorphs path', () => {
+    window.history.replaceState({}, '', '/biomorphs');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
   });
 
   it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
@@ -203,6 +229,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/timezone')).toBe('timezone');
       expect(parseRoute('/picker/')).toBe('picker');
       expect(parseRoute('/pomo')).toBe('pomo');
+      expect(parseRoute('/biomorphs')).toBe('biomorphs');
     });
 
     it('parses hash fallback correctly', () => {
@@ -210,6 +237,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/', '#timezone')).toBe('timezone');
       expect(parseRoute('/', '#picker')).toBe('picker');
       expect(parseRoute('/', '#/pomo')).toBe('pomo');
+      expect(parseRoute('/', '#/biomorphs')).toBe('biomorphs');
     });
 
     it('falls back to hub for unknown or empty paths', () => {
@@ -225,6 +253,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('timezone')).toBe('/timezone');
       expect(getPathForView('picker')).toBe('/picker');
       expect(getPathForView('pomo')).toBe('/pomo');
+      expect(getPathForView('biomorphs')).toBe('/biomorphs');
     });
   });
 });

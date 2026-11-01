@@ -14,6 +14,7 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 - **[Timezone Converter](./src/tools/timezone/SPEC.md)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
 - **[Random Picker](./src/tools/picker/SPEC.md)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
 - **[Cute Pomo](./src/tools/pomo/SPEC.md)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
+- **[Biomorphs](./src/tools/biomorphs/SPEC.md)**: Evolutionary Watchmaker artificial selection sandbox guiding morphology of generative alien organisms through 2-way comparative duels, timeline rewind, and DNA sharing.
 
 ---
 

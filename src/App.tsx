@@ -3,6 +3,7 @@ import BigText from './tools/big/BigText';
 import TimezoneConverter from './tools/timezone/TimezoneConverter';
 import ChoicePicker from './tools/picker/ChoicePicker';
 import PomoTimer from './tools/pomo/PomoTimer';
+import Biomorphs from './tools/biomorphs/Biomorphs';
 import ChessWatermark from './components/ChessWatermark';
 import { parseRoute, getPathForView, TOOL_ROUTES, type ToolKey, type View } from './routes';
 import './index.css';
@@ -63,6 +64,10 @@ export default function App() {
     return <PomoTimer onBack={() => navigate('hub')} />;
   }
 
+  if (view === 'biomorphs') {
+    return <Biomorphs onBack={() => navigate('hub')} />;
+  }
+
   return (
     <div className="app-wrapper">
       <ChessWatermark />
@@ -113,6 +118,16 @@ export default function App() {
             <div className="tool-icon">🍅</div>
             <h2>Cute Pomo</h2>
             <p>Playful Pomodoro timer with Sprouting Tomato Buddy, chimes & cycle tracking.</p>
+          </a>
+
+          <a
+            href={TOOL_ROUTES.biomorphs}
+            className="tool-card"
+            onClick={handleCardClick('biomorphs')}
+          >
+            <div className="tool-icon">🧬</div>
+            <h2>Biomorphs</h2>
+            <p>Evolutionary Watchmaker: guide alien organism morphology through comparative duels.</p>
           </a>
 
           {/* Placeholder for future tools */}
