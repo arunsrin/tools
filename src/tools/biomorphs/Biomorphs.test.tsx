@@ -12,6 +12,15 @@ import {
   THREATS,
   type EcosystemConfig,
 } from './biomorphEngine';
+import {
+  createInitialBiosphere,
+  stepBiosphere,
+  drawBiosphere,
+  addPreyAgent,
+  addPredatorAgent,
+  respawnPlayer,
+  generateExtinctionAdvice,
+} from './ecosystemEngine';
 
 describe('Biomorphs Component & Engine', () => {
   const onBackMock = vi.fn();
@@ -308,5 +317,240 @@ describe('Biomorphs Component & Engine', () => {
     expect(TERRAINS.map((t) => t.id)).toContain(eco.terrain);
     expect(CLIMATES.map((c) => c.id)).toContain(eco.climate);
     expect(THREATS.map((th) => th.id)).toContain(eco.threat);
+  });
+
+  describe('Living Autonomous Biosphere & Survival Simulation', () => {
+    it('switches to Living Biosphere via header tab and launches champion', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      // Initially in lab
+      expect(screen.getByTestId('ecosystem-bar')).toBeInTheDocument();
+      expect(screen.queryByTestId('biosphere-section')).not.toBeInTheDocument();
+
+      // Click Living Biosphere tab
+      fireEvent.click(screen.getByTestId('tab-living-biosphere'));
+
+      // Biosphere stage mounted
+      expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
+      expect(screen.getByTestId('biosphere-canvas')).toBeInTheDocument();
+      expect(screen.getByTestId('player-energy-val')).toHaveTextContent(/100%/i);
+      expect(screen.getByTestId('survival-timer')).toBeInTheDocument();
+      expect(screen.getByTestId('biosphere-action-ticker')).toBeInTheDocument();
+    });
+
+    it('launches specimen directly into biosphere from candidate card', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      const launchAlphaBtn = screen.getByRole('button', { name: /^launch alpha:/i });
+      fireEvent.click(launchAlphaBtn);
+
+      expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
+      expect(screen.getByTestId('biosphere-action-ticker')).toHaveTextContent(/launched/i);
+    });
+
+    it('toggles pause and resume in biosphere via button and spacebar', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+
+      const pauseBtn = screen.getByTestId('btn-toggle-pause');
+      expect(pauseBtn).toHaveTextContent(/pause/i);
+
+      // Click pause
+      fireEvent.click(pauseBtn);
+      expect(pauseBtn).toHaveTextContent(/resume/i);
+
+      // Keyboard space toggles back to resume
+      fireEvent.keyDown(window, { key: ' ' });
+      expect(pauseBtn).toHaveTextContent(/pause/i);
+    });
+
+    it('changes simulation speed (1x, 2x, 3x)', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+
+      const speed2Btn = screen.getByRole('button', { name: /^2x$/i });
+      fireEvent.click(speed2Btn);
+      expect(speed2Btn).toHaveClass('active');
+
+      const speed3Btn = screen.getByRole('button', { name: /^3x$/i });
+      fireEvent.click(speed3Btn);
+      expect(speed3Btn).toHaveClass('active');
+    });
+
+    it('adds prey and predators interactively to the biosphere', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+
+      const addPreyBtn = screen.getByRole('button', { name: /\+prey/i });
+      fireEvent.click(addPreyBtn);
+
+      const addPredatorBtn = screen.getByRole('button', { name: /\+predator/i });
+      fireEvent.click(addPredatorBtn);
+
+      expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
+    });
+
+    it('directs organism target on canvas click', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+
+      const canvas = screen.getByTestId('biosphere-canvas');
+      fireEvent.click(canvas, { clientX: 200, clientY: 150 });
+      expect(canvas).toBeInTheDocument();
+    });
+
+    it('returns to breeding lab via back button and preserves state', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+      expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
+
+      // Return to lab
+      fireEvent.click(screen.getByTestId('btn-back-to-lab'));
+      expect(screen.getByTestId('ecosystem-bar')).toBeInTheDocument();
+      expect(screen.queryByTestId('biosphere-section')).not.toBeInTheDocument();
+    });
+
+    it('supports keyboard shortcut L to toggle between Lab and Biosphere', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      // In Lab: press L to launch
+      fireEvent.keyDown(window, { key: 'l' });
+      expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
+
+      // In Biosphere: press L to return to Lab
+      fireEvent.keyDown(window, { key: 'l' });
+      expect(screen.getByTestId('ecosystem-bar')).toBeInTheDocument();
+    });
+
+    it('initializes biosphere state with scaled player speed and population', () => {
+      const eco: EcosystemConfig = { terrain: 'canopy', climate: 'oxygen', threat: 'airborne' };
+      const genome = createPrimordialGenome();
+      genome.limbPairs[0].tipType = 'wing';
+
+      const state = createInitialBiosphere(genome, eco, 800, 500);
+      expect(state.playerAgent).not.toBeNull();
+      expect(state.playerAgent?.role).toBe('player');
+      expect(state.playerAgent?.energy).toBe(100);
+      expect(state.agents.filter((a) => a.role === 'prey').length).toBe(8);
+      expect(state.agents.filter((a) => a.role === 'predator').length).toBe(2);
+      expect(state.agents.filter((a) => a.role === 'rival').length).toBe(3);
+      expect(state.particles.length).toBeGreaterThan(0);
+
+      // Verify dynamic agent addition
+      const withMorePrey = addPreyAgent(state, 800, 500);
+      expect(withMorePrey.agents.filter((a) => a.role === 'prey').length).toBe(9);
+
+      const withMorePredator = addPredatorAgent(withMorePrey, 800, 500);
+      expect(withMorePredator.agents.filter((a) => a.role === 'predator').length).toBe(3);
+    });
+
+    it('steps simulation and drains metabolism over time', () => {
+      const eco: EcosystemConfig = { terrain: 'swamp', climate: 'frost', threat: 'stalkers' };
+      const genome = createPrimordialGenome();
+      const state = createInitialBiosphere(genome, eco, 800, 500);
+
+      const next = stepBiosphere(state, 1.0, 800, 500);
+      expect(next.elapsedSeconds).toBe(1.0);
+      expect(next.playerAgent?.energy).toBeLessThan(100);
+    });
+
+    it('handles feeding collision when player touches prey', () => {
+      const eco: EcosystemConfig = { terrain: 'abyss', climate: 'darkness', threat: 'parasites' };
+      const genome = createPrimordialGenome();
+      const state = createInitialBiosphere(genome, eco, 800, 500);
+
+      // Force player energy down and place a prey right next to player
+      if (state.playerAgent) {
+        state.playerAgent.energy = 50;
+      }
+      const prey = state.agents.find((a) => a.role === 'prey');
+      if (prey && state.playerAgent) {
+        prey.x = state.playerAgent.x + 5;
+        prey.y = state.playerAgent.y + 5;
+      }
+
+      const stepped = stepBiosphere(state, 0.1, 800, 500);
+      expect(stepped.preyEaten).toBe(1);
+      expect(stepped.playerAgent?.energy).toBeCloseTo(67.88, 1);
+      const steppedPrey = stepped.agents.find((a) => a.id === prey?.id);
+      expect(steppedPrey?.isAlive).toBe(false);
+    });
+
+    it('triggers extinction when player energy reaches 0', () => {
+      const eco: EcosystemConfig = { terrain: 'desert', climate: 'geothermal', threat: 'stalkers' };
+      const genome = createPrimordialGenome();
+      const state = createInitialBiosphere(genome, eco, 800, 500);
+
+      // Force energy almost zero
+      if (state.playerAgent) {
+        state.playerAgent.energy = 0.5;
+      }
+
+      const stepped = stepBiosphere(state, 2.0, 800, 500);
+      expect(stepped.isExtinct).toBe(true);
+      expect(stepped.playerAgent?.isAlive).toBe(false);
+      expect(stepped.extinctionReason).toMatch(/energy depletion/i);
+
+      // Respawn restores health
+      const respawned = respawnPlayer(stepped, 800, 500);
+      expect(respawned.isExtinct).toBe(false);
+      expect(respawned.playerAgent?.isAlive).toBe(true);
+      expect(respawned.playerAgent?.energy).toBe(100);
+    });
+
+    it('generates tailored extinction advice based on environment', () => {
+      const genome = createPrimordialGenome();
+
+      const airborneAdvice = generateExtinctionAdvice(
+        genome,
+        { terrain: 'canopy', climate: 'oxygen', threat: 'airborne' },
+        'devoured by airborne hunters'
+      );
+      expect(airborneAdvice.advice).toMatch(/airborne swarms/i);
+
+      const stalkersAdvice = generateExtinctionAdvice(
+        genome,
+        { terrain: 'swamp', climate: 'acidic', threat: 'stalkers' },
+        'ambushed'
+      );
+      expect(stalkersAdvice.advice).toMatch(/apex stalkers/i);
+    });
+
+    it('drawBiosphere executes without errors across biomes', () => {
+      const mockCtx = {
+        save: vi.fn(),
+        restore: vi.fn(),
+        clearRect: vi.fn(),
+        translate: vi.fn(),
+        rotate: vi.fn(),
+        scale: vi.fn(),
+        beginPath: vi.fn(),
+        closePath: vi.fn(),
+        moveTo: vi.fn(),
+        lineTo: vi.fn(),
+        quadraticCurveTo: vi.fn(),
+        bezierCurveTo: vi.fn(),
+        arc: vi.fn(),
+        ellipse: vi.fn(),
+        fill: vi.fn(),
+        stroke: vi.fn(),
+        fillRect: vi.fn(),
+        strokeRect: vi.fn(),
+        fillText: vi.fn(),
+        setLineDash: vi.fn(),
+        createRadialGradient: vi.fn(() => ({
+          addColorStop: vi.fn(),
+        })),
+        createLinearGradient: vi.fn(() => ({
+          addColorStop: vi.fn(),
+        })),
+      } as unknown as CanvasRenderingContext2D;
+
+      const eco: EcosystemConfig = { terrain: 'cavern', climate: 'geothermal', threat: 'stalkers' };
+      const genome = createPrimordialGenome();
+      const state = createInitialBiosphere(genome, eco, 800, 500);
+
+      expect(() => drawBiosphere(mockCtx, state, 800, 500, 1.0)).not.toThrow();
+    });
   });
 });
