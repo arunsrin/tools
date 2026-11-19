@@ -12,13 +12,10 @@ A curated, interactive digital catalogue of Mortimer J. Adler's reading recommen
   - Fast filter pills: All, Free Ebook Available, Great Books of the Western World (`*`), Gateway to the Great Books (`**`), In Copyright.
   - Dropdowns for Era and Genre filtering with instant active count and reset.
 - **Verified Public Domain Ebook Downloads:**
-  - Direct links to ManyBooks.net title pages (or Project Gutenberg / Standard Ebooks fallback).
+  - Direct links to verified ManyBooks.net title pages (or canonical Project Gutenberg / Standard Ebooks fallback).
   - Format badges: ePub, MOBI, PDF, Read Online.
   - Modern titles under active copyright marked as "In Copyright · Reference Only".
-- **Reading Progress Tracker:**
-  - Toggle each book/author as "Want to Read", "Currently Reading", or "Completed".
-  - Persistent via `localStorage` with error handling.
-  - Dynamic progress bar showing total books read.
+- **Zero Distraction / High Readability:** Clean, fast exploration focused strictly on Adler's curated corpus, works, and verified download destinations.
 - **Hub Navigation:** Clear "Back to Tools Hub" button with URL synchronization to `/`.
 
 ## 2. Technical Requirements

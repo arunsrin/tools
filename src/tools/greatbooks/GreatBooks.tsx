@@ -1,10 +1,8 @@
-import { useState, useMemo, useEffect, useCallback, memo } from 'react';
+import { useState, useMemo, useCallback, memo } from 'react';
 import type {
   HistoricalEra,
   BookGenre,
   ViewMode,
-  ReadingStatus,
-  ReadingTrackerState,
   AdlerAuthor,
 } from './greatBooksTypes';
 import {
@@ -12,9 +10,7 @@ import {
   BOOK_GENRES,
   type QuickFilter,
   filterAuthors,
-  calculateStats,
-  loadReadingTracker,
-  saveReadingTracker,
+  calculateCorpusStats,
 } from './greatBooksHelpers';
 import { ADLER_GREAT_BOOKS } from './adlerBooksData';
 import './GreatBooks.css';
@@ -29,25 +25,6 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
   const [selectedEra, setSelectedEra] = useState<HistoricalEra | 'all'>('all');
   const [selectedGenre, setSelectedGenre] = useState<BookGenre | 'all'>('all');
   const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
-  const [tracker, setTracker] = useState<ReadingTrackerState>(() => loadReadingTracker());
-
-  // Save tracker state on change
-  useEffect(() => {
-    saveReadingTracker(tracker);
-  }, [tracker]);
-
-  const handleStatusChange = useCallback((authorId: number, status: ReadingStatus | 'none') => {
-    setTracker((prev) => {
-      const next = { ...prev };
-      const key = String(authorId);
-      if (status === 'none') {
-        delete next[key];
-      } else {
-        next[key] = status;
-      }
-      return next;
-    });
-  }, []);
 
   const handleClearFilters = useCallback(() => {
     setSearchQuery('');
@@ -72,10 +49,10 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
     });
   }, [searchQuery, selectedEra, selectedGenre, quickFilter]);
 
-  // Overall stats
-  const stats = useMemo(() => {
-    return calculateStats(ADLER_GREAT_BOOKS, tracker);
-  }, [tracker]);
+  // Corpus stats
+  const corpusStats = useMemo(() => {
+    return calculateCorpusStats(ADLER_GREAT_BOOKS);
+  }, []);
 
   // Grouped by era for timeline view
   const authorsByEra = useMemo(() => {
@@ -122,46 +99,42 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
             Mortimer Adler’s Reading List from <em>How to Read a Book</em> (1972)
           </p>
           <div className="great-books-corpus-meta">
-            <span className="corpus-badge">137 Foundational Authors</span>
-            <span className="corpus-badge">263 Curated Works</span>
+            <span className="corpus-badge">{corpusStats.totalAuthors} Foundational Authors</span>
+            <span className="corpus-badge">{corpusStats.totalWorks} Curated Works</span>
             <span className="corpus-badge accent-badge">Verified Legal Public Domain Ebooks</span>
           </div>
         </div>
-
-        {/* Reading Tracker Dashboard Card */}
-        <section className="great-books-tracker-card" aria-label="Personal Reading Progress">
-          <div className="tracker-header">
-            <div className="tracker-headline">
-              <span className="tracker-icon" aria-hidden="true">📚</span>
-              <div>
-                <h2 className="tracker-title">Your Reading Journey</h2>
-                <p className="tracker-counts">
-                  <strong>{stats.completedCount}</strong> of {stats.totalAuthors} authors read ({stats.percentCompleted}%) ·{' '}
-                  <span className="reading-accent">{stats.readingCount} reading</span> ·{' '}
-                  <span className="want-accent">{stats.wantToReadCount} want to read</span>
-                </p>
-              </div>
-            </div>
-            <div className="tracker-percentage" aria-hidden="true">
-              {stats.percentCompleted}%
-            </div>
-          </div>
-
-          <div
-            className="tracker-progress-track"
-            role="progressbar"
-            aria-valuenow={stats.percentCompleted}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Overall Reading Progress"
-          >
-            <div
-              className="tracker-progress-fill"
-              style={{ width: `${stats.percentCompleted}%` }}
-            />
-          </div>
-        </section>
       </header>
+
+      {/* Project Gutenberg Tribute & Donation Banner */}
+      <aside className="gutenberg-donation-banner" aria-label="Support Project Gutenberg">
+        <div className="donation-banner-content">
+          <div className="donation-banner-text">
+            <span className="donation-banner-icon" aria-hidden="true">📖</span>
+            <div>
+              <h2 className="donation-banner-title">
+                Honoring Free Knowledge & Public Domain Preservation
+              </h2>
+              <p className="donation-banner-desc">
+                All public domain editions in this catalog are digitized and preserved by the tireless volunteers at{' '}
+                <strong>Project Gutenberg</strong> and <strong>Standard Ebooks</strong> with zero paywalls, advertisements, or mandatory registration.
+                If you find this Great Books guide valuable, please consider supporting Project Gutenberg’s 501(c)(3) mission.
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://www.gutenberg.org/donate/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="donation-cta-btn"
+            aria-label="Donate to Project Gutenberg (opens in a new tab)"
+          >
+            <span className="heart-icon" aria-hidden="true">💖</span>
+            <span>Support Project Gutenberg</span>
+            <span className="ext-icon" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
 
       {/* Control Bar: Search, View Mode & Filters */}
       <section className="great-books-controls" aria-label="Search and Filter Controls">
@@ -345,8 +318,6 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
                     <AuthorCard
                       key={author.id}
                       author={author}
-                      status={tracker[String(author.id)]}
-                      onStatusChange={handleStatusChange}
                     />
                   ))}
                 </div>
@@ -375,8 +346,6 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
                     <AuthorCard
                       key={author.id}
                       author={author}
-                      status={tracker[String(author.id)]}
-                      onStatusChange={handleStatusChange}
                     />
                   ))}
                 </div>
@@ -395,7 +364,7 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
         <p className="footer-subtext">
           <span className="legend-item"><span className="legend-symbol">(*)</span> Great Books of the Western World</span> ·{' '}
           <span className="legend-item"><span className="legend-symbol">(**)</span> Gateway to the Great Books</span> ·{' '}
-          <span>Only verified, legal public domain editions are linked (ManyBooks & Project Gutenberg).</span>
+          <span>Only verified, legal public domain editions are linked (Project Gutenberg). Free, open, zero registration.</span>
         </p>
       </footer>
     </div>
@@ -404,13 +373,11 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
 
 interface AuthorCardProps {
   author: AdlerAuthor;
-  status?: ReadingStatus;
-  onStatusChange: (authorId: number, status: ReadingStatus | 'none') => void;
 }
 
-const AuthorCard = memo(function AuthorCard({ author, status, onStatusChange }: AuthorCardProps) {
+const AuthorCard = memo(function AuthorCard({ author }: AuthorCardProps) {
   return (
-    <article className={`author-card ${status ? `status-${status}` : ''}`}>
+    <article className="author-card">
       <div className="author-card-header">
         <div className="author-meta-left">
           <span className="adler-index-badge">#{author.id}</span>
@@ -418,24 +385,6 @@ const AuthorCard = memo(function AuthorCard({ author, status, onStatusChange }: 
             <h3 className="author-name">{author.name}</h3>
             {author.dates && <span className="author-dates">{author.dates}</span>}
           </div>
-        </div>
-
-        {/* Reading Status Selector */}
-        <div className="reading-status-control">
-          <label htmlFor={`status-${author.id}`} className="visually-hidden">
-            Reading status for {author.name}
-          </label>
-          <select
-            id={`status-${author.id}`}
-            className={`status-select ${status || 'unmarked'}`}
-            value={status || 'none'}
-            onChange={(e) => onStatusChange(author.id, e.target.value as ReadingStatus | 'none')}
-          >
-            <option value="none">Mark Status</option>
-            <option value="want_to_read">🔖 Want to Read</option>
-            <option value="reading">📖 Currently Reading</option>
-            <option value="completed">✓ Completed</option>
-          </select>
         </div>
       </div>
 

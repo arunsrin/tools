@@ -1,24 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import GreatBooks from './GreatBooks';
-import { LOCAL_STORAGE_KEY } from './greatBooksHelpers';
 
 describe('GreatBooks Component', { timeout: 35000 }, () => {
   const onBackMock = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
   });
 
-  it('renders the header, corpus metadata, and reading journey card', () => {
+  it('renders the header and corpus metadata badges', () => {
     render(<GreatBooks onBack={onBackMock} />);
 
     expect(screen.getByRole('heading', { level: 1, name: /great books/i })).toBeInTheDocument();
     expect(screen.getByText(/137 Foundational Authors/i)).toBeInTheDocument();
     expect(screen.getByText(/263 Curated Works/i)).toBeInTheDocument();
     expect(screen.getByText(/Verified Legal Public Domain Ebooks/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 2, name: /your reading journey/i })).toBeInTheDocument();
+  });
+
+  it('renders the Project Gutenberg tribute and donation banner with link to donate', () => {
+    render(<GreatBooks onBack={onBackMock} />);
+
+    const donateLink = screen.getByRole('link', { name: /donate to project gutenberg/i });
+    expect(donateLink).toHaveAttribute('href', 'https://www.gutenberg.org/donate/');
+    expect(donateLink).toHaveAttribute('target', '_blank');
+    expect(screen.getByText(/Honoring Free Knowledge & Public Domain Preservation/i)).toBeInTheDocument();
   });
 
   it('triggers onBack when "Back to Tools Hub" button is clicked', () => {
@@ -129,32 +135,15 @@ describe('GreatBooks Component', { timeout: 35000 }, () => {
     expect(screen.queryByRole('heading', { level: 3, name: /^plato$/i })).not.toBeInTheDocument();
   });
 
-  it('updates reading tracker and persists to localStorage', () => {
-    render(<GreatBooks onBack={onBackMock} />);
-
-    // Select status for Homer (#1)
-    const homerStatusSelect = screen.getByLabelText(/reading status for homer/i);
-    expect(homerStatusSelect).toHaveValue('none');
-
-    fireEvent.change(homerStatusSelect, { target: { value: 'completed' } });
-    expect(homerStatusSelect).toHaveValue('completed');
-
-    // Progress percentage should update in dashboard
-    expect(screen.getByText(/of 137 authors read/i)).toBeInTheDocument();
-
-    // Verify localStorage
-    const stored = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-    expect(stored['1']).toBe('completed');
-  });
-
-  it('shows verified ManyBooks download links with formats for public domain works', () => {
+  it('shows verified public domain download links with formats for public domain works', () => {
     render(<GreatBooks onBack={onBackMock} />);
 
     // Homer's Iliad link
     const iliadLink = screen.getByRole('link', { name: /download or read iliad/i });
-    expect(iliadLink).toHaveAttribute('href', 'https://manybooks.net/titles/homer2238222382-8.html');
+    expect(iliadLink).toHaveAttribute('href', 'https://www.gutenberg.org/ebooks/2199');
     expect(iliadLink).toHaveAttribute('target', '_blank');
     expect(iliadLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.getAllByText(/Free on Project Gutenberg/i).length).toBeGreaterThan(0);
   });
 
   it('renders "In Copyright · Reference Only" badge for 20th C. copyrighted books', () => {

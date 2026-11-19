@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  loadReadingTracker,
-  saveReadingTracker,
   filterAuthors,
-  calculateStats,
-  getStatusLabel,
-  LOCAL_STORAGE_KEY,
+  calculateCorpusStats,
 } from './greatBooksHelpers';
 import type { AdlerAuthor } from './greatBooksTypes';
 
@@ -32,7 +28,7 @@ const mockAuthors: AdlerAuthor[] = [
         title: 'Odyssey',
         gbww: true,
         inCopyright: false,
-        downloadUrl: 'https://manybooks.net/titles/homeretext99dyssy08a.html',
+        downloadUrl: 'https://manybooks.net/titles/homer2426924269-8.html',
         source: 'ManyBooks',
         formats: ['ePub', 'PDF'],
       },
@@ -79,36 +75,6 @@ const mockAuthors: AdlerAuthor[] = [
 ];
 
 describe('greatBooksHelpers', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    vi.restoreAllMocks();
-  });
-
-  describe('localStorage reading tracker', () => {
-    it('returns empty object when localStorage is empty', () => {
-      expect(loadReadingTracker()).toEqual({});
-    });
-
-    it('loads and saves tracker state correctly', () => {
-      const state = { '1': 'completed' as const, '12': 'reading' as const };
-      saveReadingTracker(state);
-      expect(loadReadingTracker()).toEqual(state);
-    });
-
-    it('gracefully handles JSON parse errors in localStorage', () => {
-      localStorage.setItem(LOCAL_STORAGE_KEY, 'corrupted-json{');
-      expect(loadReadingTracker()).toEqual({});
-    });
-
-    it('gracefully handles localStorage write failures', () => {
-      vi.spyOn(Storage.prototype, 'setItem').mockImplementationOnce(() => {
-        throw new Error('QuotaExceededError');
-      });
-      // Should not throw
-      expect(() => saveReadingTracker({ '1': 'completed' })).not.toThrow();
-    });
-  });
-
   describe('filterAuthors', () => {
     it('returns all authors when default options are provided', () => {
       const res = filterAuthors(mockAuthors, {
@@ -209,33 +175,22 @@ describe('greatBooksHelpers', () => {
     });
   });
 
-  describe('calculateStats', () => {
-    it('calculates total authors, works, and completed percentage correctly', () => {
-      const tracker = { '1': 'completed' as const, '12': 'reading' as const };
-      const stats = calculateStats(mockAuthors, tracker);
+  describe('calculateCorpusStats', () => {
+    it('calculates total authors, works, and public domain works correctly', () => {
+      const stats = calculateCorpusStats(mockAuthors);
 
       expect(stats.totalAuthors).toBe(3);
       expect(stats.totalWorks).toBe(4);
       expect(stats.publicDomainWorks).toBe(3);
-      expect(stats.completedCount).toBe(1);
-      expect(stats.readingCount).toBe(1);
-      expect(stats.wantToReadCount).toBe(0);
-      expect(stats.percentCompleted).toBe(33); // 1 / 3 = 33%
+      expect(stats.inCopyrightWorks).toBe(1);
     });
 
     it('handles zero authors gracefully', () => {
-      const stats = calculateStats([], {});
+      const stats = calculateCorpusStats([]);
       expect(stats.totalAuthors).toBe(0);
-      expect(stats.percentCompleted).toBe(0);
-    });
-  });
-
-  describe('getStatusLabel', () => {
-    it('returns appropriate labels for each status', () => {
-      expect(getStatusLabel('completed')).toBe('Completed');
-      expect(getStatusLabel('reading')).toBe('Currently Reading');
-      expect(getStatusLabel('want_to_read')).toBe('Want to Read');
-      expect(getStatusLabel(undefined)).toBe('Mark Status');
+      expect(stats.totalWorks).toBe(0);
+      expect(stats.publicDomainWorks).toBe(0);
+      expect(stats.inCopyrightWorks).toBe(0);
     });
   });
 });

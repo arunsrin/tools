@@ -1,5 +1,5 @@
 // Mortimer Adler's Reading List from "How to Read a Book" (Appendix A, 1972)
-// Curated with verified legal public domain ebook links (ManyBooks, Gutenberg) and copyright indicators.
+// Curated with verified legal public domain ebook links from Project Gutenberg and copyright indicators.
 import type { AdlerAuthor } from "./greatBooksTypes";
 
 export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
@@ -17,13 +17,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/homer2238222382-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2199",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -32,13 +32,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/homeretext99dyssy08a.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1727",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -57,13 +57,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/anonymousother07kjv10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/10",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -71,7 +71,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 3,
     "name": "Aeschylus",
-    "dates": "c. 525–456 B.C.",
+    "dates": "c. 525\u2013456 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -82,13 +82,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/aeschylusetext96promb10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/27458",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -96,7 +96,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 4,
     "name": "Sophocles",
-    "dates": "c. 495–406 B.C.",
+    "dates": "c. 495\u2013406 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -107,13 +107,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/sophoclesetext02oedtr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/31",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -121,7 +121,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 5,
     "name": "Herodotus",
-    "dates": "c. 484–425 B.C.",
+    "dates": "c. 484\u2013425 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -132,13 +132,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/herodotusetext01hrdt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2707",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -146,7 +146,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 6,
     "name": "Euripides",
-    "dates": "c. 485–406 B.C.",
+    "dates": "c. 485\u2013406 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -157,13 +157,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "esp. Medea,Hippolytus,The Bacchae",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/euripidesetext028eup10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/35170",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -171,7 +171,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 7,
     "name": "Thucydides",
-    "dates": "c. 460–400 B.C.",
+    "dates": "c. 460\u2013400 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -182,13 +182,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/thucydidesetext04plpwr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7142",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -196,7 +196,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 8,
     "name": "Hippocrates",
-    "dates": "c. 460–377? B.C.",
+    "dates": "c. 460\u2013377? B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -211,9 +211,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -221,7 +221,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 9,
     "name": "Aristophanes",
-    "dates": "c. 448–380 B.C.",
+    "dates": "c. 448\u2013380 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -232,13 +232,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "esp. The Clouds,The Birds,The Frogs",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/aristophanestext97clods10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7700",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -246,7 +246,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 10,
     "name": "Plato",
-    "dates": "c. 427–347 B.C.",
+    "dates": "c. 427\u2013347 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -257,13 +257,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "esp. The Republic,Symposium,Phaedo,Meno,Apology,Phaedrus, Protagoras,Gorgias,Sophist,Theaetetus",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/platoetext98repub11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1497",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -271,7 +271,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 11,
     "name": "Aristotle",
-    "dates": "384–322 B.C.",
+    "dates": "384\u2013322 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -282,13 +282,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "esp. Organon,Physics,Metaphysics,On the Soul,The Nicomachean Ethics,Politics,Rhetoric,Poetics",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/aristotleetext97nikep10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/8438",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -296,7 +296,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 12,
     "name": "Epicurus",
-    "dates": "c. 341–270 B.C.",
+    "dates": "c. 341\u2013270 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -311,9 +311,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -326,9 +326,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -336,7 +336,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 13,
     "name": "Euclid",
-    "dates": "ﬂ.c. 300 B.C.",
+    "dates": "\ufb02.c. 300 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -351,9 +351,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -361,7 +361,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 14,
     "name": "Archimedes",
-    "dates": "c. 287–212 B.C.",
+    "dates": "c. 287\u2013212 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -376,9 +376,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -386,7 +386,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 15,
     "name": "Apollonius of Perga",
-    "dates": "ﬂ.c. 240 B.C.",
+    "dates": "\ufb02.c. 240 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -401,9 +401,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -411,7 +411,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 16,
     "name": "Cicero",
-    "dates": "106–43 B.C.",
+    "dates": "106\u201343 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -422,13 +422,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Orations,On Friendship,On Old Age",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/ciceromarcetext97ocic10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14970",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -436,7 +436,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 17,
     "name": "Lucretius",
-    "dates": "c. 95–55 B.C.",
+    "dates": "c. 95\u201355 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -447,13 +447,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/lucretiutext97natrg10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/785",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -461,7 +461,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 18,
     "name": "Virgil",
-    "dates": "70–19 B.C.",
+    "dates": "70\u201319 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -472,13 +472,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/virgiletext95aenid11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/228",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -486,7 +486,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 19,
     "name": "Horace",
-    "dates": "65–8 B.C.",
+    "dates": "65\u20138 B.C.",
     "era": "Ancient Greece & Rome",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -497,13 +497,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Odes and Epodes,The Art of Poetry",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/horaceetext97odesh10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5419",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -522,13 +522,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/livyetext00romn110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/19725",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -547,13 +547,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Metamorphoses",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/ovidetext00metm110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/21765",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -561,7 +561,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 22,
     "name": "Plutarch",
-    "dates": "c. 45–120",
+    "dates": "c. 45\u2013120",
     "era": "Ancient Greece & Rome",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": true,
@@ -572,13 +572,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/plutarchtext96plut110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/674",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -591,9 +591,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -601,7 +601,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 23,
     "name": "Tacitus",
-    "dates": "c. 55–117",
+    "dates": "c. 55\u2013117",
     "era": "Ancient Greece & Rome",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": true,
@@ -612,13 +612,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tacituspetext057tcth10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/108",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -627,13 +627,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tacituspetext058tcth10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/108",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -642,12 +642,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tacituspetext055tcth10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Tacitus",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -657,12 +656,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tacituspetext056tcth10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Tacitus",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -671,7 +669,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 24,
     "name": "Nicomachus of Gerasa",
-    "dates": "ﬂ.c. 100 A.D.",
+    "dates": "\ufb02.c. 100 A.D.",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -686,9 +684,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -696,7 +694,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 25,
     "name": "Epictetus",
-    "dates": "c. 60–120",
+    "dates": "c. 60\u2013120",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -707,13 +705,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/epictetuetext97dsctt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/10661",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -722,12 +720,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/epictetuetext97dsctt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Epictetus",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -736,7 +733,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 26,
     "name": "Ptolemy",
-    "dates": "c. 100–170;ﬂ.127–151",
+    "dates": "c. 100\u2013170;\ufb02.127\u2013151",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -751,9 +748,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -761,7 +758,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 27,
     "name": "Lucian",
-    "dates": "c. 120–c. 190",
+    "dates": "c. 120\u2013c. 190",
     "era": "Ancient Greece & Rome",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": true,
@@ -776,9 +773,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -786,7 +783,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 28,
     "name": "Marcus Aurelius",
-    "dates": "121–180",
+    "dates": "121\u2013180",
     "era": "Ancient Greece & Rome",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -797,13 +794,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/aureliusmetext01mdtt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2680",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -811,7 +808,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 29,
     "name": "Galen",
-    "dates": "c. 130–200",
+    "dates": "c. 130\u2013200",
     "era": "Ancient Greece & Rome",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -826,9 +823,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -847,13 +844,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/anonymousother07kjv10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/10",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -861,7 +858,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 31,
     "name": "Plotinus",
-    "dates": "205–270",
+    "dates": "205\u2013270",
     "era": "Early Christian & Middle Ages",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -876,9 +873,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -886,7 +883,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 32,
     "name": "St. Augustine",
-    "dates": "354–430",
+    "dates": "354\u2013430",
     "era": "Early Christian & Middle Ages",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
@@ -897,13 +894,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. On the Teacher,*Confessions,*The City of God,*Christian Doctrine",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/augustinetext02cconf10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3296",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -922,13 +919,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/variousetext951song10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/391",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -945,15 +942,15 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "id": "34-1",
         "title": "The Nibelungenlied",
         "gbww": false,
-        "note": "(TheVölsunga Sagais the Scandinavian version of the same legend.",
+        "note": "(TheV\u00f6lsunga Sagais the Scandinavian version of the same legend.",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/variousetext98niblg10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7420",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -972,13 +969,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/variousetext98njal10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/17919",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -986,7 +983,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 36,
     "name": "St. Thomas Aquinas",
-    "dates": "c. 1225–1274",
+    "dates": "c. 1225\u20131274",
     "era": "Early Christian & Middle Ages",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
@@ -1001,9 +998,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1011,7 +1008,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 37,
     "name": "Dante Alighieri",
-    "dates": "1265–1321",
+    "dates": "1265\u20131321",
     "era": "Early Christian & Middle Ages",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": true,
@@ -1022,13 +1019,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dantealigetext971dant10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/8800",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1037,21 +1034,21 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dantealigetext971dant10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/34547",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
   },
   {
     "id": 38,
-    "name": "Geoﬀrey Chaucer",
-    "dates": "c. 1340–1400",
+    "name": "Geo\ufb00rey Chaucer",
+    "dates": "c. 1340\u20131400",
     "era": "Early Christian & Middle Ages",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -1062,13 +1059,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. *Troilus and Criseyde,*Canterbury Tales",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/chaucergetext00ctals10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/221",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1076,7 +1073,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 39,
     "name": "Leonardo da Vinci",
-    "dates": "1452–1519",
+    "dates": "1452\u20131519",
     "era": "Renaissance & Reformation",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1087,21 +1084,21 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/davinciletext048leon10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5000",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
   },
   {
     "id": 40,
-    "name": "Niccolò Machiavelli",
-    "dates": "1469–1527",
+    "name": "Niccol\u00f2 Machiavelli",
+    "dates": "1469\u20131527",
     "era": "Renaissance & Reformation",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -1112,13 +1109,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/machiavelletext99tprnc11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1232",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1127,13 +1124,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/machiavel1082710827-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/10827",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1141,7 +1138,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 41,
     "name": "Desiderius Erasmus",
-    "dates": "c. 1469–1536",
+    "dates": "c. 1469\u20131536",
     "era": "Renaissance & Reformation",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": false,
@@ -1152,13 +1149,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/erasmusdetext97pfoly10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/939",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1166,7 +1163,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 42,
     "name": "Nicolaus Copernicus",
-    "dates": "1473–1543",
+    "dates": "1473\u20131543",
     "era": "Renaissance & Reformation",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1177,13 +1174,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/70054",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2130",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1191,7 +1188,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 43,
     "name": "Sir Thomas More",
-    "dates": "c. 1478–1535",
+    "dates": "c. 1478\u20131535",
     "era": "Renaissance & Reformation",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -1202,13 +1199,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/morethomtext95utopi10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1547",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1216,7 +1213,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 44,
     "name": "Martin Luther",
-    "dates": "1483–1546",
+    "dates": "1483\u20131546",
     "era": "Renaissance & Reformation",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
@@ -1227,13 +1224,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/1547",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1200",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1242,12 +1239,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/luthermaetext97ttalk10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Martin%20Luther",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1255,8 +1251,8 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   },
   {
     "id": 45,
-    "name": "François Rabelais",
-    "dates": "c. 1495–1553",
+    "name": "Fran\u00e7ois Rabelais",
+    "dates": "c. 1495\u20131553",
     "era": "Renaissance & Reformation",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -1267,13 +1263,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/rabelaisfetext97gpant10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/65135",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1281,7 +1277,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 46,
     "name": "John Calvin",
-    "dates": "1509–1564",
+    "dates": "1509\u20131564",
     "era": "Renaissance & Reformation",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
@@ -1292,13 +1288,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/65135",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3600",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1306,7 +1302,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 47,
     "name": "Michel de Montaigne",
-    "dates": "1533–1592",
+    "dates": "1533\u20131592",
     "era": "Renaissance & Reformation",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": false,
@@ -1317,13 +1313,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/montaignedetext023me10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/33810",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1331,7 +1327,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 48,
     "name": "William Gilbert",
-    "dates": "1540–1603",
+    "dates": "1540\u20131603",
     "era": "Renaissance & Reformation",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1342,13 +1338,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/33810",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/996",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1356,7 +1352,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 49,
     "name": "Miguel de Cervantes",
-    "dates": "1547–1616",
+    "dates": "1547\u20131616",
     "era": "Renaissance & Reformation",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -1367,13 +1363,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/cervanteetext971donq10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1942",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1381,7 +1377,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 50,
     "name": "Edmund Spenser",
-    "dates": "c. 1552–1599",
+    "dates": "c. 1552\u20131599",
     "era": "Renaissance & Reformation",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -1392,28 +1388,28 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/1942",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/242",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "50-b",
-        "title": "The Faërie Queene",
+        "title": "The Fa\u00ebrie Queene",
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/spenseredetext98fqeen10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5500",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1421,7 +1417,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 51,
     "name": "Francis Bacon",
-    "dates": "1561–1626",
+    "dates": "1561\u20131626",
     "era": "Renaissance & Reformation",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -1432,13 +1428,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/baconfraetext96bessy10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/100",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1447,12 +1443,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/baconfraetext93adlrn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Francis%20Bacon",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -1462,12 +1457,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/45988",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Francis%20Bacon",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -1477,12 +1471,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/baconfraetext95natln10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Francis%20Bacon",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1491,7 +1484,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 52,
     "name": "William Shakespeare",
-    "dates": "1564–1616",
+    "dates": "1564\u20131616",
     "era": "Renaissance & Reformation",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -1502,13 +1495,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/shakespeetext94shaks12.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/46207",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1516,7 +1509,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 53,
     "name": "Galileo Galilei",
-    "dates": "1564–1642",
+    "dates": "1564\u20131642",
     "era": "Renaissance & Reformation",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -1527,13 +1520,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/46207",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/68997",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1542,13 +1535,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/galileigetext048dsci10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/68997",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1556,7 +1549,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 54,
     "name": "Johannes Kepler",
-    "dates": "1571–1630",
+    "dates": "1571\u20131630",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1567,13 +1560,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/68997",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/17921",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1582,13 +1575,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/68997",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/17921",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1596,7 +1589,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 55,
     "name": "William Harvey",
-    "dates": "1578–1657",
+    "dates": "1578\u20131657",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1607,13 +1600,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/17921",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3207",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1622,12 +1615,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/17921",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=William%20Harvey",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -1637,12 +1629,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/17921",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=William%20Harvey",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1651,7 +1642,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 56,
     "name": "Thomas Hobbes",
-    "dates": "1588–1679",
+    "dates": "1588\u20131679",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -1662,21 +1653,21 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/hobbesthtext02lvthn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/59",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
   },
   {
     "id": 57,
-    "name": "René Descartes",
-    "dates": "1596–1650",
+    "name": "Ren\u00e9 Descartes",
+    "dates": "1596\u20131650",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -1687,13 +1678,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/descartetext93dsmet10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/20",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1702,13 +1693,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/descartetext93dsmet10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/608",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1717,12 +1708,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/264",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Ren%C3%A9%20Descartes",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -1732,12 +1722,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/descarte21122112-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Ren%C3%A9%20Descartes",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1746,7 +1735,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 58,
     "name": "John Milton",
-    "dates": "1608–1674",
+    "dates": "1608\u20131674",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -1757,13 +1746,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/miltonjoetext92plost10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14954",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1772,12 +1761,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/miltonjoetext92plost10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=John%20Milton",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1785,8 +1773,8 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   },
   {
     "id": 59,
-    "name": "Molière",
-    "dates": "1622–1673",
+    "name": "Moli\u00e8re",
+    "dates": "1622\u20131673",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": true,
@@ -1797,27 +1785,26 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/moliereetext96tartf10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/8781",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "59-b",
-        "title": "(esp.The Miser,The School for Wives,The Misanthrope,The Doctor in Spite of Himself,Tartuﬀe)",
+        "title": "(esp.The Miser,The School for Wives,The Misanthrope,The Doctor in Spite of Himself,Tartu\ufb00e)",
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/moliereetext96tartf10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Moli%C3%A8re",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -1826,7 +1813,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 60,
     "name": "Blaise Pascal",
-    "dates": "1623–1662",
+    "dates": "1623\u20131662",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -1837,43 +1824,43 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/pascalbletext04prvlt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/31998",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "60-b",
-        "title": "Pensées",
+        "title": "Pens\u00e9es",
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/pascalbletext99pense10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/18269",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "60-c",
-        "title": "Scientiﬁc Treatises",
+        "title": "Scienti\ufb01c Treatises",
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/pascalbletext04prvlt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/68997",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1881,7 +1868,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 61,
     "name": "Christiaan Huygens",
-    "dates": "1629–1695",
+    "dates": "1629\u20131695",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -1892,13 +1879,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/huygenscetext05trlg10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14725",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1906,7 +1893,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 62,
     "name": "Benedict de Spinoza",
-    "dates": "1632–1677",
+    "dates": "1632\u20131677",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -1917,13 +1904,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/spinozabtext03ethic10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3800",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -1931,7 +1918,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 63,
     "name": "John Locke",
-    "dates": "1632–1704",
+    "dates": "1632\u20131704",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -1942,28 +1929,28 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/lockejoh1082710827-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7370",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "63-b",
-        "title": "“Of Civil Government” (second treatise in Two Treatises on Government)",
+        "title": "\u201cOf Civil Government\u201d (second treatise in Two Treatises on Government)",
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/lockejohtext052trtg10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/10615",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -1972,12 +1959,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/lockejohtext04ehum110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=John%20Locke",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -1987,12 +1973,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/lockejoh1061110611-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=John%20Locke",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2001,7 +1986,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 64,
     "name": "Jean Baptiste Racine",
-    "dates": "1639–1699",
+    "dates": "1639\u20131699",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -2012,13 +1997,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Andromache,Phaedra",
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/1477",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1977",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2026,7 +2011,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 65,
     "name": "Isaac Newton",
-    "dates": "1642–1727",
+    "dates": "1642\u20131727",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -2041,9 +2026,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2052,13 +2037,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/newtonis3350433504-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/33504",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2066,7 +2051,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 66,
     "name": "Gottfried Wilhelm von Leibniz",
-    "dates": "1646–1716",
+    "dates": "1646\u20131716",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -2077,13 +2062,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/leibnizg3918539185-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/39904",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2092,13 +2077,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/40957",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/39904",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2107,13 +2092,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/leibnizg3918539185-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/39904",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2121,7 +2106,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 67,
     "name": "Daniel Defoe",
-    "dates": "1660–1731",
+    "dates": "1660\u20131731",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -2132,13 +2117,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/defoedan1000810008-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/521",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2146,7 +2131,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 68,
     "name": "Jonathan Swift",
-    "dates": "1667–1745",
+    "dates": "1667\u20131745",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -2157,13 +2142,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/swiftjontext03ttub10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4737",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2172,28 +2157,28 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/swiftjon1325613256-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4118",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "68-c",
-        "title": "Gulliver’s Travels",
+        "title": "Gulliver\u2019s Travels",
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/swiftjontext97glvtr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/829",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2202,13 +2187,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/swiftjontext03ttub10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1080",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2216,7 +2201,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 69,
     "name": "William Congreve",
-    "dates": "1670–1729",
+    "dates": "1670\u20131729",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -2227,13 +2212,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/congreveetext98wywld10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1292",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2241,7 +2226,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 70,
     "name": "George Berkeley",
-    "dates": "1685–1753",
+    "dates": "1685\u20131753",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -2252,13 +2237,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/berkeleyetext03prhkn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4723",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2266,7 +2251,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 71,
     "name": "Alexander Pope",
-    "dates": "1688–1744",
+    "dates": "1688\u20131744",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -2277,13 +2262,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/popealexetext05scrtc10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2428",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2292,13 +2277,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/popealexetext97rlock10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2300",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2307,13 +2292,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/popealextext00essmn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2428",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2321,7 +2306,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 72,
     "name": "Charles de Secondat, Baron de Montesquieu",
-    "dates": "1689–1755",
+    "dates": "1689\u20131755",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -2332,13 +2317,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/montesqu2804528045-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/27532",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2347,12 +2332,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/montesqu2753227532-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Charles%20de%20Secondat%2C%20Baron%20de%20Montesquieu",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2361,7 +2345,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 73,
     "name": "Voltaire",
-    "dates": "1694–1778",
+    "dates": "1694\u20131778",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": true,
@@ -2372,13 +2356,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/voltaireetext007fltr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/19942",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2387,13 +2371,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/voltaireetext95cndid10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/35621",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2402,12 +2386,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/voltaire3562135621-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Voltaire",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2416,7 +2399,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 74,
     "name": "Henry Fielding",
-    "dates": "1707–1754",
+    "dates": "1707\u20131754",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -2427,13 +2410,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/fieldingetext04jand110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/6593",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2442,12 +2425,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/fieldingetext96tjons10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Henry%20Fielding",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2456,7 +2438,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 75,
     "name": "Samuel Johnson",
-    "dates": "1709–1784",
+    "dates": "1709\u20131784",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": true,
@@ -2467,13 +2449,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/johnsons2875128751-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3709",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2482,13 +2464,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/5430",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/652",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2497,12 +2479,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/johnsonsetext96rassl10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Samuel%20Johnson",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -2512,12 +2493,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. the essays on Milton and Pope",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/johnsons1875118751-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Samuel%20Johnson",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2526,7 +2506,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 76,
     "name": "David Hume",
-    "dates": "1711–1776",
+    "dates": "1711\u20131776",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -2537,13 +2517,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/humedavietext03trthn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/9662",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2552,12 +2532,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/humedavi3610036100-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=David%20Hume",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -2567,12 +2546,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/humedavietext97inqhu10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=David%20Hume",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2581,7 +2559,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 77,
     "name": "Jean Jaques Rousseau",
-    "dates": "1712–1778",
+    "dates": "1712\u20131778",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": true,
@@ -2592,13 +2570,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/rousseauetext04dsneq10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/11136",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2607,13 +2585,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/rousseauetext04dsneq10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5427",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2622,13 +2600,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/rousseau54275427-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/46333",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2637,12 +2615,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/rousseauetext03scont10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Jean%20Jaques%20Rousseau",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2651,7 +2628,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 78,
     "name": "Laurence Sterne",
-    "dates": "1713–1768",
+    "dates": "1713\u20131768",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -2662,13 +2639,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/sternelaetext97tshnd10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1079",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2677,13 +2654,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/sternelaetext97sentj10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1079",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2691,7 +2668,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 79,
     "name": "Adam Smith",
-    "dates": "1723–1790",
+    "dates": "1723\u20131790",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -2702,13 +2679,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/smithada67366736-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3300",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2717,12 +2694,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/smithadaetext02wltnt11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Adam%20Smith",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2731,7 +2707,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 80,
     "name": "Immanuel Kant",
-    "dates": "1724–1804",
+    "dates": "1724\u20131804",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -2742,13 +2718,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimmaetext03cprsn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4280",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2757,13 +2733,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimmaetext04fndmm10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5683",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2772,13 +2748,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimmaetext04cprac10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/48433",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2787,12 +2763,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimma50925092-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Immanuel%20Kant",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -2802,12 +2777,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimma4843348433-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Immanuel%20Kant",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -2817,12 +2791,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kantimma50925092-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Immanuel%20Kant",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2831,7 +2804,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 81,
     "name": "Edward Gibbon",
-    "dates": "1737–1794",
+    "dates": "1737\u20131794",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -2842,13 +2815,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/gibbonedetext971dfre10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/25717",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2857,13 +2830,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/gibboned1111711117-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/8900",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2871,7 +2844,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 82,
     "name": "James Boswell",
-    "dates": "1740–1795",
+    "dates": "1740\u20131795",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": false,
@@ -2882,13 +2855,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. London Journal",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/boswellj15641564-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1564",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2897,12 +2870,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/boswelljetext98lsjhn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=James%20Boswell",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -2911,7 +2883,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 83,
     "name": "Antoine Laurent Lavoisier",
-    "dates": "1743–1794",
+    "dates": "1743\u20131794",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -2926,9 +2898,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2936,7 +2908,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 84,
     "name": "John Jay",
-    "dates": "1745–1829), James Madison (1751–1836), and Alexander Hamilton (1757–1804",
+    "dates": "1745\u20131829), James Madison (1751\u20131836), and Alexander Hamilton (1757\u20131804",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -2947,13 +2919,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "(together with the *Articles of Confederation,t h e*Constitution of the United States,a n dt h e*Declaration of Independence",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/variousetext91feder16.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/18",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -2961,7 +2933,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 85,
     "name": "Jeremy Bentham",
-    "dates": "1748–1832",
+    "dates": "1748\u20131832",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -2972,13 +2944,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/70366",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/58212",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -2987,12 +2959,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/70366",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Jeremy%20Bentham",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -3001,7 +2972,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 86,
     "name": "Johann Wolfgang von Goethe",
-    "dates": "1749–1832",
+    "dates": "1749\u20131832",
     "era": "Enlightenment & Scientific Revolution",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": false,
@@ -3012,13 +2983,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/goethejoetext981faust10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14591",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3027,13 +2998,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/goethejo3206132061-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14591",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3041,7 +3012,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 87,
     "name": "Jean Baptiste Joseph Fourier",
-    "dates": "1768–1830",
+    "dates": "1768\u20131830",
     "era": "19th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -3052,13 +3023,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/58957",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/47306",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3066,7 +3037,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 88,
     "name": "Georg Wilhelm Friedrich Hegel",
-    "dates": "1770–1831",
+    "dates": "1770\u20131831",
     "era": "19th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -3077,13 +3048,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/48995",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/40733",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3092,13 +3063,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/48995",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/25525",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3107,12 +3078,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/hegelgeo1318413184-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Georg%20Wilhelm%20Friedrich%20Hegel",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -3121,7 +3091,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 89,
     "name": "William Wordsworth",
-    "dates": "1770–1850",
+    "dates": "1770\u20131850",
     "era": "19th Century",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -3132,13 +3102,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Lyrical Ballads,L u c yp o e m s ,s o n n e t s ;The Prelude",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/wordswor1214512145-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/8824",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3146,7 +3116,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 90,
     "name": "Samuel Taylor Coleridge",
-    "dates": "1772–1834",
+    "dates": "1772\u20131834",
     "era": "19th Century",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -3155,15 +3125,15 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "id": "90-a",
         "title": "Poems",
         "gbww": false,
-        "note": "esp. “Kubla Khan,”Rime of the Ancient Mariner",
+        "note": "esp. \u201cKubla Khan,\u201dRime of the Ancient Mariner",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/coleridg2909029090-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/151",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3172,13 +3142,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/coleridgetext04bgltr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/151",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3186,7 +3156,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 91,
     "name": "Jane Austen",
-    "dates": "1775–1817",
+    "dates": "1775\u20131817",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -3197,13 +3167,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/austenjaetext981pandp10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1342",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3212,13 +3182,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/austenjaetext94emma11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/158",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3226,7 +3196,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 92,
     "name": "Karl von Clausewitz",
-    "dates": "1780–1831",
+    "dates": "1780\u20131831",
     "era": "19th Century",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": true,
@@ -3237,13 +3207,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/clausewiktext058onwr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1946",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3251,7 +3221,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 93,
     "name": "Stendhal",
-    "dates": "1783–1842",
+    "dates": "1783\u20131842",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -3262,13 +3232,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/stendhal4474744747-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/44747",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3277,13 +3247,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/stendhaletext03chprm10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/44747",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3292,12 +3262,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/stendhal4474744747-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Stendhal",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -3306,7 +3275,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 94,
     "name": "George Gordon, Lord Byron",
-    "dates": "1788–1824",
+    "dates": "1788\u20131824",
     "era": "19th Century",
     "genre": "Epic & Poetry",
     "gatewayToGreatBooks": false,
@@ -3317,13 +3286,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/byronlor2170021700-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/21700",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3331,7 +3300,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 95,
     "name": "Arthur Schopenhauer",
-    "dates": "1788–1860",
+    "dates": "1788\u20131860",
     "era": "19th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -3342,13 +3311,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/schopenhetext97stpess10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/38427",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3356,7 +3325,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 96,
     "name": "Michael Faraday",
-    "dates": "1791–1867",
+    "dates": "1791\u20131867",
     "era": "19th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -3367,13 +3336,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/faradaymtext01chcnd10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/14474",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3386,9 +3355,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3396,7 +3365,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 97,
     "name": "Charles Lyell",
-    "dates": "1797–1875",
+    "dates": "1797\u20131875",
     "era": "19th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -3407,13 +3376,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/37500",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/33224",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3421,7 +3390,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 98,
     "name": "Auguste Comte",
-    "dates": "1798–1857",
+    "dates": "1798\u20131857",
     "era": "19th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -3432,52 +3401,51 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/42749",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/31882",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
   },
   {
     "id": 99,
-    "name": "Honoré de Balzac",
-    "dates": "1799–1850",
+    "name": "Honor\u00e9 de Balzac",
+    "dates": "1799\u20131850",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
     "works": [
       {
         "id": "99-a",
-        "title": "Père Goriot",
+        "title": "P\u00e8re Goriot",
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/balzachoetext98griot10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1237",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
         "id": "99-b",
-        "title": "Eugénie Grandet",
+        "title": "Eug\u00e9nie Grandet",
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/balzachoetext98egrnd10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Honor%C3%A9%20de%20Balzac",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -3486,7 +3454,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 100,
     "name": "Ralph Waldo Emerson",
-    "dates": "1803–1882",
+    "dates": "1803\u20131882",
     "era": "19th Century",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": true,
@@ -3497,13 +3465,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/emersonret04rpmen10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2945",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3512,13 +3480,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/emersonret01essy110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2945",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3527,12 +3495,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/emersonret01essy110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Ralph%20Waldo%20Emerson",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -3541,7 +3508,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 101,
     "name": "Nathaniel Hawthorne",
-    "dates": "1804–1864",
+    "dates": "1804\u20131864",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -3552,13 +3519,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/hawthorntext92scrlt11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/33",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3566,7 +3533,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 102,
     "name": "Alexis de Tocqueville",
-    "dates": "1805–1859",
+    "dates": "1805\u20131859",
     "era": "19th Century",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": true,
@@ -3577,13 +3544,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tocquevietext971dica10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/815",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3591,7 +3558,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 103,
     "name": "John Stuart Mill",
-    "dates": "1806–1873",
+    "dates": "1806\u20131873",
     "era": "19th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -3602,13 +3569,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/27942",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/34901",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3617,13 +3584,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/milljohntext03onlbr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/34901",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3632,13 +3599,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/milljohnetext04rpgov10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/27083",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3647,13 +3614,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/milljohnetext04utlts10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/11224",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3662,13 +3629,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/milljohnetext01subwm10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/27083",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3677,13 +3644,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/milljohnetext97atbml10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/103",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3691,7 +3658,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 104,
     "name": "Charles Darwin",
-    "dates": "1809–1882",
+    "dates": "1809\u20131882",
     "era": "19th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -3702,13 +3669,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/darwinchetext98otoos10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1228",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3717,13 +3684,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/darwinchetext002dsmn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2300",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3732,13 +3699,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/darwinch20102010-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2010",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3746,7 +3713,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 105,
     "name": "Charles Dickens",
-    "dates": "1812–1870",
+    "dates": "1812\u20131870",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -3755,15 +3722,15 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "id": "105-a",
         "title": "Works",
         "gbww": false,
-        "note": "esp. Pickwick Papers,David Copperﬁeld,Hard Times",
+        "note": "esp. Pickwick Papers,David Copper\ufb01eld,Hard Times",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dickenschtext97cdgex10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/580",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3771,7 +3738,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 106,
     "name": "Claude Bernard",
-    "dates": "1813–1878",
+    "dates": "1813\u20131878",
     "era": "19th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -3782,13 +3749,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/57597",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/35154",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3796,7 +3763,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 107,
     "name": "Henry David Thoreau",
-    "dates": "1817–1862",
+    "dates": "1817\u20131862",
     "era": "19th Century",
     "genre": "Essays & Satire",
     "gatewayToGreatBooks": true,
@@ -3807,13 +3774,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/thoreauhetext93cvdis10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/71",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3822,13 +3789,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/thoreauhetext95waldn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/205",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3836,7 +3803,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 108,
     "name": "Karl Marx",
-    "dates": "1818–1883",
+    "dates": "1818\u20131883",
     "era": "19th Century",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -3847,13 +3814,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": "(together with the *Communist Manifesto",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/marxkarl1092710927-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/61",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3861,7 +3828,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 109,
     "name": "George Eliot",
-    "dates": "1819–1880",
+    "dates": "1819\u20131880",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -3872,13 +3839,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/eliotgeotext95adamb10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2701",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3887,13 +3854,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/eliotgeotext94midlm11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4018",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3901,7 +3868,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 110,
     "name": "Herman Melville",
-    "dates": "1819–1891",
+    "dates": "1819\u20131891",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -3912,13 +3879,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/melvilleetext93moby10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/550",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3927,13 +3894,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/melvilleetext04bbudd10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/145",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3941,7 +3908,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 111,
     "name": "Fyodor Dostoevsky",
-    "dates": "1821–1881",
+    "dates": "1821\u20131881",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -3952,13 +3919,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dostoevsetext01cpnsh10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2554",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3967,13 +3934,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dostoevsetext01theid10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2638",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -3982,13 +3949,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/dostoevsetext014bkrm10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2805",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -3996,7 +3963,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 112,
     "name": "Gustave Flaubert",
-    "dates": "1821–1880",
+    "dates": "1821\u20131880",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -4007,13 +3974,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/flaubertetext98mbovr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2413",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4022,13 +3989,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/flaubert1037310373-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1290",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4036,7 +4003,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 113,
     "name": "Henrik Ibsen",
-    "dates": "1828–1906",
+    "dates": "1828\u20131906",
     "era": "19th Century",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": true,
@@ -4045,15 +4012,15 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "id": "113-a",
         "title": "Plays",
         "gbww": false,
-        "note": "esp. Hedda Gabler,AD o l l ’ sH o u s e,The Wild Duck",
+        "note": "esp. Hedda Gabler,AD o l l \u2019 sH o u s e,The Wild Duck",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/ibsenhenetext00dlhse10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2542",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4061,7 +4028,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 114,
     "name": "Leo Tolstoy",
-    "dates": "1828–1910",
+    "dates": "1828\u20131910",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -4072,13 +4039,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tolstoy1654316543-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2600",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4087,13 +4054,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tolstoyletext98karen10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1399",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4102,13 +4069,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tolstoyl34533453-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/24380",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4117,12 +4084,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/tolstoyl13861386-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Leo%20Tolstoy",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -4131,7 +4097,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 115,
     "name": "Mark Twain",
-    "dates": "1835–1910",
+    "dates": "1835\u20131910",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -4142,13 +4108,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/twainmaretext93hfinn12.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/76",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4157,13 +4123,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/twainmar31863186-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3186",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4171,7 +4137,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 116,
     "name": "William James",
-    "dates": "1842–1910",
+    "dates": "1842\u20131910",
     "era": "19th Century",
     "genre": "Psychology & Mind",
     "gatewayToGreatBooks": true,
@@ -4182,13 +4148,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameswilet04prnps10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/58279",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4197,13 +4163,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameswilet04vrrlg10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5649",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4212,13 +4178,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameswilet04prgmt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/621",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4227,12 +4193,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameswil1187411874-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=William%20James",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -4241,7 +4206,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 117,
     "name": "Henry James",
-    "dates": "1843–1916",
+    "dates": "1843\u20131916",
     "era": "19th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -4252,13 +4217,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameshenetext95amrcn10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/177",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4267,13 +4232,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/jameshenetext95ambas10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2833",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4281,7 +4246,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 118,
     "name": "Friedrich Wilhelm Nietzsche",
-    "dates": "1844–1900",
+    "dates": "1844\u20131900",
     "era": "19th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -4292,13 +4257,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/nietzschftext00tszkr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/1998",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4307,13 +4272,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/nietzschftext03bgnev10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4363",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4322,13 +4287,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/nietzschf3784137841-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/52319",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4337,21 +4302,21 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/nietzschf3784137841-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/52319",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
   },
   {
     "id": 119,
-    "name": "Jules Henri Poincaré",
-    "dates": "1854–1912",
+    "name": "Jules Henri Poincar\u00e9",
+    "dates": "1854\u20131912",
     "era": "20th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": false,
@@ -4362,13 +4327,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/70745",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/35451",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4377,13 +4342,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/70745",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/35451",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4391,7 +4356,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 120,
     "name": "Sigmund Freud",
-    "dates": "1856–1939",
+    "dates": "1856\u20131939",
     "era": "20th Century",
     "genre": "Psychology & Mind",
     "gatewayToGreatBooks": false,
@@ -4402,13 +4367,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/freudsigetext03itpdr10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/48433",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4417,13 +4382,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/42158",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/48433",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4433,7 +4398,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4442,12 +4407,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": true,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/42158",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Sigmund%20Freud",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       }
@@ -4456,7 +4420,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 121,
     "name": "George Bernard Shaw",
-    "dates": "1856–1950",
+    "dates": "1856\u20131950",
     "era": "20th Century",
     "genre": "Drama & Theater",
     "gatewayToGreatBooks": true,
@@ -4467,13 +4431,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": "esp. Man and Superman,Major Barbara,Caesar and Cleopatra, Pygmalion,Saint Joan",
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/shawgeoret03pygml10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/3618",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4481,7 +4445,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 122,
     "name": "Max Planck",
-    "dates": "1858–1947",
+    "dates": "1858\u20131947",
     "era": "20th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -4496,9 +4460,9 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4508,17 +4472,17 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
         "id": "122-c",
-        "title": "Scientiﬁc Autobiography",
+        "title": "Scienti\ufb01c Autobiography",
         "gbww": false,
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4526,7 +4490,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 123,
     "name": "Henri Bergson",
-    "dates": "1859–1941",
+    "dates": "1859\u20131941",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -4537,13 +4501,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/bergsonh4350443504-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/26163",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4552,13 +4516,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/bergsonh4419444194-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/26163",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4567,12 +4531,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/bergsonhetext03crtev10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Henri%20Bergson",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -4583,7 +4546,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4591,7 +4554,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 124,
     "name": "John Dewey",
-    "dates": "1859–1952",
+    "dates": "1859\u20131952",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -4602,13 +4565,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/deweyjohetext03hwtk110.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/852",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4617,13 +4580,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/deweyjohetext97dmedu10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/852",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4632,12 +4595,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/66988",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=John%20Dewey",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -4648,7 +4610,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4656,7 +4618,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 125,
     "name": "Alfred North Whitehead",
-    "dates": "1861–1947",
+    "dates": "1861\u20131947",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -4667,13 +4629,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/whiteheadetext03intmt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/41568",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4683,7 +4645,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4693,7 +4655,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4703,7 +4665,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4711,7 +4673,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 126,
     "name": "George Santayana",
-    "dates": "1863–1952",
+    "dates": "1863\u20131952",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -4722,13 +4684,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/santayang1500015000-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/15000",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4737,12 +4699,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/66989",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=George%20Santayana",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -4753,7 +4714,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4761,7 +4722,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 127,
     "name": "Nikolai Lenin",
-    "dates": "1870–1924",
+    "dates": "1870\u20131924",
     "era": "20th Century",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -4772,13 +4733,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/69490",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/46605",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4786,7 +4747,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 128,
     "name": "Marcel Proust",
-    "dates": "1871–1922",
+    "dates": "1871\u20131922",
     "era": "20th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -4797,13 +4758,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/proustm71787178-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7178",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -4811,7 +4772,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 129,
     "name": "Bertrand Russell",
-    "dates": "1872–1970",
+    "dates": "1872\u20131970",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": true,
@@ -4822,13 +4783,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/russellbetext04prbph10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5827",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4837,12 +4798,11 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/russellbetext01anmnd10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/search/?query=Bertrand%20Russell",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
+          "Kindle",
           "Read Online"
         ]
       },
@@ -4853,7 +4813,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4863,7 +4823,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4871,7 +4831,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 130,
     "name": "Thomas Mann",
-    "dates": "1875–1955",
+    "dates": "1875\u20131955",
     "era": "20th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
@@ -4883,7 +4843,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4893,7 +4853,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4901,7 +4861,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 131,
     "name": "Albert Einstein",
-    "dates": "1879–1955",
+    "dates": "1879\u20131955",
     "era": "20th Century",
     "genre": "Science & Mathematics",
     "gatewayToGreatBooks": true,
@@ -4912,13 +4872,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/einsteina3627236272-8.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/30155",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4928,7 +4888,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -4938,7 +4898,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -4946,24 +4906,24 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 132,
     "name": "James Joyce",
-    "dates": "1882–1941",
+    "dates": "1882\u20131941",
     "era": "20th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": true,
     "works": [
       {
         "id": "132-a",
-        "title": "“The Dead” inDubliners",
+        "title": "\u201cThe Dead\u201d inDubliners",
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/joycejameetext01dubln10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/2814",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4972,13 +4932,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/joycejameetext03prtrt10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4217",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -4987,13 +4947,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/joycejameetext03ulyss11.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/4300",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -5001,7 +4961,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 133,
     "name": "Jacques Maritain",
-    "dates": "1882–",
+    "dates": "1882\u2013",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -5013,7 +4973,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5023,7 +4983,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5033,7 +4993,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5043,7 +5003,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -5051,7 +5011,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 134,
     "name": "Franz Kafka",
-    "dates": "1883–1924",
+    "dates": "1883\u20131924",
     "era": "20th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -5062,13 +5022,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://manybooks.net/titles/kafkatext03trial10.html",
-        "source": "ManyBooks",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/5200",
+        "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "PDF",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       },
       {
@@ -5077,13 +5037,13 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "gbww": false,
         "note": null,
         "inCopyright": false,
-        "downloadUrl": "https://www.gutenberg.org/ebooks/72450",
+        "downloadUrl": "https://www.gutenberg.org/ebooks/7849",
         "source": "Project Gutenberg",
         "formats": [
           "ePub",
-          "MOBI",
-          "HTML",
-          "Read Online"
+          "Kindle",
+          "Read Online",
+          "Plain Text"
         ]
       }
     ]
@@ -5091,7 +5051,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 135,
     "name": "Arnold Toynbee",
-    "dates": "1889–",
+    "dates": "1889\u2013",
     "era": "20th Century",
     "genre": "History, Politics & Society",
     "gatewayToGreatBooks": false,
@@ -5103,7 +5063,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5113,7 +5073,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -5121,7 +5081,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 136,
     "name": "Jean Paul Sartre",
-    "dates": "1905–",
+    "dates": "1905\u2013",
     "era": "20th Century",
     "genre": "Philosophy & Ethics",
     "gatewayToGreatBooks": false,
@@ -5133,7 +5093,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5143,7 +5103,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5153,7 +5113,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]
@@ -5161,7 +5121,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
   {
     "id": 137,
     "name": "Aleksandr I. Solzhenitsyn",
-    "dates": "1918–",
+    "dates": "1918\u2013",
     "era": "20th Century",
     "genre": "Fiction & Literature",
     "gatewayToGreatBooks": false,
@@ -5173,7 +5133,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       },
       {
@@ -5183,7 +5143,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
         "note": null,
         "inCopyright": true,
         "downloadUrl": null,
-        "source": "In Copyright · Reference Only",
+        "source": "In Copyright \u00b7 Reference Only",
         "formats": []
       }
     ]

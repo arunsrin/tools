@@ -2,11 +2,7 @@ import type {
   AdlerAuthor,
   HistoricalEra,
   BookGenre,
-  ReadingTrackerState,
-  ReadingStatus,
 } from './greatBooksTypes';
-
-export const LOCAL_STORAGE_KEY = 'tools_hub_adler_great_books_tracker_v1';
 
 export const HISTORICAL_ERAS: HistoricalEra[] = [
   'Ancient Greece & Rome',
@@ -38,36 +34,36 @@ export interface FilterOptions {
   quickFilter: QuickFilter;
 }
 
-export interface ReadingProgressStats {
+export interface GreatBooksCorpusStats {
   totalAuthors: number;
   totalWorks: number;
   publicDomainWorks: number;
-  completedCount: number;
-  readingCount: number;
-  wantToReadCount: number;
-  percentCompleted: number;
+  inCopyrightWorks: number;
 }
 
-export function loadReadingTracker(): ReadingTrackerState {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    if (typeof parsed === 'object' && parsed !== null) {
-      return parsed as ReadingTrackerState;
+export function calculateCorpusStats(authors: AdlerAuthor[]): GreatBooksCorpusStats {
+  const totalAuthors = authors.length;
+  let totalWorks = 0;
+  let publicDomainWorks = 0;
+  let inCopyrightWorks = 0;
+
+  for (const author of authors) {
+    totalWorks += author.works.length;
+    for (const work of author.works) {
+      if (work.inCopyright) {
+        inCopyrightWorks++;
+      } else if (work.downloadUrl) {
+        publicDomainWorks++;
+      }
     }
-  } catch (e) {
-    console.warn('Failed to load Great Books reading tracker from localStorage:', e);
   }
-  return {};
-}
 
-export function saveReadingTracker(state: ReadingTrackerState): void {
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn('Failed to save Great Books reading tracker to localStorage:', e);
-  }
+  return {
+    totalAuthors,
+    totalWorks,
+    publicDomainWorks,
+    inCopyrightWorks,
+  };
 }
 
 export function filterAuthors(
@@ -131,57 +127,3 @@ export function filterAuthors(
     });
 }
 
-export function calculateStats(
-  authors: AdlerAuthor[],
-  tracker: ReadingTrackerState
-): ReadingProgressStats {
-  const totalAuthors = authors.length;
-  let totalWorks = 0;
-  let publicDomainWorks = 0;
-
-  for (const author of authors) {
-    totalWorks += author.works.length;
-    for (const work of author.works) {
-      if (!work.inCopyright && work.downloadUrl) {
-        publicDomainWorks++;
-      }
-    }
-  }
-
-  let completedCount = 0;
-  let readingCount = 0;
-  let wantToReadCount = 0;
-
-  // Track status per author (or work)
-  for (const status of Object.values(tracker)) {
-    if (status === 'completed') completedCount++;
-    else if (status === 'reading') readingCount++;
-    else if (status === 'want_to_read') wantToReadCount++;
-  }
-
-  const percentCompleted =
-    totalAuthors > 0 ? Math.min(100, Math.round((completedCount / totalAuthors) * 100)) : 0;
-
-  return {
-    totalAuthors,
-    totalWorks,
-    publicDomainWorks,
-    completedCount,
-    readingCount,
-    wantToReadCount,
-    percentCompleted,
-  };
-}
-
-export function getStatusLabel(status?: ReadingStatus): string {
-  switch (status) {
-    case 'completed':
-      return 'Completed';
-    case 'reading':
-      return 'Currently Reading';
-    case 'want_to_read':
-      return 'Want to Read';
-    default:
-      return 'Mark Status';
-  }
-}

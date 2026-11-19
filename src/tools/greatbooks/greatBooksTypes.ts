@@ -45,8 +45,4 @@ export interface AdlerAuthor {
   works: BookWork[];
 }
 
-export type ReadingStatus = 'want_to_read' | 'reading' | 'completed';
-
-export type ReadingTrackerState = Record<string, ReadingStatus>;
-
 export type ViewMode = 'timeline' | 'genre';

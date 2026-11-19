@@ -52,7 +52,7 @@ The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler 
 ### 4.1 Header & Navigation
 - Prominent Title: **Great Books** with subtitle *"Mortimer Adler's Reading List from 'How to Read a Book' (1972)"*.
 - High-contrast, accessible **"Back to Tools Hub"** button calling `onBack()`.
-- Reading Progress summary bar: shows count and percentage of books marked as "Read" or "Currently Reading".
+- Metadata counters displaying 137 Foundational Authors, 263 Curated Works, and Verified Legal Public Domain Ebooks badge.
 
 ### 4.2 Interactive View Switcher
 - **Chronological Timeline View:** Sequential order (1 to 137) matching Adler's original text, grouped into sticky/collapsible Era sections.
@@ -78,7 +78,7 @@ The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler 
 - Ebook Availability & Download Button:
   - **Public Domain:** Prominent download button linking directly to verified ManyBooks title page (or Gutenberg / Standard Ebooks fallback) with format indicators (`ePub`, `MOBI`, `PDF`, `Online`).
   - **In Copyright:** Subtle badge stating *"In Copyright · Reference Only"*.
-- Personal Tracker: Interactive toggle (`Want to Read`, `Reading`, `Completed`), saved in `localStorage`.
+- Zero Distraction: Clean, fast exploration focused strictly on Adler's curated corpus, works, and verified legal download destinations.
 
 ### 4.5 Performance & Accessibility
 - Dark theme standard matching `#0f172a`, card surfaces `#1e293b`, borders `#334155`, text `#f1f5f9` / `#94a3b8`, accents `#38bdf8`.
