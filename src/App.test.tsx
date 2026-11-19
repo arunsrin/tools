@@ -342,6 +342,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/pals')).toBe('pals');
       expect(parseRoute('/fractal')).toBe('fractal');
       expect(parseRoute('/biomorphs')).toBe('biomorphs');
+      expect(parseRoute('/greatbooks')).toBe('greatbooks');
     });
 
     it('parses hash fallback correctly', () => {
@@ -352,6 +353,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/', '#/pals')).toBe('pals');
       expect(parseRoute('/', '#/fractal')).toBe('fractal');
       expect(parseRoute('/', '#/biomorphs')).toBe('biomorphs');
+      expect(parseRoute('/', '#/greatbooks')).toBe('greatbooks');
     });
 
     it('falls back to hub for unknown or empty paths', () => {
@@ -370,6 +372,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('pals')).toBe('/pals');
       expect(getPathForView('fractal')).toBe('/fractal');
       expect(getPathForView('biomorphs')).toBe('/biomorphs');
+      expect(getPathForView('greatbooks')).toBe('/greatbooks');
     });
   });
 });
