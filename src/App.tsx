@@ -6,6 +6,7 @@ import PomoTimer from './tools/pomo/PomoTimer';
 import Pals from './tools/pals/Pals';
 import FractalExplorer from './tools/fractal/FractalExplorer';
 import Biomorphs from './tools/biomorphs/Biomorphs';
+import GreatBooks from './tools/greatbooks/GreatBooks';
 import ChessWatermark from './components/ChessWatermark';
 import { parseRoute, getPathForView, TOOL_ROUTES, type ToolKey, type View } from './routes';
 import './index.css';
@@ -78,6 +79,10 @@ export default function App() {
     return <Biomorphs onBack={() => navigate('hub')} />;
   }
 
+  if (view === 'greatbooks') {
+    return <GreatBooks onBack={() => navigate('hub')} />;
+  }
+
   return (
     <div className="app-wrapper">
       <ChessWatermark />
@@ -139,6 +144,16 @@ export default function App() {
             <div className="tool-icon">🌀</div>
             <h2>Fractal Explorer</h2>
             <p>Deep zoom Mandelbrot, Julia & Burning Ship sets with 4K wallpaper studio.</p>
+          </a>
+
+          <a
+            href={TOOL_ROUTES.greatbooks}
+            className="tool-card"
+            onClick={handleCardClick('greatbooks')}
+          >
+            <div className="tool-icon">📚</div>
+            <h2>Great Books</h2>
+            <p>Mortimer Adler’s reading list with verified public domain ebooks & reading tracker.</p>
           </a>
 
           <a
