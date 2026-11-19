@@ -25,6 +25,7 @@ describe('GreatBooks Component', { timeout: 35000 }, () => {
     expect(donateLink).toHaveAttribute('href', 'https://www.gutenberg.org/donate/');
     expect(donateLink).toHaveAttribute('target', '_blank');
     expect(screen.getByText(/Honoring Free Knowledge & Public Domain Preservation/i)).toBeInTheDocument();
+    expect(screen.getByText(/not affiliated with Project Gutenberg/i)).toBeInTheDocument();
   });
 
   it('triggers onBack when "Back to Tools Hub" button is clicked', () => {

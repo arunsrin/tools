@@ -18,10 +18,7 @@ export type BookGenre =
   | 'Psychology & Mind';
 
 export type DownloadSource =
-  | 'ManyBooks'
   | 'Project Gutenberg'
-  | 'Standard Ebooks'
-  | 'Internet Archive'
   | 'In Copyright · Reference Only';
 
 export interface BookWork {

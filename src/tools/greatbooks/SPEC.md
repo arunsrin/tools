@@ -12,9 +12,10 @@ A curated, interactive digital catalogue of Mortimer J. Adler's reading recommen
   - Fast filter pills: All, Free Ebook Available, Great Books of the Western World (`*`), Gateway to the Great Books (`**`), In Copyright.
   - Dropdowns for Era and Genre filtering with instant active count and reset.
 - **Verified Public Domain Ebook Downloads:**
-  - Direct links to verified ManyBooks.net title pages (or canonical Project Gutenberg / Standard Ebooks fallback).
-  - Format badges: ePub, MOBI, PDF, Read Online.
+  - Direct links to canonical Project Gutenberg eBook pages (`https://www.gutenberg.org/ebooks/<id>`).
+  - Format badges: ePub, Kindle, Read Online, Plain Text.
   - Modern titles under active copyright marked as "In Copyright · Reference Only".
+- **Project Gutenberg Tribute & Donation CTA:** High-contrast header banner giving full credit to Project Gutenberg with independent non-affiliation disclaimer and direct donation link (`https://www.gutenberg.org/donate/`).
 - **Zero Distraction / High Readability:** Clean, fast exploration focused strictly on Adler's curated corpus, works, and verified download destinations.
 - **Hub Navigation:** Clear "Back to Tools Hub" button with URL synchronization to `/`.
 

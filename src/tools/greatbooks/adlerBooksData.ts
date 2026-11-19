@@ -47,7 +47,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
     "id": 2,
     "name": "The Old Testament",
     "dates": "",
-    "era": "Ancient Greece & Rome",
+    "era": "Early Christian & Middle Ages",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
     "works": [
@@ -834,7 +834,7 @@ export const ADLER_GREAT_BOOKS: AdlerAuthor[] = [
     "id": 30,
     "name": "The New Testament",
     "dates": "",
-    "era": "Ancient Greece & Rome",
+    "era": "Early Christian & Middle Ages",
     "genre": "Theology & Sacred Texts",
     "gatewayToGreatBooks": false,
     "works": [

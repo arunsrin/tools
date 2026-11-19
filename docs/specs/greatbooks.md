@@ -8,7 +8,7 @@
 ---
 
 ## 1. Overview & Vision
-The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler & Charles Van Doren's canonical reading list from Appendix A of *How to Read a Book* (1972). It provides a clean, fast, high-contrast digital catalogue allowing readers to explore the foundational works of Western thought, filter by historical era and genre, track personal reading progress, and easily access verified legal public domain ebook downloads (primarily via **ManyBooks.net**, with **Project Gutenberg** and **Standard Ebooks** fallbacks).
+The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler & Charles Van Doren's canonical reading list from Appendix A of *How to Read a Book* (1972). It provides a clean, fast, high-contrast digital catalogue allowing readers to explore the foundational works of Western thought, filter by historical era and genre, and easily access verified legal public domain ebook downloads exclusively via **Project Gutenberg** (`https://www.gutenberg.org/ebooks/<id>`), accompanied by a tribute and donation banner supporting Gutenberg's non-profit mission.
 
 ---
 
@@ -76,7 +76,7 @@ The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler 
 - Collection Badges (`GBWW`, `Gateway`).
 - Recommended Works list with Adler's specific dialogue/work recommendations highlighted.
 - Ebook Availability & Download Button:
-  - **Public Domain:** Prominent download button linking directly to verified ManyBooks title page (or Gutenberg / Standard Ebooks fallback) with format indicators (`ePub`, `MOBI`, `PDF`, `Online`).
+  - **Public Domain:** Prominent download button linking directly to verified Project Gutenberg eBook page with format indicators (`ePub`, `Kindle`, `Read Online`, `Plain Text`).
   - **In Copyright:** Subtle badge stating *"In Copyright · Reference Only"*.
 - Zero Distraction: Clean, fast exploration focused strictly on Adler's curated corpus, works, and verified legal download destinations.
 
@@ -99,7 +99,7 @@ The **Great Books** tool catalogues, structures, and enriches Mortimer J. Adler 
 ## 6. Acceptance Criteria
 1. [x] All 137 authors from Adler's Appendix A catalogued with correct dates and works.
 2. [ ] Accurate assignment of 6 historical eras and 8 discipline genres across all entries.
-3. [ ] Verified ManyBooks (and Gutenberg/Standard Ebooks) public domain links for all non-copyrighted books.
+3. [ ] Canonical Project Gutenberg public domain download links for all non-copyrighted books.
 4. [ ] Clear "In Copyright / Reference Only" designation for modern copyrighted titles.
 5. [ ] Working view switcher between Chronological Timeline and By Genre.
 6. [ ] Real-time search across author names, titles, and genres.

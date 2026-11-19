@@ -117,7 +117,8 @@ export default function GreatBooks({ onBack }: GreatBooksProps) {
               </h2>
               <p className="donation-banner-desc">
                 All public domain editions in this catalog are digitized and preserved by the tireless volunteers at{' '}
-                <strong>Project Gutenberg</strong> and <strong>Standard Ebooks</strong> with zero paywalls, advertisements, or mandatory registration.
+                <strong>Project Gutenberg</strong> with zero paywalls, advertisements, or mandatory registration.
+                This site is completely independent and not affiliated with Project Gutenberg—just a grateful user paying tribute.
                 If you find this Great Books guide valuable, please consider supporting Project Gutenberg’s 501(c)(3) mission.
               </p>
             </div>
