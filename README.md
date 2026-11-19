@@ -15,6 +15,7 @@ A centralized static hub for hosting multiple small, self-contained utilities. B
 - **[Cute Pomo](https://tools.arunsr.in/pomo)**: A playful Pomodoro and focus timer featuring Sprouting Tomato Buddy, synthesized Web Audio chimes, and cycle tracking.
 - **[Desktop Pals](https://tools.arunsr.in/pals)**: An interactive canvas companion toy with physics playgrounds, obstacles, toys & treats (Pip the Penguin, Barnaby the Pup, Sprout the Sprite).
 - **[Fractal Explorer](https://tools.arunsr.in/fractal)**: An interactive Mandelbrot, Julia, and Burning Ship fractal explorer with deep continuous zoom and 4K wallpaper export studio.
+- **[Great Books](https://tools.arunsr.in/greatbooks)**: Curated digital catalogue of Mortimer Adler's recommended reading list from *How to Read a Book* (1972) with verified legal public domain ebook downloads (ManyBooks/Gutenberg) and reading progress tracker.
 - **[Random Picker](https://tools.arunsr.in/picker)**: A playful decision maker with 3D coin toss, multi-dice roll, customizable spinning wheel, and raffle picker.
 - **[Timezone Converter](https://tools.arunsr.in/timezone)**: A visual 3-day world clock, overlapping working hours analyzer, and meeting planner with time scrubber and clipboard export.
 
@@ -81,6 +82,7 @@ This project is designed to be hosted as a static-only Worker using **Cloudflare
   - `src/tools/big/`: The Big Text tool module.
   - `src/tools/biomorphs/`: The Biomorphs Evolutionary Watchmaker artificial selection sandbox tool module.
   - `src/tools/fractal/`: The Fractal Explorer and wallpaper studio tool module.
+  - `src/tools/greatbooks/`: The Great Books digital catalogue and public domain ebook downloader tool module.
   - `src/tools/pals/`: The Desktop Pals interactive companion sandbox tool module.
   - `src/tools/picker/`: The Random Picker and Decision Maker tool module.
   - `src/tools/pomo/`: The Cute Pomo / Focus Timer tool module.

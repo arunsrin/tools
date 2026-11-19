@@ -1,0 +1,763 @@
+/* Great Books - Mortimer Adler Reading List Tool Styles */
+
+.great-books-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  color: #f1f5f9;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .great-books-container {
+    padding: 1rem 0.75rem 3rem;
+  }
+}
+
+/* Accessibility helper */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Header Section */
+.great-books-header {
+  margin-bottom: 2rem;
+}
+
+.great-books-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  background-color: #1e293b;
+  color: #38bdf8;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.great-books-back-button:hover {
+  background-color: #334155;
+  color: #7dd3fc;
+  border-color: #38bdf8;
+  transform: translateX(-2px);
+}
+
+.great-books-back-button:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.great-books-title-group {
+  margin-bottom: 1.5rem;
+}
+
+.great-books-title {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 0.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.great-books-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: #94a3b8;
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.great-books-subtitle em {
+  color: #cbd5e1;
+  font-style: italic;
+}
+
+.great-books-corpus-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.corpus-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  background-color: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.corpus-badge.accent-badge {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+  font-weight: 600;
+}
+
+/* Project Gutenberg Tribute & Donation Banner */
+.gutenberg-donation-banner {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-left: 4px solid #38bdf8;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.donation-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.donation-banner-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1 1 500px;
+}
+
+.donation-banner-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.donation-banner-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 0.35rem;
+}
+
+.donation-banner-desc {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.donation-banner-desc strong {
+  color: #e2e8f0;
+}
+
+.donation-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #0f172a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.donation-cta-btn:hover {
+  background: linear-gradient(135deg, #38bdf8, #7dd3fc);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+}
+
+.donation-cta-btn:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
+.heart-icon {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 640px) {
+  .gutenberg-donation-banner {
+    padding: 1rem;
+  }
+  .donation-banner-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .donation-cta-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Controls & Filter Section */
+.great-books-controls {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.controls-row-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-input-wrapper {
+  flex: 1 1 320px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  font-size: 1rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.great-books-search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.4rem;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.great-books-search-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.great-books-search-input::placeholder {
+  color: #64748b;
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.search-clear-btn:hover {
+  color: #f8fafc;
+  background-color: #334155;
+}
+
+/* View Switcher */
+.view-mode-toggle {
+  display: flex;
+  background-color: #0f172a;
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.view-mode-btn {
+  padding: 0.55rem 0.95rem;
+  border: none;
+  background: none;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.view-mode-btn.active {
+  background-color: #1e293b;
+  color: #38bdf8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.view-mode-btn:hover:not(.active) {
+  color: #f1f5f9;
+}
+
+/* Quick Filter Chips */
+.quick-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filter-chip {
+  padding: 0.45rem 0.85rem;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 9999px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: #64748b;
+  color: #f1f5f9;
+}
+
+.filter-chip.active {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Dropdowns & Results Count */
+.dropdowns-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  border-top: 1px solid #334155;
+}
+
+.dropdown-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.great-books-select {
+  padding: 0.5rem 0.85rem;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 0.88rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.great-books-select:focus {
+  border-color: #38bdf8;
+}
+
+.results-count-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-left: auto;
+}
+
+.results-count-text {
+  font-size: 0.88rem;
+  color: #94a3b8;
+}
+
+.results-count-text strong {
+  color: #f8fafc;
+}
+
+.reset-filters-btn {
+  padding: 0.35rem 0.65rem;
+  background: none;
+  border: 1px solid #475569;
+  color: #38bdf8;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-filters-btn:hover {
+  background-color: rgba(56, 189, 248, 0.1);
+  border-color: #38bdf8;
+}
+
+/* Section Headings (Eras / Genres) */
+.era-section,
+.genre-section {
+  margin-bottom: 3rem;
+}
+
+.era-section-header,
+.genre-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.era-section-title,
+.genre-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.era-section-count,
+.genre-section-count {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Authors Grid */
+.authors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 480px) {
+  .authors-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Author Card */
+.author-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.author-card:hover {
+  border-color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.author-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.author-meta-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.adler-index-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.1);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.author-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+  color: #f8fafc;
+  line-height: 1.3;
+}
+
+.author-dates {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  display: block;
+}
+
+/* Author Badges */
+.author-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.author-genre-badge,
+.author-era-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background-color: #0f172a;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+.author-collection-badge.gateway-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Works List */
+.works-list {
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.works-heading {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin: 0 0 0.6rem;
+}
+
+.works-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.work-item {
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.work-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.work-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.work-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.gbww-marker {
+  color: #38bdf8;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.work-note {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0.25rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+.work-note em {
+  color: #cbd5e1;
+}
+
+/* Download / Action */
+.work-download-action {
+  margin-top: 0.4rem;
+}
+
+.download-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.75rem;
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.download-link-btn:hover {
+  background-color: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+}
+
+.download-link-btn:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.dl-icon {
+  font-size: 0.85rem;
+}
+
+.ext-icon {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.format-tags {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.format-pill {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.35rem;
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-radius: 4px;
+}
+
+.download-link-btn:hover .format-pill {
+  background-color: #0f172a;
+  color: #38bdf8;
+}
+
+.copyright-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #94a3b8;
+  background-color: rgba(148, 163, 184, 0.1);
+  border: 1px dashed #475569;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+}
+
+/* Empty State */
+.great-books-empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 0.5rem;
+}
+
+.empty-text {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0 0 1.5rem;
+}
+
+.empty-reset-btn {
+  padding: 0.6rem 1.25rem;
+  background-color: #38bdf8;
+  color: #0f172a;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.empty-reset-btn:hover {
+  background-color: #7dd3fc;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+/* Footer */
+.great-books-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #334155;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.footer-subtext {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
+
+.legend-symbol {
+  color: #38bdf8;
+  font-weight: 700;
+}

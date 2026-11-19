@@ -40,6 +40,9 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const biomorphsLink = screen.getByRole('link', { name: /biomorphs/i });
     expect(biomorphsLink).toHaveAttribute('href', TOOL_ROUTES.biomorphs);
 
+    const greatbooksLink = screen.getByRole('link', { name: /great books/i });
+    expect(greatbooksLink).toHaveAttribute('href', TOOL_ROUTES.greatbooks);
+
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
@@ -55,6 +58,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       'Cute Pomo',
       'Desktop Pals',
       'Fractal Explorer',
+      'Great Books',
       'Random Picker',
       'Timezone Converter',
     ]);
@@ -203,6 +207,22 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
+  it('navigates to Great Books tool when its card is clicked and back to hub', () => {
+    render(<App />);
+    const greatbooksCard = screen.getByRole('link', { name: /great books/i });
+    fireEvent.click(greatbooksCard);
+
+    // In Great Books tool & URL updated
+    expect(window.location.pathname).toBe('/greatbooks');
+    expect(screen.getByRole('heading', { level: 1, name: /great books/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /return to tools hub/i })).toBeInTheDocument();
+
+    // Navigate back to hub
+    fireEvent.click(screen.getByRole('button', { name: /return to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
   it('mounts directly to Timezone Converter when loading /timezone path', () => {
     window.history.replaceState({}, '', '/timezone');
     render(<App />);
@@ -252,6 +272,13 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     render(<App />);
 
     expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
+  });
+
+  it('mounts directly to Great Books when loading /greatbooks path', () => {
+    window.history.replaceState({}, '', '/greatbooks');
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /great books/i })).toBeInTheDocument();
   });
 
   it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
@@ -315,6 +342,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/pals')).toBe('pals');
       expect(parseRoute('/fractal')).toBe('fractal');
       expect(parseRoute('/biomorphs')).toBe('biomorphs');
+      expect(parseRoute('/greatbooks')).toBe('greatbooks');
     });
 
     it('parses hash fallback correctly', () => {
@@ -325,6 +353,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(parseRoute('/', '#/pals')).toBe('pals');
       expect(parseRoute('/', '#/fractal')).toBe('fractal');
       expect(parseRoute('/', '#/biomorphs')).toBe('biomorphs');
+      expect(parseRoute('/', '#/greatbooks')).toBe('greatbooks');
     });
 
     it('falls back to hub for unknown or empty paths', () => {
@@ -343,6 +372,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('pals')).toBe('/pals');
       expect(getPathForView('fractal')).toBe('/fractal');
       expect(getPathForView('biomorphs')).toBe('/biomorphs');
+      expect(getPathForView('greatbooks')).toBe('/greatbooks');
     });
   });
 });
