@@ -95,7 +95,7 @@ This skill orchestrates an autonomous multi-agent feature sprint for **Tools Hub
    - Do NOT pick or execute tasks that lack the `next` tag without explicit human instruction.
 
 2. **Codebase & Architectural Analysis:**
-   Inspect related files, `SPEC.md`, `src/App.tsx`, and existing tools in `src/tools/`. Identify potential tradeoffs, UI/UX choices, or edge cases.
+   Inspect related files, `SPEC.md`, `src/routes.ts`, `src/App.tsx`, `src/shared/`, `src/styles/tokens.css`, and existing tools in `src/tools/`. Identify reusable shared primitives (`ToolHeader`, `Modal`, `SegmentedControl`, `InlineAlert`, `Toast`, `usePersistedState`, `useTimeoutRegistry`, `useCopyFeedback`, `useDocumentTitle`, `createAudioController`), UX/accessibility tradeoffs, or edge cases.
 
 3. **Interactive Human Interview & Sign-off Gate:**
    - Present the proposed feature, approach, and options to the author.
@@ -107,7 +107,8 @@ This skill orchestrates an autonomous multi-agent feature sprint for **Tools Hub
    **CRITICAL ZERO-MAIN-COMMIT RULE:** The specification file must NEVER be committed or pushed to `main`. `main` is strictly read-only for agents. The spec must be written and committed strictly inside the isolated worktree (`.worktrees/<feature-name>`) on the feature branch. It accumulates in `main` exclusively upon PR merge via `gh pr merge`. The spec must contain:
    - User Story & Context
    - Numbered, verifiable Acceptance Criteria
-   - Core Guardrails from [AGENTS.md](../../AGENTS.md) (React 19 hooks discipline, TypeScript strictness, responsive design, Cloudflare Workers Assets safety).
+   - Shared Architecture & UX/Accessibility Plan: `src/shared/*` primitives to reuse, `src/styles/tokens.css` compliance, WCAG AA contrast (`>= 4.5:1`), `:focus-visible`, 320px mobile responsiveness, and `InlineAlert`/`Modal` error handling (zero `window.alert`).
+   - Core Guardrails from [AGENTS.md](../../AGENTS.md) (React 19 hooks & RAF/AudioContext/timer cleanup discipline, single-default-export Rule 25, TypeScript strictness, Cloudflare Workers Assets safety).
 
 ---
 
@@ -124,21 +125,20 @@ This skill orchestrates an autonomous multi-agent feature sprint for **Tools Hub
 
 2. **Implementation:**
    Gimli implements all requirements specified in `docs/specs/<feature-name>.md` within `.worktrees/<feature-name>`:
-   - Create modular directory: `src/tools/<tool-name>/`.
-   - Main component: `src/tools/<tool-name>/<ToolName>.tsx`.
-   - Styles: `src/tools/<tool-name>/<ToolName>.css`.
-   - Tool Spec: `src/tools/<tool-name>/SPEC.md`.
-   - Wire tool card and view switcher into `src/App.tsx`.
-   - Update master `SPEC.md` under Current Tools.
-   - Accessible "Back to Hub" button on every tool.
+   - Create modular directory: `src/tools/<tool-name>/` (zero cross-tool imports).
+   - Main component: `src/tools/<tool-name>/<ToolName>.tsx` exporting ONLY `export default` (Rule 25; put types in `types.ts`, subcomponents in separate `.tsx` files, engines/helpers in `<tool>Engine.ts`), using shared `ToolHeader` (`"← Back to Tools Hub"`), `Modal`, `SegmentedControl`, `InlineAlert`, `Toast`, and hooks/utils from `src/shared/`.
+   - Styles: `src/tools/<tool-name>/<ToolName>.css` consuming `src/styles/tokens.css` variables (`var(--...)`), prefixing all classes (`.<tool>-*`), never redeclaring `:root {` or `.back-btn`, preserving `:focus-visible`, and wrapping cleanly down to 320px.
+   - Tool Spec: `src/tools/<tool-name>/SPEC.md` with standardized `Overview`, `Functional Requirements`, and `Acceptance Criteria` sections.
+   - Registration & Tests: Register in `src/routes.ts`, wire alphabetical card & view switcher in `src/App.tsx` (inside `ToolErrorBoundary`), add direct route + card tests in `src/App.test.tsx`, update master `SPEC.md` (`Current Tools`), and update `README.md` (`Featured Tools` + `Project Structure`).
 
 3. **Mandatory Companion Automated Test Authoring & CI Parity:**
-   Whenever new code, components, or tools are introduced, Gimli MUST author corresponding automated regression tests in `src/tools/<tool-name>/<ToolName>.test.tsx` maintaining >80% coverage.
+   Whenever new code, components, or tools are introduced, Gimli MUST author corresponding automated regression tests in `src/tools/<tool-name>/<ToolName>.test.tsx` satisfying `vite.config.ts` thresholds (`lines: 80`, `functions: 80`, `branches: 75`, `statements: 80`).
    *Test Authoring Criteria:*
-   - **Component Rendering:** Assert all primary interactive elements render cleanly.
-   - **Interactions & State:** Test user inputs, theme switching, presets, and resets.
-   - **Persistence:** Verify `localStorage` state read/write and error handling.
-   - **Negative & Edge Cases:** Test empty states, invalid inputs, overflow, and boundaries.
+   - **Component Rendering:** Assert all primary interactive elements, `ToolHeader`, and ARIA roles render cleanly.
+   - **Interactions & State:** Test user inputs, presets, keyboard shortcuts (including input/modal focus guards and `Modal` `Escape`), and resets.
+   - **Persistence & Corrupt Storage:** Verify `localStorage` `getItem` and `setItem` (`QuotaExceededError`) error tolerance, corrupt JSON, and invalid/partial schema sanitization.
+   - **Lifecycle Cleanup & Negative Cases:** Test empty states, invalid inputs (`role="alert"`), `AudioContext`/`getContext('2d') === null`/clipboard failures, and unmount cleanup (`cancelAnimationFrame`, timers, `document.title` restore).
+   - **Scoped Mock Restoration:** Save and restore any patched globals/prototypes (`HTMLCanvasElement.prototype`, `navigator.clipboard`, `window.AudioContext`, `document.execCommand`) in `afterEach()`.
    - **Zero Untested Features:** A feature is NEVER considered complete without accompanying automated test coverage.
 
 ---
@@ -151,7 +151,7 @@ This skill orchestrates an autonomous multi-agent feature sprint for **Tools Hub
    python scripts/tool_sprint.py run-tests .worktrees/<feature-name>
    # or: cd .worktrees/<feature-name> && ./scripts/test.ps1 (PowerShell) / ./scripts/test.sh (WSL)
    ```
-   If new code lacks companion automated tests or coverage is <80%, Legolas rejects the build and instructs Gimli to author tests before certifying approval.
+   Legolas verifies `npm run build`, `npm run lint`, `npm run coverage` (`vite.config.ts` thresholds: 80% lines/statements/functions, 75% branches), `python scripts/test_ci_parity.py`, `python scripts/test_tools_structure.py` (all modular/CSS/export/spec/registration gates), and `python scripts/test_cleanup_tooling.py` all pass cleanly. If new code lacks companion automated tests or fails any coverage/structural gate, Legolas rejects the build and instructs Gimli to fix it before certifying approval.
 
 2. **Automated Feedback Loop to Gimli:**
    - **On Any Failure (Exit code != 0 or missing test coverage):**
