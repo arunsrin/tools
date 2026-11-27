@@ -76,4 +76,25 @@ describe('ChessWatermark Component & Easter Egg', () => {
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
+
+  it('toggles hopping animation for 500ms and cleans up pending timers on unmount', () => {
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
+    const { unmount } = render(<ChessWatermark />);
+    const knightBtn = screen.getByRole('button', { name: /click the chess knight/i });
+
+    fireEvent.click(knightBtn);
+    expect(knightBtn).toHaveClass('hopping');
+
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(knightBtn).not.toHaveClass('hopping');
+
+    fireEvent.click(knightBtn);
+    expect(knightBtn).toHaveClass('hopping');
+
+    unmount();
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+    clearTimeoutSpy.mockRestore();
+  });
 });

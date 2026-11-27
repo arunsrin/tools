@@ -3,24 +3,17 @@
 ## 1. Overview
 Fractal Explorer is a high-performance interactive fractal renderer and wallpaper studio. It provides real-time exploration of the Mandelbrot Set, Julia Sets, and the Burning Ship fractal with deep continuous zoom, high-contrast aesthetic color palettes, curated landmark bookmarks, live coordinate telemetry, and client-side 4K/Full HD wallpaper export.
 
----
-
-## 2. Acceptance Criteria & Features
+## 2. Functional Requirements
 
 ### 2.1 Supported Fractals
-- **Mandelbrot:** $z_{n+1} = z_n^2 + c$ starting from $z_0 = 0$.
-- **Julia:** $z_{n+1} = z_n^2 + c$ with selectable constant presets (e.g. Douady's Rabbit $c = -0.123 + 0.745i$, Dendrite $c = -0.4 + 0.6i$).
-- **Burning Ship:** Inverted absolute value variant $(|\text{Re}(z)| + i|\text{Im}(z)|)^2 + c$.
+- **Mandelbrot**: $z_{n+1} = z_n^2 + c$ starting from $z_0 = 0$.
+- **Julia**: $z_{n+1} = z_n^2 + c$ with selectable constant presets (e.g. Douady's Rabbit $c = -0.123 + 0.745i$, Dendrite $c = -0.4 + 0.6i$).
+- **Burning Ship**: Inverted absolute value variant $(|\text{Re}(z)| + i|\text{Im}(z)|)^2 + c$.
 
-### 2.2 Rendering & Interaction
-- **High-Precision Direct Pixel Buffer Engine:**
-  - High-performance Canvas 2D direct pixel array buffer computation using 64-bit IEEE double float precision for artifact-free deep zoom.
-  - Multi-stop gradient color interpolation across a 48-step cycle period to produce smooth, posterization-free wallpapers.
-- **Navigation:**
-  - Pan via click-and-drag or touch drag.
-  - Deep continuous zoom via mouse wheel, touch pinch, and zoom buttons (`+`, `-`).
-  - Iteration depth slider (40 to 500 iterations).
-  - Home / Reset button to restore default zoom for the current fractal.
+### 2.2 Rendering & Navigation
+- **High-Precision Direct Pixel Buffer Engine**: Canvas 2D direct pixel array buffer computation in `fractalEngine.ts` using 64-bit IEEE double float precision for artifact-free deep zoom, with multi-stop gradient color interpolation across a 48-step cycle period.
+- **Navigation**: Pan via click-and-drag or touch drag (matching rendered canvas aspect ratio), deep continuous zoom via non-passive mouse wheel (`{ passive: false }`), touch pinch, and zoom buttons (`+`, `-`) clamped between `0.2` and `1e12`.
+- **Iteration Depth & Reset**: Iteration depth slider (30 to 500 iterations) and Home / Reset button to restore default zoom for the current fractal.
 
 ### 2.3 Landmarks & Presets
 - Curated landmark warp buttons:
@@ -39,16 +32,14 @@ Fractal Explorer is a high-performance interactive fractal renderer and wallpape
 - *Emerald Nebula* (bioluminescent emerald/jade)
 - *Monochrome Silver* (sharp metallic silver/ink)
 
-### 2.5 Wallpaper Studio
-- Export current view to PNG at selectable resolutions:
-  - Current Viewport
-  - Full HD (1920 × 1080)
-  - 4K Ultra HD (3840 × 2160)
-  - Mobile Portrait (1080 × 2400)
-- Fully client-side canvas snapshot download (`fractal-wallpaper.png`).
+### 2.5 Wallpaper Studio & Guide
+- Client-side PNG snapshot export (`downloadCanvasPng`) via an interactive Wallpaper Studio Export `Modal` at selectable resolutions (`Screen Viewport 1200 × 750`, `Full HD 1920 × 1080`, `4K Ultra HD 3840 × 2160`, `Mobile Portrait 1080 × 2400`) as `fractal-<type>-<width>x<height>.png`.
+- Shareable coordinate copy with visual feedback (`useCopyFeedback`) and an inline Exploration Guide tip card below the canvas.
 
-### 2.6 Hub Integration & Standards
-- Accessible "Back to Tools Hub" button calling `onBack()`.
-- Direct route `/fractal` registered in `src/routes.ts`, `src/App.tsx`, and `src/App.test.tsx`.
-- Preferences (fractal type, palette, iterations) stored in `localStorage` under `tools_hub_fractal_prefs`.
-- Zero external dependencies.
+## 3. Acceptance Criteria
+- **Hub Navigation & Direct Route**: Uses shared `ToolHeader` (`"← Back to Tools Hub"` calling `onBack()`), registers `/fractal` in `src/routes.ts`, `src/App.tsx`, and `src/App.test.tsx`.
+- **Error & Clipboard Feedback**: Canvas `getContext('2d') === null`, `toDataURL` export errors, and clipboard rejections surface clear user feedback via `InlineAlert` / `Toast` rather than failing silently.
+- **Modal & Wheel Listener Cleanup**: Wallpaper Studio Export `Modal` supports `Escape` dismissal, close button, and focus restoration; native `{ passive: false }` wheel listeners and `useTimeoutRegistry` timers clean up on unmount.
+- **Persistence & Clamping**: Preferences (fractal type, palette, iterations clamped to 30–500) are stored in `localStorage` under `tools_hub_fractal_prefs` via `usePersistedState` with validation.
+- **Responsive Dark Theme & CSS Isolation**: Consumes `src/styles/tokens.css`, prefixes classes (`.fractal-*`), wraps button groups, and avoids HUD/overlay collisions on 320px mobile viewports.
+- **Modular Isolation & Test Coverage**: `FractalExplorer.tsx` exports only `default function FractalExplorer` (types in `types.ts`, engine in `fractalEngine.ts`), with companion tests in `FractalExplorer.test.tsx` restoring patched prototypes/mocks in `afterEach` and exceeding 80% coverage.

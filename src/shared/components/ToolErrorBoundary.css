@@ -1,0 +1,90 @@
+.shared-error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--bg-canvas, #0f172a);
+  color: var(--text-primary, #f1f5f9);
+}
+
+.shared-error-card {
+  width: min(100%, 480px);
+  padding: 1.75rem;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--status-danger, #f87171);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.shared-error-badge {
+  display: inline-flex;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill, 9999px);
+  background: var(--status-danger-bg, rgba(239, 68, 68, 0.15));
+  color: var(--status-danger, #f87171);
+  border: 1px solid var(--status-danger, #f87171);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shared-error-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-strong, #f8fafc);
+}
+
+.shared-error-message {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-muted, #94a3b8);
+  overflow-wrap: anywhere;
+}
+
+.shared-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+}
+
+.shared-error-retry-btn,
+.shared-error-back-btn {
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md, 8px);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.shared-error-retry-btn {
+  background: var(--accent-solid, #0369a1);
+  border: 1px solid var(--accent-solid, #0369a1);
+  color: var(--accent-solid-on, #ffffff);
+}
+
+.shared-error-retry-btn:hover {
+  background: var(--accent-solid-hover, #0284c7);
+  border-color: var(--accent-solid-hover, #0284c7);
+}
+
+.shared-error-back-btn {
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-subtle, #334155);
+  color: var(--text-primary, #f1f5f9);
+}
+
+.shared-error-back-btn:hover {
+  background: var(--bg-surface-hover, #334155);
+  border-color: var(--border-strong, #475569);
+}

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import PomoTimer, { PomoMascot } from './PomoTimer';
-import { playChime } from './audio';
+import PomoTimer from './PomoTimer';
+import PomoMascot from './PomoMascot';
+import { playChime, closeChimeAudio } from './audio';
 
 describe('PomoTimer Component', () => {
   const mockOnBack = vi.fn();
@@ -9,11 +10,13 @@ describe('PomoTimer Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-    document.title = 'Tools Hub';
+    document.title = 'Tools Hub - Simple, Self-Contained Utilities';
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await closeChimeAudio();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('renders default state: 25:00 focus session, mascot, cycle 1/4, and controls', () => {
@@ -26,7 +29,7 @@ describe('PomoTimer Component', () => {
     expect(screen.getByRole('button', { name: /start timer/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /reset timer/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /skip to next phase/i })).toBeInTheDocument();
-    expect(screen.getByText(/cycle/i)).toBeInTheDocument();
+    expect(screen.getByText(/^cycle/i)).toBeInTheDocument();
     expect(screen.getByText(/1\/4/)).toBeInTheDocument();
   });
 
@@ -36,49 +39,73 @@ describe('PomoTimer Component', () => {
     expect(mockOnBack).toHaveBeenCalledTimes(1);
   });
 
-  it('starts and pauses the countdown timer with fake timers', () => {
+  it('starts and pauses the countdown timer and updates SVG progress ring', () => {
     vi.useFakeTimers();
-    render(<PomoTimer onBack={mockOnBack} />);
+    const { container } = render(<PomoTimer onBack={mockOnBack} />);
+
+    const progressCircle = container.querySelector('.pomo-ring-progress') as SVGCircleElement;
+    expect(progressCircle).toBeTruthy();
+    const initialOffset = parseFloat(progressCircle.style.strokeDashoffset);
+    expect(initialOffset).toBeCloseTo(0, 3);
 
     const startBtn = screen.getByRole('button', { name: /start timer/i });
     fireEvent.click(startBtn);
-
-    // Button should now say Pause
     expect(screen.getByRole('button', { name: /pause timer/i })).toBeInTheDocument();
 
-    // Advance 3 seconds
     act(() => {
       vi.advanceTimersByTime(3000);
     });
 
     expect(screen.getByText('24:57')).toBeInTheDocument();
+    const elapsedOffset = parseFloat(progressCircle.style.strokeDashoffset);
+    expect(elapsedOffset).toBeGreaterThan(0);
 
-    // Pause timer
     fireEvent.click(screen.getByRole('button', { name: /pause timer/i }));
     expect(screen.getByRole('button', { name: /start timer/i })).toBeInTheDocument();
 
-    // Advance 5 seconds - time should remain paused
     act(() => {
       vi.advanceTimersByTime(5000);
     });
     expect(screen.getByText('24:57')).toBeInTheDocument();
   });
 
-  it('handles micro adjustments (+1m and -1m)', () => {
+  it('stays accurate to wall-clock time across background-tab throttling', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T12:00:00Z'));
+
+    render(<PomoTimer onBack={mockOnBack} />);
+    fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
+
+    // Simulate browser tab throttling where system clock jumps ahead 90 seconds without intermediate ticks
+    vi.setSystemTime(new Date('2026-01-01T12:01:30Z'));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(screen.getByText('23:30')).toBeInTheDocument();
+  });
+
+  it('handles micro adjustments (+1m and -1m) while paused and running', () => {
+    vi.useFakeTimers();
     render(<PomoTimer onBack={mockOnBack} />);
 
     const addBtn = screen.getByRole('button', { name: /add one minute/i });
     const subBtn = screen.getByRole('button', { name: /subtract one minute/i });
 
-    // Initial 25:00 + 1m -> 26:00
     fireEvent.click(addBtn);
     expect(screen.getByText('26:00')).toBeInTheDocument();
 
-    // 26:00 - 1m -> 25:00
     fireEvent.click(subBtn);
     expect(screen.getByText('25:00')).toBeInTheDocument();
 
-    // Subtract 26 times to verify clamping at 00:00
+    // Also adjust while running
+    fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
+    fireEvent.click(addBtn);
+    expect(screen.getByText('26:00')).toBeInTheDocument();
+    fireEvent.click(subBtn);
+    expect(screen.getByText('25:00')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /pause timer/i }));
+
     for (let i = 0; i < 26; i++) {
       fireEvent.click(subBtn);
     }
@@ -100,23 +127,26 @@ describe('PomoTimer Component', () => {
     expect(screen.getByRole('button', { name: /start timer/i })).toBeInTheDocument();
   });
 
-  it('allows manual phase tab switching', () => {
+  it('allows manual phase tab switching with ARIA tablist semantics', () => {
     render(<PomoTimer onBack={mockOnBack} />);
 
-    // Switch to Short Break
-    fireEvent.click(screen.getByRole('button', { name: /^short break$/i }));
+    const shortBreakTab = screen.getByRole('tab', { name: /^short break$/i });
+    fireEvent.click(shortBreakTab);
+    expect(shortBreakTab).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('05:00')).toBeInTheDocument();
     expect(screen.getByText(/short coffee break/i)).toBeInTheDocument();
     expect(screen.getByTestId('pomo-mascot')).toHaveAttribute('data-phase', 'shortBreak');
 
-    // Switch to Long Break
-    fireEvent.click(screen.getByRole('button', { name: /^long break$/i }));
+    const longBreakTab = screen.getByRole('tab', { name: /^long break$/i });
+    fireEvent.click(longBreakTab);
+    expect(longBreakTab).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('15:00')).toBeInTheDocument();
     expect(screen.getByText(/long rest & recharge/i)).toBeInTheDocument();
     expect(screen.getByTestId('pomo-mascot')).toHaveAttribute('data-phase', 'longBreak');
 
-    // Switch back to Focus
-    fireEvent.click(screen.getByRole('button', { name: /^focus$/i }));
+    const focusTab = screen.getByRole('tab', { name: /^focus$/i });
+    fireEvent.click(focusTab);
+    expect(focusTab).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('25:00')).toBeInTheDocument();
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
   });
@@ -126,33 +156,27 @@ describe('PomoTimer Component', () => {
 
     const skipBtn = screen.getByRole('button', { name: /skip to next phase/i });
 
-    // Cycle 1: Focus -> Short Break
     expect(screen.getByText(/1\/4/)).toBeInTheDocument();
     fireEvent.click(skipBtn);
     expect(screen.getByText(/short coffee break/i)).toBeInTheDocument();
 
-    // Short Break -> Focus (Cycle 2)
     fireEvent.click(skipBtn);
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
     expect(screen.getByText(/2\/4/)).toBeInTheDocument();
 
-    // Cycle 2: Focus -> Short Break -> Focus (Cycle 3)
     fireEvent.click(skipBtn);
     fireEvent.click(skipBtn);
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
     expect(screen.getByText(/3\/4/)).toBeInTheDocument();
 
-    // Cycle 3: Focus -> Short Break -> Focus (Cycle 4)
     fireEvent.click(skipBtn);
     fireEvent.click(skipBtn);
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
     expect(screen.getByText(/4\/4/)).toBeInTheDocument();
 
-    // Cycle 4: Focus -> Long Break!
     fireEvent.click(skipBtn);
     expect(screen.getByText(/long rest & recharge/i)).toBeInTheDocument();
 
-    // Long Break -> Resets to Focus (Cycle 1)
     fireEvent.click(skipBtn);
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
     expect(screen.getByText(/1\/4/)).toBeInTheDocument();
@@ -162,23 +186,21 @@ describe('PomoTimer Component', () => {
     vi.useFakeTimers();
     render(<PomoTimer onBack={mockOnBack} />);
 
-    // Start Focus
     fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
 
-    // Run until 0 seconds left (25 min = 1500 seconds)
     act(() => {
       vi.advanceTimersByTime(1500 * 1000);
     });
 
-    // Should complete Focus, increment completed count, and move to Short Break
     expect(screen.getByText(/short coffee break/i)).toBeInTheDocument();
     expect(screen.getByText('05:00')).toBeInTheDocument();
     expect(screen.getByText(/lifetime:/i)).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
   });
 
-  it('updates document title during countdown and resets on unmount', () => {
+  it('updates document title during countdown and restores previous title on unmount', () => {
     vi.useFakeTimers();
+    document.title = 'Tools Hub - Simple, Self-Contained Utilities';
     const { unmount } = render(<PomoTimer onBack={mockOnBack} />);
 
     expect(document.title).toContain('(25:00) 🍅 Focus · Tools Hub');
@@ -190,10 +212,10 @@ describe('PomoTimer Component', () => {
     expect(document.title).toContain('(24:58) 🍅 Focus · Tools Hub');
 
     unmount();
-    expect(document.title).toBe('Tools Hub');
+    expect(document.title).toBe('Tools Hub - Simple, Self-Contained Utilities');
   });
 
-  it('opens settings modal, modifies custom durations and validates inputs', () => {
+  it('opens settings modal, validates strict integer inputs (no parseInt truncation), and saves', () => {
     render(<PomoTimer onBack={mockOnBack} />);
 
     fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
@@ -204,33 +226,48 @@ describe('PomoTimer Component', () => {
     const shortBreakInput = screen.getByLabelText(/short break duration/i);
     const longBreakInput = screen.getByLabelText(/long break duration/i);
 
-    // Test invalid value > 90 for focus
+    // Reject empty / NaN / decimal / trailing characters
+    fireEvent.change(focusInput, { target: { value: '' } });
+    fireEvent.submit(form);
+    expect(screen.getByRole('alert')).toHaveTextContent(/whole number between 1 and 90/i);
+
+    fireEvent.change(focusInput, { target: { value: '25.5' } });
+    fireEvent.submit(form);
+    expect(screen.getByRole('alert')).toHaveTextContent(/whole number between 1 and 90/i);
+
+    fireEvent.change(focusInput, { target: { value: '25abc' } });
+    fireEvent.submit(form);
+    expect(screen.getByRole('alert')).toHaveTextContent(/whole number between 1 and 90/i);
+
+    // Dismiss alert
+    fireEvent.click(screen.getByRole('button', { name: /dismiss alert/i }));
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    // Out-of-range focus
     fireEvent.change(focusInput, { target: { value: '120' } });
     fireEvent.submit(form);
     expect(screen.getByRole('alert')).toHaveTextContent(/between 1 and 90 minutes/i);
 
-    // Test invalid value < 1
     fireEvent.change(focusInput, { target: { value: '0' } });
     fireEvent.submit(form);
     expect(screen.getByRole('alert')).toHaveTextContent(/between 1 and 90 minutes/i);
 
-    // Test invalid short break
+    // Invalid short break
     fireEvent.change(focusInput, { target: { value: '30' } });
     fireEvent.change(shortBreakInput, { target: { value: '45' } });
     fireEvent.submit(form);
-    expect(screen.getByRole('alert')).toHaveTextContent(/short break must be between 1 and 30 minutes/i);
+    expect(screen.getByRole('alert')).toHaveTextContent(/short break must be a whole number between 1 and 30/i);
 
-    // Test invalid long break
+    // Invalid long break
     fireEvent.change(shortBreakInput, { target: { value: '5' } });
     fireEvent.change(longBreakInput, { target: { value: '99' } });
     fireEvent.submit(form);
-    expect(screen.getByRole('alert')).toHaveTextContent(/long break must be between 1 and 60 minutes/i);
+    expect(screen.getByRole('alert')).toHaveTextContent(/long break must be a whole number between 1 and 60/i);
 
     // Valid save
     fireEvent.change(longBreakInput, { target: { value: '20' } });
     fireEvent.submit(form);
 
-    // Modal should close and timer reflect 30:00
     expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
     expect(screen.getByText('30:00')).toBeInTheDocument();
   });
@@ -240,45 +277,44 @@ describe('PomoTimer Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
 
-    // Reset Defaults
     fireEvent.click(screen.getByRole('button', { name: /reset defaults/i }));
     expect(screen.getByLabelText(/focus duration/i)).toHaveValue(25);
 
-    // Clear stats
     fireEvent.click(screen.getByRole('button', { name: /clear stats/i }));
     expect(screen.getByText(/1\/4/)).toBeInTheDocument();
 
-    // Close modal via close button
     fireEvent.click(screen.getByRole('button', { name: /close settings/i }));
     expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
   });
 
-  it('dismisses settings modal on Escape key and resets uncommitted input errors on reopen', () => {
+  it('dismisses settings modal on Escape key, restores focus, and resets uncommitted errors on reopen', () => {
     render(<PomoTimer onBack={mockOnBack} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
+    const settingsBtn = screen.getByRole('button', { name: /timer settings/i });
+    settingsBtn.focus();
+    fireEvent.click(settingsBtn);
     expect(screen.getByRole('heading', { name: /timer settings/i })).toBeInTheDocument();
 
     const form = screen.getByTestId('pomo-settings-form');
     const focusInput = screen.getByLabelText(/focus duration/i);
 
-    // Enter invalid input
     fireEvent.change(focusInput, { target: { value: '999' } });
     fireEvent.submit(form);
     expect(screen.getByRole('alert')).toBeInTheDocument();
 
-    // Dismiss with Escape key
-    fireEvent.keyDown(window, { key: 'Escape' });
+    // Dismiss with Escape key via Modal's document keydown listener
+    fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
+    expect(document.activeElement).toBe(settingsBtn);
 
-    // Reopen modal - input should be back to saved duration and error cleared
-    fireEvent.click(screen.getByRole('button', { name: /timer settings/i }));
+    // Reopen modal - input back to saved duration and error cleared
+    fireEvent.click(settingsBtn);
     expect(screen.getByRole('heading', { name: /timer settings/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/focus duration/i)).toHaveValue(25);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
-    // Dismiss by clicking backdrop
-    const backdrop = screen.getByRole('dialog');
+    // Dismiss by clicking Modal backdrop
+    const backdrop = screen.getByRole('dialog').parentElement!;
     fireEvent.click(backdrop);
     expect(screen.queryByRole('heading', { name: /timer settings/i })).not.toBeInTheDocument();
   });
@@ -300,30 +336,26 @@ describe('PomoTimer Component', () => {
     render(<PomoTimer onBack={mockOnBack} />);
     expect(screen.getByText('01:00')).toBeInTheDocument();
 
-    // Start Focus
     fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
     expect(screen.getByRole('button', { name: /pause timer/i })).toBeInTheDocument();
 
-    // Advance 60s to natural completion
     act(() => {
       vi.advanceTimersByTime(60 * 1000);
     });
 
-    // Should transition to Short Break AND stay running automatically
     expect(screen.getByText(/short coffee break/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /pause timer/i })).toBeInTheDocument();
 
-    // Advance 2s in short break to confirm it's ticking
     act(() => {
       vi.advanceTimersByTime(2000);
     });
     expect(screen.getByText('00:58')).toBeInTheDocument();
   });
 
-  it('toggles mute preference and handles audio gracefully with context cleanup', () => {
+  it('toggles mute preference and handles audio gracefully with context cleanup', async () => {
     const mockClose = vi.fn().mockResolvedValue(undefined);
     const mockResume = vi.fn().mockResolvedValue(undefined);
-    let capturedOnEnded: (() => void) | undefined = undefined;
+    let capturedOnEnded: (() => void) | undefined;
 
     class MockAudioContext {
       state = 'suspended';
@@ -361,31 +393,51 @@ describe('PomoTimer Component', () => {
     const originalAudioContext = window.AudioContext;
     (window as unknown as { AudioContext: typeof MockAudioContext }).AudioContext = MockAudioContext;
 
-    render(<PomoTimer onBack={mockOnBack} />);
+    try {
+      render(<PomoTimer onBack={mockOnBack} />);
 
-    const muteBtn = screen.getByRole('button', { name: /mute alerts/i });
-    expect(muteBtn).toHaveTextContent('🔔');
+      const muteBtn = screen.getByRole('button', { name: /mute alerts/i });
+      expect(muteBtn).toHaveTextContent('🔔');
 
-    fireEvent.click(muteBtn);
-    expect(screen.getByRole('button', { name: /unmute alerts/i })).toHaveTextContent('🔇');
+      fireEvent.click(muteBtn);
+      expect(screen.getByRole('button', { name: /unmute alerts/i })).toHaveTextContent('🔇');
 
-    // Calling playChime with muted should do nothing
-    playChime(true);
-    expect(mockResume).not.toHaveBeenCalled();
+      expect(await playChime(true)).toBe(false);
+      expect(mockResume).not.toHaveBeenCalled();
 
-    // Unmute
-    fireEvent.click(screen.getByRole('button', { name: /unmute alerts/i }));
+      fireEvent.click(screen.getByRole('button', { name: /unmute alerts/i }));
 
-    // Calling playChime when unmuted uses AudioContext and closes on ended
-    playChime(false);
-    expect(mockResume).toHaveBeenCalled();
-    const triggerEnded = capturedOnEnded as (() => void) | undefined;
-    if (triggerEnded) {
-      triggerEnded();
+      expect(await playChime(false)).toBe(true);
+      expect(mockResume).toHaveBeenCalled();
+      expect(capturedOnEnded).toBeTypeOf('function');
+      capturedOnEnded!();
       expect(mockClose).toHaveBeenCalled();
+    } finally {
+      (window as unknown as { AudioContext?: typeof originalAudioContext }).AudioContext =
+        originalAudioContext;
     }
+  });
 
-    (window as unknown as { AudioContext?: typeof originalAudioContext }).AudioContext = originalAudioContext;
+  it('handles missing or throwing AudioContext safely without throwing', async () => {
+    const originalAudioContext = window.AudioContext;
+    const originalWebkit = (window as unknown as { webkitAudioContext?: unknown }).webkitAudioContext;
+
+    try {
+      // Missing AudioContext
+      delete (window as unknown as { AudioContext?: unknown }).AudioContext;
+      delete (window as unknown as { webkitAudioContext?: unknown }).webkitAudioContext;
+      expect(await playChime(false)).toBe(false);
+
+      // Throwing AudioContext constructor
+      (window as unknown as { AudioContext: unknown }).AudioContext = function ThrowingAudio() {
+        throw new Error('Audio blocked');
+      };
+      expect(await playChime(false)).toBe(false);
+    } finally {
+      (window as unknown as { AudioContext?: typeof originalAudioContext }).AudioContext =
+        originalAudioContext;
+      (window as unknown as { webkitAudioContext?: unknown }).webkitAudioContext = originalWebkit;
+    }
   });
 
   it('renders PomoMascot across all phases and animation states', () => {
@@ -401,7 +453,7 @@ describe('PomoTimer Component', () => {
     expect(screen.getByTestId('pomo-mascot')).toHaveClass('pomo-celebrating');
   });
 
-  it('loads preferences from localStorage and gracefully handles malformed data', () => {
+  it('loads valid preferences and sanitizes corrupt JSON or out-of-range fields', () => {
     localStorage.setItem(
       'tools_hub_pomo_prefs',
       JSON.stringify({
@@ -414,20 +466,67 @@ describe('PomoTimer Component', () => {
       })
     );
 
-    render(<PomoTimer onBack={mockOnBack} />);
+    const { unmount } = render(<PomoTimer onBack={mockOnBack} />);
     expect(screen.getByText('45:00')).toBeInTheDocument();
     expect(screen.getByText('7')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /unmute alerts/i })).toBeInTheDocument();
+    unmount();
+
+    // Actual corrupt JSON
+    localStorage.setItem('tools_hub_pomo_prefs', '{corrupt-json');
+    const { unmount: unmountCorrupt } = render(<PomoTimer onBack={mockOnBack} />);
+    expect(screen.getByText('25:00')).toBeInTheDocument();
+    unmountCorrupt();
+
+    // Partial / out-of-range values
+    localStorage.setItem(
+      'tools_hub_pomo_prefs',
+      JSON.stringify({
+        focusDuration: 999,
+        shortBreakDuration: -5,
+        longBreakDuration: 'bad',
+        autoStart: 'yes',
+        totalCompleted: -3,
+      })
+    );
+    render(<PomoTimer onBack={mockOnBack} />);
+    expect(screen.getByText('25:00')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
   });
 
-  it('tolerates localStorage getItem throwing an exception', () => {
-    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+  it('tolerates localStorage getItem and setItem (QuotaExceededError) exceptions', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('Access denied');
+    });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceededError');
     });
 
     render(<PomoTimer onBack={mockOnBack} />);
     expect(screen.getByText('25:00')).toBeInTheDocument();
 
-    getItemSpy.mockRestore();
+    expect(() => {
+      fireEvent.click(screen.getByRole('button', { name: /mute alerts/i }));
+    }).not.toThrow();
+    expect(screen.getByRole('button', { name: /unmute alerts/i })).toBeInTheDocument();
+  });
+
+  it('cleans up active countdown interval and alert timeout on unmount', () => {
+    vi.useFakeTimers();
+    const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
+
+    const { unmount } = render(<PomoTimer onBack={mockOnBack} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /start timer/i }));
+    // Complete 25m focus to schedule the 2500ms alert timeout
+    act(() => {
+      vi.advanceTimersByTime(1500 * 1000);
+    });
+
+    unmount();
+
+    expect(clearIntervalSpy).toHaveBeenCalled();
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 });

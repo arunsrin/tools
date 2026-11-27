@@ -4,69 +4,32 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: radial-gradient(circle at 50% 10%, #172554 0%, #090d16 65%, #05070c 100%);
-  color: #f8fafc;
+  background: var(--bg-canvas, #0f172a);
+  color: var(--text-primary, #f1f5f9);
   font-family: inherit;
   padding: 1.5rem 1.25rem 3rem;
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
-/* Header & Controls Bar */
-.biomorphs-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+.biomorphs-header-wrap {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto 1.25rem;
-}
-
-.biomorphs-title-group {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.75rem;
 }
 
-.biomorphs-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  align-self: flex-start;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-}
-
-.biomorphs-title-group h1 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  margin: 0;
-  background: linear-gradient(135deg, #f8fafc 30%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.biomorphs-subtitle {
-  font-size: 0.875rem;
-  color: #94a3b8;
-  margin: 0;
+.biomorphs-header {
+  width: 100%;
 }
 
 /* How to Play Guidance Callout */
-.how-to-play-guide {
-  margin-top: 0.5rem;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: 0.5rem;
+.biomorphs-how-to-play-guide {
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: var(--radius-md, 8px);
   padding: 0.65rem 1rem;
   display: flex;
   flex-direction: column;
@@ -74,196 +37,184 @@
   text-align: left;
 }
 
-.guide-title {
+.biomorphs-guide-title {
   font-size: 0.78rem;
   font-weight: 800;
-  color: #38bdf8;
+  color: var(--accent, #38bdf8);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.guide-steps {
+.biomorphs-guide-steps {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   font-size: 0.8rem;
-  color: #cbd5e1;
+  color: var(--text-primary, #f1f5f9);
   line-height: 1.4;
 }
 
-.guide-steps code {
-  color: #4ade80;
-  background: rgba(74, 222, 128, 0.1);
+.biomorphs-guide-steps code {
+  color: var(--status-success, #4ade80);
+  background: var(--status-success-bg, rgba(74, 222, 128, 0.14));
   padding: 0.1rem 0.3rem;
   border-radius: 0.25rem;
   font-size: 0.75rem;
 }
 
-.biomorphs-top-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.bio-btn {
+.biomorphs-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  background: #1e293b;
-  color: #f1f5f9;
-  border: 1px solid #334155;
+  background: var(--bg-surface, #1e293b);
+  color: var(--text-primary, #f1f5f9);
+  border: 1px solid var(--border-subtle, #334155);
   padding: 0.5rem 0.9rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md, 8px);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
   user-select: none;
 }
 
-.bio-btn:hover {
-  background: #334155;
-  border-color: #475569;
-  color: #ffffff;
+.biomorphs-btn:hover:not(:disabled) {
+  background: var(--bg-surface-hover, #334155);
+  border-color: var(--border-strong, #475569);
+  color: var(--text-strong, #f8fafc);
   transform: translateY(-1px);
 }
 
-.bio-btn:active {
+.biomorphs-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.bio-btn.btn-back {
-  background: rgba(15, 23, 42, 0.8);
-  border-color: #334155;
-  color: #cbd5e1;
+.biomorphs-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-.bio-btn.btn-back:hover {
-  background: #1e293b;
-  color: #38bdf8;
-  border-color: #38bdf8;
-}
-
-.bio-btn.btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border-color: #38bdf8;
-  color: #ffffff;
+.biomorphs-btn.biomorphs-btn-primary {
+  background: var(--accent-solid, #0369a1);
+  border-color: var(--accent, #38bdf8);
+  color: var(--accent-solid-on, #ffffff);
   box-shadow: 0 2px 10px rgba(56, 189, 248, 0.25);
 }
 
-.bio-btn.btn-primary:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+.biomorphs-btn.biomorphs-btn-primary:hover:not(:disabled) {
+  background: var(--accent-solid-hover, #0284c7);
   box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
 }
 
 /* Ecosystem & Environmental Pressures Bar */
-.ecosystem-bar {
+.biomorphs-ecosystem-bar {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto 1.5rem;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid #1e293b;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
   border-radius: 0.85rem;
   padding: 0.85rem 1.25rem;
   box-sizing: border-box;
 }
 
-.ecosystem-controls-row {
+.biomorphs-ecosystem-controls-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
 }
 
-.ecosystem-select-group {
+.biomorphs-ecosystem-select-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 }
 
-.ecosystem-label {
+.biomorphs-ecosystem-label {
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: var(--text-muted, #94a3b8);
 }
 
-.ecosystem-dropdown {
-  background: #0b1120;
-  color: #f1f5f9;
-  border: 1px solid #334155;
+.biomorphs-ecosystem-dropdown {
+  background: var(--bg-elevated, #0b1120);
+  color: var(--text-primary, #f1f5f9);
+  border: 1px solid var(--border-subtle, #334155);
   padding: 0.45rem 0.75rem;
   border-radius: 0.45rem;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  outline: none;
-  transition: all 0.18s ease;
+  max-width: 100%;
+  min-width: 0;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.ecosystem-dropdown:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+.biomorphs-ecosystem-dropdown:focus {
+  border-color: var(--accent, #38bdf8);
 }
 
-.ecosystem-dropdown option {
-  background: #0f172a;
-  color: #f1f5f9;
+.biomorphs-ecosystem-dropdown option {
+  background: var(--bg-canvas, #0f172a);
+  color: var(--text-primary, #f1f5f9);
 }
 
-.btn-random-ecosystem {
+.biomorphs-btn-random-ecosystem {
   margin-left: auto;
-  background: rgba(30, 41, 59, 0.9);
-  color: #e2e8f0;
+  background: var(--bg-elevated, #0b1120);
+  color: var(--text-primary, #f1f5f9);
 }
 
-.btn-random-ecosystem:hover {
-  background: #334155;
-  color: #38bdf8;
-  border-color: #38bdf8;
+.biomorphs-btn-random-ecosystem:hover:not(:disabled) {
+  background: var(--bg-surface-hover, #334155);
+  color: var(--accent, #38bdf8);
+  border-color: var(--accent, #38bdf8);
 }
 
-.ecosystem-narrative-bar {
+.biomorphs-ecosystem-narrative-bar {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  border-top: 1px solid var(--border-subtle, #334155);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
 }
 
-.narrative-headline {
+.biomorphs-narrative-headline {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.narrative-tag {
+.biomorphs-narrative-tag {
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #38bdf8;
+  color: var(--accent, #38bdf8);
   letter-spacing: 0.05em;
 }
 
-.narrative-title {
+.biomorphs-narrative-title {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text-primary, #f1f5f9);
 }
 
-.narrative-desc {
+.biomorphs-narrative-desc {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-muted, #94a3b8);
   margin: 0;
   line-height: 1.4;
 }
 
 /* 2-Way Duel Arena */
-.duel-arena {
+.biomorphs-duel-arena {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
@@ -273,45 +224,40 @@
   position: relative;
 }
 
-.specimen-card {
+.biomorphs-specimen-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: #0b1120;
-  border: 2px solid #1e293b;
+  min-width: 0;
+  background: var(--bg-surface, #1e293b);
+  border: 2px solid var(--border-subtle, #334155);
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  outline: none;
+  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
 }
 
-.specimen-card:hover {
-  border-color: #38bdf8;
+.biomorphs-specimen-card:hover {
+  border-color: var(--accent, #38bdf8);
   transform: translateY(-3px);
   box-shadow: 0 12px 35px rgba(56, 189, 248, 0.18);
 }
 
-.specimen-card:focus-visible {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
-}
-
 /* Apex Specimen Highlight */
-.specimen-card.apex-specimen {
-  border-color: #f59e0b;
+.biomorphs-specimen-card.biomorphs-apex-specimen {
+  border-color: var(--status-warning, #fbbf24);
   box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
 }
 
-.specimen-card.apex-specimen:hover {
-  border-color: #fbbf24;
+.biomorphs-specimen-card.biomorphs-apex-specimen:hover {
+  border-color: var(--status-warning, #fbbf24);
   box-shadow: 0 0 35px rgba(251, 191, 36, 0.45);
 }
 
-.apex-banner {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-  color: #ffffff;
+.biomorphs-apex-banner {
+  background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+  color: var(--accent-solid-on, #ffffff);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -320,131 +266,125 @@
   border-bottom: 1px solid rgba(251, 191, 36, 0.5);
 }
 
-.card-header-bar {
+.biomorphs-card-header-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.85rem 1.25rem;
-  background: rgba(15, 23, 42, 0.8);
-  border-bottom: 1px solid #1e293b;
+  background: var(--bg-elevated, #0b1120);
+  border-bottom: 1px solid var(--border-subtle, #334155);
 }
 
-.specimen-tag {
+.biomorphs-specimen-tag {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
-.btn-select-champion {
+.biomorphs-btn-select-champion {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #ffffff;
-  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: var(--accent-solid, #0369a1);
+  color: var(--accent-solid-on, #ffffff);
+  border: 1px solid var(--accent, #38bdf8);
   padding: 0.35rem 0.75rem;
   border-radius: 0.375rem;
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.18s ease;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+  transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  box-shadow: 0 2px 6px rgba(3, 105, 161, 0.25);
 }
 
-.btn-select-champion:hover {
-  background: linear-gradient(135deg, #0369a1, #075985);
+.biomorphs-btn-select-champion:hover {
+  background: var(--accent-solid-hover, #0284c7);
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   transform: translateY(-1px);
 }
 
-.tag-badge {
+.biomorphs-tag-badge {
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   padding: 0.2rem 0.5rem;
   border-radius: 0.35rem;
-  background: #38bdf8;
-  color: #020617;
+  background: var(--accent, #38bdf8);
+  color: var(--accent-on, #0f172a);
 }
 
-.specimen-name {
+.biomorphs-specimen-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #f1f5f9;
-}
-
-.shortcut-indicator {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #94a3b8;
-  background: #1e293b;
-  border: 1px solid #334155;
-  padding: 0.2rem 0.55rem;
-  border-radius: 0.35rem;
+  color: var(--text-primary, #f1f5f9);
 }
 
 /* Fitness & Adaptation Metrics Bar */
-.specimen-fitness-badge-row {
+.biomorphs-specimen-fitness-badge-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   padding: 0.6rem 1.25rem;
-  background: #070d18;
-  border-bottom: 1px solid #1e293b;
+  background: var(--bg-canvas, #0f172a);
+  border-bottom: 1px solid var(--border-subtle, #334155);
 }
 
-.fitness-score-tag {
+.biomorphs-fitness-score-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   font-size: 0.85rem;
   font-weight: 800;
-  color: #38bdf8;
+  color: var(--accent, #38bdf8);
 }
 
-.fitness-score-tag.apex-score {
-  color: #fbbf24;
+.biomorphs-fitness-score-tag.biomorphs-apex-score {
+  color: var(--status-warning, #fbbf24);
   text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 
-.fitness-icon {
+.biomorphs-fitness-icon {
   font-size: 0.95rem;
 }
 
-.fitness-val {
+.biomorphs-fitness-val {
   font-variant-numeric: tabular-nums;
 }
 
-.adaptive-delta-badge {
+.biomorphs-adaptive-delta-badge {
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.2rem 0.55rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill, 9999px);
   font-variant-numeric: tabular-nums;
 }
 
-.adaptive-delta-badge.delta-pos {
-  color: #4ade80;
-  background: rgba(74, 222, 128, 0.12);
+.biomorphs-adaptive-delta-badge.biomorphs-delta-pos {
+  color: var(--status-success, #4ade80);
+  background: var(--status-success-bg, rgba(74, 222, 128, 0.14));
   border: 1px solid rgba(74, 222, 128, 0.3);
 }
 
-.adaptive-delta-badge.delta-neg {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
+.biomorphs-adaptive-delta-badge.biomorphs-delta-neg {
+  color: var(--status-warning, #fbbf24);
+  background: var(--status-warning-bg, rgba(251, 191, 36, 0.14));
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-.adaptive-delta-badge.delta-neu {
-  color: #94a3b8;
+.biomorphs-adaptive-delta-badge.biomorphs-delta-neu {
+  color: var(--text-muted, #94a3b8);
   background: rgba(148, 163, 184, 0.1);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 /* Canvas Display */
-.canvas-wrapper {
+.biomorphs-canvas-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -453,49 +393,49 @@
   min-height: 280px;
 }
 
-.specimen-canvas {
+.biomorphs-specimen-canvas {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
 /* Adaptation Diagnostics & Mutation Sections (Above Canvas & Below Canvas) */
-.adaptation-diagnostics-section {
+.biomorphs-adaptation-diagnostics-section {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   padding: 0.6rem 1.25rem;
-  background: #090e1a;
-  border-bottom: 1px solid #1e293b;
+  background: var(--bg-elevated, #0b1120);
+  border-bottom: 1px solid var(--border-subtle, #334155);
   box-sizing: border-box;
 }
 
-.mutations-section {
+.biomorphs-mutations-section {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   padding: 0.6rem 1.25rem;
-  background: #0b1120;
-  border-top: 1px solid #1e293b;
+  background: var(--bg-elevated, #0b1120);
+  border-top: 1px solid var(--border-subtle, #334155);
   box-sizing: border-box;
 }
 
-.trait-section-label {
+.biomorphs-trait-section-label {
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: var(--text-muted, #94a3b8);
 }
 
-.adaptation-diagnostics {
+.biomorphs-adaptation-diagnostics {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   min-height: 28px;
 }
 
-.diagnostic-tag {
+.biomorphs-diagnostic-tag {
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.18rem 0.45rem;
@@ -503,150 +443,153 @@
   line-height: 1.2;
 }
 
-.diagnostic-tag.tag-pro {
+.biomorphs-diagnostic-tag.biomorphs-tag-pro {
   color: #86efac;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-.diagnostic-tag.tag-con {
+.biomorphs-diagnostic-tag.biomorphs-tag-con {
   color: #fde047;
-  background: rgba(234, 179, 8, 0.1);
-  border: 1px solid rgba(234, 179, 8, 0.25);
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
 }
 
 /* Traits Bar */
-.card-traits-bar {
+.biomorphs-card-traits-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   min-height: 28px;
 }
 
-.trait-pill {
+.biomorphs-trait-pill {
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.18rem 0.5rem;
-  border-radius: 9999px;
-  background: rgba(56, 189, 248, 0.08);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--radius-pill, 9999px);
+  background: var(--accent-tint, rgba(56, 189, 248, 0.12));
+  color: var(--accent, #38bdf8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-.card-action-footer {
+.biomorphs-card-action-footer {
   padding: 0.75rem 1.25rem;
-  background: rgba(15, 23, 42, 0.95);
-  border-top: 1px solid #1e293b;
+  background: var(--bg-canvas, #0f172a);
+  border-top: 1px solid var(--border-subtle, #334155);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0.75rem;
 }
 
-.card-click-hint {
+.biomorphs-card-click-hint {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--text-muted, #94a3b8);
   font-style: italic;
 }
 
 /* Ancestor Lineage Section */
-.lineage-section {
+.biomorphs-lineage-section {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid #1e293b;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
   border-radius: 1rem;
   padding: 1rem 1.25rem;
   box-sizing: border-box;
 }
 
-.lineage-header {
+.biomorphs-lineage-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.4rem;
   margin-bottom: 0.75rem;
 }
 
-.lineage-title {
+.biomorphs-lineage-title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text-primary, #f1f5f9);
 }
 
-.lineage-hint {
+.biomorphs-lineage-hint {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--text-muted, #94a3b8);
 }
 
-.lineage-scroll {
+.biomorphs-lineage-scroll {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+  scrollbar-color: var(--border-subtle, #334155) transparent;
 }
 
-.lineage-scroll::-webkit-scrollbar {
+.biomorphs-lineage-scroll::-webkit-scrollbar {
   height: 6px;
 }
 
-.lineage-scroll::-webkit-scrollbar-thumb {
-  background: #334155;
+.biomorphs-lineage-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle, #334155);
   border-radius: 3px;
 }
 
-.lineage-card {
+.biomorphs-lineage-card {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: var(--bg-canvas, #0f172a);
+  border: 1px solid var(--border-subtle, #334155);
   border-radius: 0.6rem;
   padding: 0.4rem 0.5rem;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
   user-select: none;
-  outline: none;
   min-width: 90px;
+  font-family: inherit;
 }
 
-.lineage-card:hover {
-  border-color: #38bdf8;
+.biomorphs-lineage-card:hover {
+  border-color: var(--accent, #38bdf8);
   transform: translateY(-2px);
-  background: #1e293b;
+  background: var(--bg-surface-hover, #334155);
 }
 
-.lineage-card.active-ancestor {
-  border-color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
+.biomorphs-lineage-card.biomorphs-active-ancestor {
+  border-color: var(--accent, #38bdf8);
+  background: var(--accent-tint, rgba(56, 189, 248, 0.12));
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
 }
 
-.lineage-thumb-canvas {
+.biomorphs-lineage-thumb-canvas {
   width: 76px;
   height: 60px;
   border-radius: 0.35rem;
-  background: #090e17;
+  background: var(--bg-elevated, #0b1120);
   display: block;
 }
 
-.lineage-gen-label {
+.biomorphs-lineage-gen-label {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: var(--text-primary, #f1f5f9);
   margin-top: 0.35rem;
 }
 
-.lineage-name-label {
+.biomorphs-lineage-name-label {
   font-size: 0.65rem;
-  color: #64748b;
+  color: var(--text-muted, #94a3b8);
   max-width: 80px;
   white-space: nowrap;
   overflow: hidden;
@@ -664,42 +607,42 @@
   max-width: 1200px;
   width: 100%;
   margin: 1.5rem auto 0;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid #1e293b;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
   border-radius: 0.85rem;
   padding: 0.9rem 1.4rem;
-  backdrop-filter: blur(10px);
   box-sizing: border-box;
 }
 
-.dock-stats {
+.biomorphs-dock-stats {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1.5rem;
 }
 
-.stat-item {
+.biomorphs-stat-item {
   display: flex;
   flex-direction: column;
 }
 
-.stat-label {
+.biomorphs-stat-label {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748b;
+  color: var(--text-muted, #94a3b8);
   font-weight: 700;
 }
 
-.stat-value {
+.biomorphs-stat-value {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #38bdf8;
+  color: var(--accent, #38bdf8);
   font-variant-numeric: tabular-nums;
 }
 
-.champion-name {
-  color: #f1f5f9;
+.biomorphs-champion-name {
+  color: var(--text-primary, #f1f5f9);
   font-size: 0.95rem;
   max-width: 160px;
   white-space: nowrap;
@@ -707,102 +650,403 @@
   text-overflow: ellipsis;
 }
 
-.fitness-highlight {
-  color: #4ade80;
+.biomorphs-fitness-highlight {
+  color: var(--status-success, #4ade80);
 }
 
-.dock-actions {
+.biomorphs-dock-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.6rem;
 }
 
-/* Modals & Overlays */
-.dna-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
-.dna-modal {
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  max-width: 520px;
-  width: 100%;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-
-.dna-modal h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  color: #f1f5f9;
-}
-
-.dna-modal p {
+/* DNA Modal Body */
+.biomorphs-dna-modal-desc {
   font-size: 0.85rem;
-  color: #94a3b8;
-  margin: 0 0 1rem;
+  color: var(--text-muted, #94a3b8);
+  margin: 0;
 }
 
-.dna-textarea {
+.biomorphs-dna-textarea {
   width: 100%;
   height: 100px;
-  background: #090e17;
-  border: 1px solid #334155;
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-subtle, #334155);
   border-radius: 0.5rem;
-  color: #38bdf8;
-  font-family: ui-monospace, monospace;
+  color: var(--accent, #38bdf8);
+  font-family: var(--font-family-mono, ui-monospace, monospace);
   font-size: 0.8rem;
   padding: 0.75rem;
   box-sizing: border-box;
   resize: vertical;
 }
 
-.dna-textarea:focus {
-  outline: none;
-  border-color: #38bdf8;
+.biomorphs-dna-textarea:focus {
+  border-color: var(--accent, #38bdf8);
 }
 
-.dna-modal-actions {
+.biomorphs-dna-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
-  margin-top: 1.25rem;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
 }
 
-/* Toast Notification */
-.bio-toast {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: #0284c7;
-  color: #ffffff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 0.5rem;
+/* Toast Notification Override */
+.biomorphs-toast {
+  background: var(--accent-solid, #0369a1);
+  color: var(--accent-solid-on, #ffffff);
+  border-color: var(--accent, #38bdf8);
+}
+
+.biomorphs-toast.shared-toast--error {
+  background: var(--bg-elevated, #0b1120);
+  color: var(--text-strong, #f8fafc);
+  border-color: var(--status-danger, #f87171);
+}
+
+/* Card Launch Button */
+.biomorphs-btn-launch-specimen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--accent-solid, #0369a1);
+  color: var(--accent-solid-on, #ffffff);
+  border: 1px solid var(--accent, #38bdf8);
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.biomorphs-btn-launch-specimen:hover {
+  background: var(--accent-solid-hover, #0284c7);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Biosphere Section */
+.biomorphs-biosphere-stage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.biomorphs-biosphere-hud-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.25rem;
+}
+
+.biomorphs-hud-biome-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-strong, #475569);
+  border-radius: var(--radius-pill, 9999px);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary, #f1f5f9);
+}
+
+.biomorphs-hud-vitals-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.biomorphs-hud-vital-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  z-index: 2000;
-  animation: toastFadeIn 0.25s ease-out;
+  color: var(--text-muted, #94a3b8);
 }
 
-@keyframes toastFadeIn {
+.biomorphs-hud-vital-val {
+  color: var(--text-strong, #f8fafc);
+  font-weight: 700;
+}
+
+.biomorphs-energy-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.biomorphs-energy-track {
+  width: 120px;
+  height: 10px;
+  background: var(--bg-canvas, #0f172a);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: var(--radius-pill, 9999px);
+  overflow: hidden;
+}
+
+.biomorphs-energy-fill {
+  height: 100%;
+  transition: width 0.15s ease-out, background 0.2s ease;
+}
+
+.biomorphs-energy-fill.biomorphs-energy-high {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+}
+
+.biomorphs-energy-fill.biomorphs-energy-med {
+  background: linear-gradient(90deg, #fbbf24, #d97706);
+}
+
+.biomorphs-energy-fill.biomorphs-energy-low {
+  background: linear-gradient(90deg, #f87171, #dc2626);
+  animation: biomorphsPulseLow 1s infinite alternate;
+}
+
+@keyframes biomorphsPulseLow {
   from {
-    opacity: 0;
-    transform: translateY(10px);
+    opacity: 0.7;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+.biomorphs-biosphere-canvas-card {
+  position: relative;
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.biomorphs-biosphere-canvas {
+  width: 100%;
+  max-height: 520px;
+  aspect-ratio: 16 / 10;
+  display: block;
+  cursor: crosshair;
+}
+
+.biomorphs-biosphere-canvas-hint {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: var(--z-hud, 30);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--text-muted, #94a3b8);
+  pointer-events: none;
+}
+
+.biomorphs-biosphere-action-ticker {
+  background: var(--bg-canvas, #0f172a);
+  border-top: 1px solid var(--border-subtle, #334155);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted, #94a3b8);
+  overflow-x: auto;
+}
+
+.biomorphs-ticker-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent, #38bdf8);
+  font-size: 0.7rem;
+  background: var(--accent-tint, rgba(56, 189, 248, 0.12));
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.biomorphs-ticker-msg {
+  color: var(--text-primary, #f1f5f9);
+}
+
+.biomorphs-biosphere-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--bg-surface, #1e293b);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.biomorphs-biosphere-controls-bar .biomorphs-controls-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.biomorphs-speed-btn-group {
+  max-width: 100%;
+}
+
+.biomorphs-extinction-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.biomorphs-extinction-card {
+  max-width: 520px;
+  width: 100%;
+  background: var(--bg-canvas, #0f172a);
+  border: 1px solid var(--status-danger, #f87171);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.2);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.biomorphs-extinction-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.biomorphs-extinction-badge {
+  background: var(--status-danger-bg, rgba(239, 68, 68, 0.15));
+  color: var(--status-danger, #f87171);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill, 9999px);
+  text-transform: uppercase;
+}
+
+.biomorphs-extinction-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-strong, #f8fafc);
+  margin: 0;
+}
+
+.biomorphs-extinction-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.biomorphs-extinction-stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.biomorphs-extinction-stat-cell .biomorphs-stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted, #94a3b8);
+  text-transform: uppercase;
+}
+
+.biomorphs-extinction-stat-cell .biomorphs-stat-num {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary, #f1f5f9);
+}
+
+.biomorphs-extinction-advice-box {
+  background: var(--status-danger-bg, rgba(239, 68, 68, 0.15));
+  border-left: 3px solid var(--status-danger, #f87171);
+  padding: 0.75rem 1rem;
+  border-radius: 0 0.375rem 0.375rem 0;
+  font-size: 0.85rem;
+  color: var(--text-primary, #f1f5f9);
+  line-height: 1.45;
+}
+
+.biomorphs-extinction-advice-box strong {
+  color: #fca5a5;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.biomorphs-extinction-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.biomorphs-apex-dominance-banner {
+  background: linear-gradient(
+    90deg,
+    rgba(234, 179, 8, 0.2),
+    rgba(202, 138, 4, 0.35),
+    rgba(234, 179, 8, 0.2)
+  );
+  border: 1px solid var(--status-warning, #fbbf24);
+  color: #fef08a;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  animation: biomorphsPulseDominance 2s infinite ease-in-out;
+}
+
+@keyframes biomorphsPulseDominance {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
   }
 }
 
@@ -812,52 +1056,41 @@
     padding: 1rem 0.75rem 2.5rem;
   }
 
-  .biomorphs-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .biomorphs-top-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .ecosystem-controls-row {
+  .biomorphs-ecosystem-controls-row {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .ecosystem-select-group {
+  .biomorphs-ecosystem-select-group {
     justify-content: space-between;
   }
 
-  .ecosystem-dropdown {
+  .biomorphs-ecosystem-dropdown {
     width: 65%;
   }
 
-  .btn-random-ecosystem {
+  .biomorphs-btn-random-ecosystem {
     width: 100%;
     margin-left: 0;
-    justify-content: center;
   }
 
-  .duel-arena {
+  .biomorphs-duel-arena {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .card-header-bar {
+  .biomorphs-card-header-bar {
     padding: 0.75rem 1rem;
   }
 
-  .specimen-name {
+  .biomorphs-specimen-name {
     max-width: 140px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .canvas-wrapper {
+  .biomorphs-canvas-wrapper {
     min-height: 240px;
   }
 
@@ -868,392 +1101,37 @@
     padding: 1rem;
   }
 
-  .dock-stats {
+  .biomorphs-dock-stats {
     justify-content: space-between;
   }
 
-  .dock-actions {
+  .biomorphs-dock-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
+}
 
-  .dock-actions .bio-btn {
-    justify-content: center;
+@media (max-width: 480px) {
+  .biomorphs-toast {
+    inset-inline: 1rem;
+    bottom: 1rem;
+    max-width: calc(100vw - 2rem);
   }
-}
 
-/* Mode Switcher */
-.biomorph-mode-switcher {
-  display: inline-flex;
-  align-items: center;
-  background: #0f172a;
-  padding: 0.25rem;
-  border-radius: 9999px;
-  border: 1px solid #334155;
-  gap: 0.25rem;
-}
+  .biomorphs-extinction-stats-row {
+    grid-template-columns: 1fr;
+  }
 
-.mode-tab-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  padding: 0.4rem 0.9rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
+  .biomorphs-biosphere-controls-bar {
+    padding: 0.75rem;
+  }
 
-.mode-tab-btn:hover {
-  color: #f1f5f9;
-}
+  .biomorphs-biosphere-hud-bar {
+    padding: 0.75rem;
+  }
 
-.mode-tab-btn.active {
-  background: #0284c7;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
-}
-
-/* Card Launch Button */
-.btn-launch-specimen {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #ffffff;
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  padding: 0.35rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-launch-specimen:hover {
-  background: linear-gradient(135deg, #0369a1, #075985);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-  transform: translateY(-1px);
-}
-
-/* Biosphere Section */
-.biosphere-stage-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.biosphere-hud-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid #334155;
-  border-radius: 0.75rem;
-  padding: 0.85rem 1.25rem;
-}
-
-.hud-biome-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #1e293b;
-  border: 1px solid #475569;
-  border-radius: 9999px;
-  padding: 0.35rem 0.85rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #e2e8f0;
-}
-
-.hud-vitals-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.hud-vital-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #94a3b8;
-}
-
-.hud-vital-val {
-  color: #f8fafc;
-  font-weight: 700;
-}
-
-.energy-bar-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.energy-track {
-  width: 120px;
-  height: 10px;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 9999px;
-  overflow: hidden;
-}
-
-.energy-fill {
-  height: 100%;
-  transition: width 0.15s ease-out, background 0.2s ease;
-}
-
-.energy-fill.high {
-  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
-}
-
-.energy-fill.med {
-  background: linear-gradient(90deg, #f59e0b, #d97706);
-}
-
-.energy-fill.low {
-  background: linear-gradient(90deg, #ef4444, #dc2626);
-  animation: pulseLow 1s infinite alternate;
-}
-
-@keyframes pulseLow {
-  from { opacity: 0.7; }
-  to { opacity: 1; }
-}
-
-.biosphere-canvas-card {
-  position: relative;
-  background: #020617;
-  border: 1px solid #334155;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-}
-
-.biosphere-canvas {
-  width: 100%;
-  max-height: 520px;
-  aspect-ratio: 16 / 10;
-  display: block;
-  cursor: crosshair;
-}
-
-.biosphere-canvas-hint {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  border-radius: 0.375rem;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  pointer-events: none;
-}
-
-.biosphere-action-ticker {
-  background: rgba(15, 23, 42, 0.95);
-  border-top: 1px solid #1e293b;
-  padding: 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.8rem;
-  color: #94a3b8;
-  overflow-x: auto;
-}
-
-.ticker-label {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #38bdf8;
-  font-size: 0.7rem;
-  background: rgba(56, 189, 248, 0.1);
-  padding: 0.15rem 0.45rem;
-  border-radius: 0.25rem;
-}
-
-.ticker-msg {
-  color: #f1f5f9;
-}
-
-.biosphere-controls-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid #334155;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-}
-
-.controls-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.speed-btn-group {
-  display: inline-flex;
-  align-items: center;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 0.375rem;
-  overflow: hidden;
-}
-
-.speed-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.speed-btn.active {
-  background: #0284c7;
-  color: #ffffff;
-}
-
-.extinction-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(2, 6, 23, 0.88);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  z-index: 50;
-  animation: fadeIn 0.25s ease-out;
-}
-
-.extinction-card {
-  max-width: 520px;
-  width: 100%;
-  background: #0f172a;
-  border: 1px solid #ef4444;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 40px rgba(239, 68, 68, 0.2);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.extinction-header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.extinction-badge {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  font-size: 0.75rem;
-  font-weight: 800;
-  padding: 0.2rem 0.5rem;
-  border-radius: 9999px;
-  text-transform: uppercase;
-}
-
-.extinction-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #f8fafc;
-  margin: 0;
-}
-
-.extinction-stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  background: #020617;
-  border: 1px solid #1e293b;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-}
-
-.extinction-stat-cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-.extinction-stat-cell .stat-lbl {
-  font-size: 0.7rem;
-  color: #94a3b8;
-  text-transform: uppercase;
-}
-
-.extinction-stat-cell .stat-num {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #f1f5f9;
-}
-
-.extinction-advice-box {
-  background: rgba(239, 68, 68, 0.08);
-  border-left: 3px solid #ef4444;
-  padding: 0.75rem 1rem;
-  border-radius: 0 0.375rem 0.375rem 0;
-  font-size: 0.85rem;
-  color: #cbd5e1;
-  line-height: 1.45;
-}
-
-.extinction-advice-box strong {
-  color: #fca5a5;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.extinction-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.apex-dominance-banner {
-  background: linear-gradient(90deg, rgba(234, 179, 8, 0.2), rgba(202, 138, 4, 0.35), rgba(234, 179, 8, 0.2));
-  border: 1px solid #facc15;
-  color: #fef08a;
-  padding: 0.65rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  animation: pulseDominance 2s infinite ease-in-out;
-}
-
-@keyframes pulseDominance {
-  0%, 100% { box-shadow: 0 0 10px rgba(250, 204, 21, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.6); }
+  .biomorphs-energy-track {
+    width: 84px;
+  }
 }

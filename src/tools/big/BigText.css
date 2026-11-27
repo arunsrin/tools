@@ -1,202 +1,205 @@
-:root {
-  --bg-color: #000000;
-  --text-color: #ffffff;
-  --ui-bg: rgba(255, 255, 255, 0.1);
-  --ui-text: #ffffff;
-  --accent-color: #3b82f6;
-}
+/* Scoped styling for BigText — editor uses Tools Hub tokens, display themes scoped under .bigtext-root */
 
-.theme-light {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --ui-bg: rgba(0, 0, 0, 0.05);
-  --ui-text: #000000;
-  --accent-color: #2563eb;
-}
+.bigtext-root {
+  --bigtext-bg: #000000;
+  --bigtext-text: #ffffff;
+  --bigtext-hint-color: #cbd5e1;
+  --bigtext-hub-bg: rgba(15, 23, 42, 0.88);
+  --bigtext-hub-border: rgba(148, 163, 184, 0.55);
+  --bigtext-hub-color: #f1f5f9;
 
-.theme-matrix {
-  --bg-color: #000000;
-  --text-color: #00ff41;
-  --ui-bg: rgba(0, 255, 65, 0.1);
-  --ui-text: #00ff41;
-  --accent-color: #00ff41;
-}
-
-.theme-bumblebee {
-  --bg-color: #ffff00;
-  --text-color: #000000;
-  --ui-bg: rgba(0, 0, 0, 0.1);
-  --ui-text: #000000;
-  --accent-color: #000000;
-}
-
-.app-container {
   position: relative;
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Edit Mode Styles */
-.edit-mode {
-  padding: 2rem;
-  z-index: 10;
-  width: 100%;
-  max-width: 600px;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  padding: 1.5rem 1rem 3rem;
   box-sizing: border-box;
 }
 
-.input-field {
-  width: 100%;
-  background: var(--ui-bg);
-  border: 2px solid var(--ui-text);
-  border-radius: 12px;
-  color: var(--ui-text);
-  padding: 1.5rem;
-  font-size: 1.5rem;
-  outline: none;
-  margin-bottom: 2rem;
-  transition: all 0.2s ease;
+.bigtext-root.is-displaying {
+  padding: 0;
+  justify-content: center;
 }
 
-.input-field:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+.bigtext-root.theme-dark {
+  --bigtext-bg: #000000;
+  --bigtext-text: #ffffff;
+  --bigtext-hint-color: #cbd5e1;
+  --bigtext-hub-bg: rgba(15, 23, 42, 0.88);
+  --bigtext-hub-border: rgba(148, 163, 184, 0.55);
+  --bigtext-hub-color: #f1f5f9;
 }
 
-.display-button {
+.bigtext-root.theme-light {
+  --bigtext-bg: #ffffff;
+  --bigtext-text: #000000;
+  --bigtext-hint-color: #334155;
+  --bigtext-hub-bg: rgba(241, 245, 249, 0.94);
+  --bigtext-hub-border: #64748b;
+  --bigtext-hub-color: #0f172a;
+}
+
+.bigtext-root.theme-matrix {
+  --bigtext-bg: #000000;
+  --bigtext-text: #00ff41;
+  --bigtext-hint-color: #00ff41;
+  --bigtext-hub-bg: rgba(0, 0, 0, 0.9);
+  --bigtext-hub-border: #00ff41;
+  --bigtext-hub-color: #00ff41;
+}
+
+.bigtext-root.theme-bumblebee {
+  --bigtext-bg: #ffff00;
+  --bigtext-text: #000000;
+  --bigtext-hint-color: #000000;
+  --bigtext-hub-bg: rgba(0, 0, 0, 0.92);
+  --bigtext-hub-border: #000000;
+  --bigtext-hub-color: #ffff00;
+}
+
+/* Edit Mode Styles */
+.bigtext-editor-shell {
   width: 100%;
-  padding: 1rem;
-  background-color: var(--accent-color);
-  color: var(--bg-color); /* Usually inverse of theme bg */
-  border: none;
-  border-radius: 12px;
-  font-size: 1.25rem;
-  font-weight: 600;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.bigtext-edit-mode {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.bigtext-input-field {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  padding: 1.15rem 1.25rem;
+  font-size: 1.35rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bigtext-input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.bigtext-input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.bigtext-display-button {
+  width: 100%;
+  padding: 0.95rem 1.25rem;
+  background-color: var(--accent-solid);
+  color: var(--accent-solid-on);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s active, filter 0.2s;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
 }
 
-/* Ensure button text is readable on specific themes */
-.theme-light .display-button {
-  color: #ffffff; /* White text on blue button */
+.bigtext-display-button:hover {
+  background-color: var(--accent);
+  color: var(--accent-on);
 }
 
-.theme-bumblebee .display-button {
-  background-color: #000000;
-  color: #ffff00; /* Yellow text on black button */
-}
-
-.theme-matrix .display-button {
-  color: #000000; /* Black text on neon green button */
-}
-
-.display-button:hover {
-  filter: brightness(1.1);
-}
-
-.display-button:active {
+.bigtext-display-button:active {
   transform: scale(0.98);
 }
 
-.presets-container {
+.bigtext-presets-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.75rem;
-  margin-top: 1.5rem;
   width: 100%;
 }
 
-.preset-button {
-  background: var(--ui-bg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: var(--ui-text);
-  padding: 0.75rem;
-  font-size: 1rem;
+.bigtext-preset-button {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 0.7rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.theme-light .preset-button {
-  border-color: rgba(0, 0, 0, 0.2);
+.bigtext-preset-button:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent);
+  color: var(--text-strong);
 }
 
-.preset-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #3b82f6;
+.bigtext-preset-button:active {
+  transform: scale(0.96);
 }
 
-.preset-button:active {
-  transform: scale(0.95);
-}
-
-.themes-container {
+.bigtext-themes-container {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
 }
 
-.theme-button {
-  width: 32px;
-  height: 32px;
+.bigtext-theme-button {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid var(--border-strong);
   cursor: pointer;
   transition: transform 0.2s, border-color 0.2s;
   padding: 0;
 }
 
-.theme-button:hover {
-  transform: scale(1.2);
-  border-color: #ffffff;
+.bigtext-theme-button:hover {
+  transform: scale(1.15);
+  border-color: var(--text-strong);
 }
 
-.theme-button.active {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--accent-color);
+.bigtext-theme-button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--accent);
 }
 
-.theme-btn-dark { background-color: #000; border-color: #444; }
-.theme-btn-light { background-color: #eee; border-color: #ccc; }
-.theme-btn-matrix { background-color: #000; border: 2px solid #00ff41; }
-.theme-btn-bumblebee { background-color: #ffff00; border-color: #000; }
-
-.back-link {
-  display: block;
-  margin: 2rem auto 0;
-  background: none;
-  border: none;
-  color: var(--ui-text);
-  opacity: 0.6;
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: opacity 0.2s;
-}
-
-.back-link:hover {
-  opacity: 1;
-}
+.bigtext-theme-btn-dark { background-color: #000000; border-color: #64748b; }
+.bigtext-theme-btn-light { background-color: #eeeeee; border-color: #cbd5e1; }
+.bigtext-theme-btn-matrix { background-color: #000000; border: 2px solid #00ff41; }
+.bigtext-theme-btn-bumblebee { background-color: #ffff00; border-color: #000000; }
 
 /* Display Mode Styles */
-.display-mode {
+.bigtext-display-mode {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -206,9 +209,37 @@
   padding: clamp(16px, 4vw, 32px);
   box-sizing: border-box;
   overflow: hidden;
+  background-color: var(--bigtext-bg);
+  color: var(--bigtext-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.big-text {
+.bigtext-display-hub-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--bigtext-hub-bg);
+  border: 1px solid var(--bigtext-hub-border);
+  color: var(--bigtext-hub-color);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.bigtext-display-hub-btn:hover {
+  transform: translateX(-2px);
+}
+
+.bigtext-display-text {
   max-width: 100%;
   text-align: center;
   line-height: 1.05;
@@ -220,26 +251,42 @@
   user-select: none;
 }
 
-.big-text.force-break {
+.bigtext-display-text.bigtext-force-break {
   word-break: break-all;
   overflow-wrap: anywhere;
 }
 
-.back-hint {
+.bigtext-back-hint {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--ui-text);
-  opacity: 0.4;
-  font-size: 0.8rem;
+  color: var(--bigtext-hint-color);
+  opacity: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
 }
 
-.theme-light .back-hint,
-.theme-bumblebee .back-hint {
-  opacity: 0.6;
-}
+@media (max-width: 480px) {
+  .bigtext-root {
+    padding: 1rem 0.75rem 2rem;
+  }
 
+  .bigtext-root.is-displaying {
+    padding: 0;
+  }
+
+  .bigtext-edit-mode {
+    padding: 1rem;
+  }
+
+  .bigtext-input-field {
+    padding: 0.9rem 1rem;
+    font-size: 1.15rem;
+  }
+}

@@ -1,326 +1,108 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import InlineAlert from '../../shared/components/InlineAlert';
+import Modal from '../../shared/components/Modal';
+import SegmentedControl from '../../shared/components/SegmentedControl';
+import Toast from '../../shared/components/Toast';
+import ToolHeader from '../../shared/components/ToolHeader';
+import { useCopyFeedback } from '../../shared/hooks/useCopyFeedback';
+import { usePersistedState } from '../../shared/hooks/usePersistedState';
+import { useTimeoutRegistry } from '../../shared/hooks/useTimeoutRegistry';
+import { downloadCanvasPng } from '../../shared/utils/canvas';
+import {
+  clampIterations,
+  clampZoom,
+  DEFAULT_FRACTAL_PREFS,
+  FRACTAL_STORAGE_KEY,
+  getDefaultViewport,
+  LANDMARKS,
+  MAX_ITERATIONS,
+  MIN_ITERATIONS,
+  PALETTES,
+  renderFractalOnCanvas,
+  validateFractalPrefs,
+  WALLPAPER_PRESETS,
+} from './fractalEngine';
+import type { FractalExplorerProps, FractalPrefs, FractalType, Landmark, PaletteId } from './types';
 import './FractalExplorer.css';
 
-export type FractalType = 'mandelbrot' | 'julia' | 'burningship';
-export type PaletteId = 'cyan' | 'neon' | 'sunset' | 'emerald' | 'monochrome';
-
-interface FractalExplorerProps {
-  onBack: () => void;
-}
-
-interface Landmark {
-  id: string;
-  name: string;
-  fractal: FractalType;
-  centerX: number;
-  centerY: number;
-  zoom: number;
-  juliaC?: [number, number];
-  description: string;
-}
-
-const STORAGE_KEY = 'tools_hub_fractal_prefs';
-
-const LANDMARKS: Landmark[] = [
-  {
-    id: 'm-overview',
-    name: 'Overview',
-    fractal: 'mandelbrot',
-    centerX: -0.65,
-    centerY: 0.0,
-    zoom: 1.0,
-    description: 'Classic full view of the Mandelbrot cardioid',
-  },
-  {
-    id: 'm-seahorse',
-    name: 'Seahorse Valley',
-    fractal: 'mandelbrot',
-    centerX: -0.743643,
-    centerY: 0.131825,
-    zoom: 8500,
-    description: 'Intricate spiraling seahorse tendrils',
-  },
-  {
-    id: 'm-elephant',
-    name: 'Elephant Valley',
-    fractal: 'mandelbrot',
-    centerX: 0.275,
-    centerY: 0.006,
-    zoom: 1200,
-    description: 'Curving elephant-trunk filaments',
-  },
-  {
-    id: 'm-spiral',
-    name: 'Triple Spiral',
-    fractal: 'mandelbrot',
-    centerX: -0.088,
-    centerY: 0.654,
-    zoom: 2400,
-    description: 'Hypnotic three-arm vortex',
-  },
-  {
-    id: 'm-satellite',
-    name: 'Mini Mandelbrot',
-    fractal: 'mandelbrot',
-    centerX: -1.7685,
-    centerY: -0.001,
-    zoom: 8000,
-    description: 'Distant self-similar satellite copy',
-  },
-  {
-    id: 'j-rabbit',
-    name: "Douady's Rabbit",
-    fractal: 'julia',
-    centerX: 0.0,
-    centerY: 0.0,
-    zoom: 1.2,
-    juliaC: [-0.123, 0.745],
-    description: 'Famous three-eared Julia rabbit',
-  },
-  {
-    id: 'j-dendrite',
-    name: 'Dendrite Crystal',
-    fractal: 'julia',
-    centerX: 0.0,
-    centerY: 0.0,
-    zoom: 1.2,
-    juliaC: [-0.4, 0.6],
-    description: 'Snowflake-like branching tree fractal',
-  },
-  {
-    id: 'j-dragon',
-    name: 'San Marco Dragon',
-    fractal: 'julia',
-    centerX: 0.0,
-    centerY: 0.0,
-    zoom: 1.2,
-    juliaC: [-0.75, 0.0],
-    description: 'Winged dragon-like self-similarity',
-  },
-  {
-    id: 'b-ship',
-    name: 'Burning Ship',
-    fractal: 'burningship',
-    centerX: -0.45,
-    centerY: -0.5,
-    zoom: 1.2,
-    description: 'Jagged flaming masts of the Burning Ship',
-  },
-  {
-    id: 'b-armada',
-    name: 'Ship Armada',
-    fractal: 'burningship',
-    centerX: -1.75,
-    centerY: -0.03,
-    zoom: 1500,
-    description: 'Deep canyon of burning ghost ships',
-  },
-];
-
-const PALETTES: Record<PaletteId, { name: string; colors: [number, number, number][] }> = {
-  cyan: {
-    name: 'Electric Cyan',
-    colors: [
-      [10, 15, 29],
-      [14, 52, 102],
-      [24, 110, 180],
-      [56, 189, 248],
-      [186, 230, 253],
-      [240, 249, 255],
-    ],
-  },
-  neon: {
-    name: 'Twilight Neon',
-    colors: [
-      [20, 8, 36],
-      [109, 40, 217],
-      [217, 70, 239],
-      [244, 63, 94],
-      [56, 189, 248],
-      [254, 240, 138],
-    ],
-  },
-  sunset: {
-    name: 'Sunset Ember',
-    colors: [
-      [15, 6, 6],
-      [127, 29, 29],
-      [194, 65, 12],
-      [249, 115, 22],
-      [250, 204, 21],
-      [254, 249, 195],
-    ],
-  },
-  emerald: {
-    name: 'Emerald Nebula',
-    colors: [
-      [4, 20, 16],
-      [6, 78, 59],
-      [16, 185, 129],
-      [52, 211, 153],
-      [167, 243, 208],
-      [240, 253, 244],
-    ],
-  },
-  monochrome: {
-    name: 'Monochrome Silver',
-    colors: [
-      [9, 9, 11],
-      [39, 39, 42],
-      [82, 82, 91],
-      [161, 161, 170],
-      [228, 228, 231],
-      [255, 255, 255],
-    ],
-  },
-};
-
-const WALLPAPER_PRESETS = [
-  { id: 'screen', name: 'Screen Viewport', width: 1200, height: 750 },
-  { id: 'fhd', name: 'Full HD (1920 × 1080)', width: 1920, height: 1080 },
-  { id: '4k', name: '4K Ultra HD (3840 × 2160)', width: 3840, height: 2160 },
-  { id: 'mobile', name: 'Mobile Portrait (1080 × 2400)', width: 1080, height: 2400 },
+const FRACTAL_OPTIONS: readonly { value: FractalType; label: string }[] = [
+  { value: 'mandelbrot', label: 'Mandelbrot' },
+  { value: 'julia', label: 'Julia Set' },
+  { value: 'burningship', label: 'Burning Ship' },
 ];
 
 export default function FractalExplorer({ onBack }: FractalExplorerProps) {
-  // Load preferences from localStorage
-  const [fractalType, setFractalType] = useState<FractalType>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed.type === 'mandelbrot' || parsed.type === 'julia' || parsed.type === 'burningship') {
-          return parsed.type;
-        }
-      }
-    } catch {
-      // fallback
-    }
-    return 'mandelbrot';
-  });
+  const [prefs, setPrefs] = usePersistedState<FractalPrefs>(
+    FRACTAL_STORAGE_KEY,
+    DEFAULT_FRACTAL_PREFS,
+    { validate: validateFractalPrefs }
+  );
 
-  const [paletteId, setPaletteId] = useState<PaletteId>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (PALETTES[parsed.palette as PaletteId]) {
-          return parsed.palette;
-        }
-      }
-    } catch {
-      // fallback
-    }
-    return 'cyan';
-  });
+  const fractalType = prefs.type;
+  const paletteId = prefs.palette;
+  const iterations = prefs.iterations;
 
-  const [iterations, setIterations] = useState<number>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (typeof parsed.iterations === 'number') {
-          return Math.max(30, Math.min(500, parsed.iterations));
-        }
-      }
-    } catch {
-      // fallback
-    }
-    return 120;
-  });
-
-  const [centerX, setCenterX] = useState<number>(-0.65);
-  const [centerY, setCenterY] = useState<number>(0.0);
-  const [zoom, setZoom] = useState<number>(1.0);
+  const [initialViewport] = useState(() => getDefaultViewport(fractalType));
+  const [centerX, setCenterX] = useState<number>(initialViewport.centerX);
+  const [centerY, setCenterY] = useState<number>(initialViewport.centerY);
+  const [zoom, setZoom] = useState<number>(initialViewport.zoom);
   const [juliaC, setJuliaC] = useState<[number, number]>([-0.123, 0.745]);
 
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedResolution, setSelectedResolution] = useState(WALLPAPER_PRESETS[1].id);
   const [isExporting, setIsExporting] = useState(false);
-  const [copiedTelemetry, setCopiedTelemetry] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [renderWarning, setRenderWarning] = useState<string | null>(null);
+
+  const { status: copyStatus, copy: copyTelemetry, reset: resetCopyStatus } = useCopyFeedback(2000);
+  const { schedule: scheduleTimeout } = useTimeoutRegistry();
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDraggingRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
 
-  // Persist settings
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          type: fractalType,
-          palette: paletteId,
-          iterations,
-        })
-      );
-    } catch {
-      // ignore
-    }
-  }, [fractalType, paletteId, iterations]);
+  const handleSelectFractalType = useCallback(
+    (type: FractalType) => {
+      setPrefs((prev) => ({ ...prev, type }));
+      const nextViewport = getDefaultViewport(type);
+      setCenterX(nextViewport.centerX);
+      setCenterY(nextViewport.centerY);
+      setZoom(nextViewport.zoom);
+    },
+    [setPrefs]
+  );
 
-  // Reset viewport when switching fractal type
-  const handleSelectFractalType = (type: FractalType) => {
-    setFractalType(type);
-    if (type === 'mandelbrot') {
-      setCenterX(-0.65);
-      setCenterY(0.0);
-      setZoom(1.0);
-    } else if (type === 'julia') {
-      setCenterX(0.0);
-      setCenterY(0.0);
-      setZoom(1.2);
-    } else {
-      setCenterX(-0.45);
-      setCenterY(-0.5);
-      setZoom(1.2);
-    }
-  };
+  const handleSelectLandmark = useCallback(
+    (landmark: Landmark) => {
+      setPrefs((prev) => ({ ...prev, type: landmark.fractal }));
+      setCenterX(landmark.centerX);
+      setCenterY(landmark.centerY);
+      setZoom(clampZoom(landmark.zoom));
+      if (landmark.juliaC) {
+        setJuliaC(landmark.juliaC);
+      }
+    },
+    [setPrefs]
+  );
 
-  // Warp to a curated landmark
-  const handleSelectLandmark = (landmark: Landmark) => {
-    setFractalType(landmark.fractal);
-    setCenterX(landmark.centerX);
-    setCenterY(landmark.centerY);
-    setZoom(landmark.zoom);
-    if (landmark.juliaC) {
-      setJuliaC(landmark.juliaC);
-    }
-  };
-
-  // Zoom controls
   const handleZoom = useCallback((factor: number) => {
-    setZoom((prev) => Math.max(0.2, Math.min(1e12, prev * factor)));
+    setZoom((prev) => clampZoom(prev * factor));
   }, []);
 
   const handleReset = useCallback(() => {
-    if (fractalType === 'mandelbrot') {
-      setCenterX(-0.65);
-      setCenterY(0.0);
-      setZoom(1.0);
-    } else if (fractalType === 'julia') {
-      setCenterX(0.0);
-      setCenterY(0.0);
-      setZoom(1.2);
-    } else {
-      setCenterX(-0.45);
-      setCenterY(-0.5);
-      setZoom(1.2);
-    }
+    const nextViewport = getDefaultViewport(fractalType);
+    setCenterX(nextViewport.centerX);
+    setCenterY(nextViewport.centerY);
+    setZoom(nextViewport.zoom);
   }, [fractalType]);
 
-  // Copy telemetry
   const handleCopyTelemetry = () => {
     const text = `Fractal: ${fractalType} | Re: ${centerX.toFixed(7)} | Im: ${centerY.toFixed(
       7
     )} | Zoom: ${zoom.toExponential(2)} | Iterations: ${iterations}`;
-    navigator.clipboard?.writeText(text).then(() => {
-      setCopiedTelemetry(true);
-      setTimeout(() => setCopiedTelemetry(false), 2000);
-    }).catch(() => {});
+    void copyTelemetry(text);
   };
 
-  // Pointer panning on canvas
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     isDraggingRef.current = true;
     lastPointerRef.current = { x: e.clientX, y: e.clientY };
@@ -328,13 +110,19 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!isDraggingRef.current || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    if (!isDraggingRef.current || !canvas) return;
     const dx = e.clientX - lastPointerRef.current.x;
     const dy = e.clientY - lastPointerRef.current.y;
     lastPointerRef.current = { x: e.clientX, y: e.clientY };
 
-    const rect = canvasRef.current.getBoundingClientRect();
-    const aspect = rect.width / rect.height;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+
+    const aspect =
+      canvas.width > 0 && canvas.height > 0
+        ? canvas.width / canvas.height
+        : rect.width / rect.height;
     const scale = 3.0 / zoom;
 
     const dRe = -(dx / rect.width) * scale * aspect;
@@ -349,23 +137,33 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
     try {
       (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
     } catch {
-      // ignore
+      // Ignore environments without pointer capture support
     }
   };
 
-  // Wheel zoom
-  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.3 : 1 / 1.3;
-    handleZoom(factor);
-  };
-
-  // Render to canvas (supports WebGL with seamless 2D fallback)
+  // Attach native non-passive wheel listener so preventDefault() blocks page scrolling reliably
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    renderFractalOnCanvas(
+    const handleNativeWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      const factor = event.deltaY < 0 ? 1.3 : 1 / 1.3;
+      handleZoom(factor);
+    };
+
+    canvas.addEventListener('wheel', handleNativeWheel, { passive: false });
+    return () => {
+      canvas.removeEventListener('wheel', handleNativeWheel);
+    };
+  }, [handleZoom]);
+
+  // Render fractal whenever viewport or parameters change
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rendered = renderFractalOnCanvas(
       canvas,
       fractalType,
       centerX,
@@ -375,21 +173,30 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
       paletteId,
       juliaC
     );
+    setRenderWarning(
+      rendered ? null : '2D canvas rendering is unavailable in this browser environment.'
+    );
   }, [fractalType, centerX, centerY, zoom, iterations, paletteId, juliaC]);
 
-  // Wallpaper export download
+  const handleCloseExportModal = useCallback(() => {
+    if (isExporting) return;
+    setExportError(null);
+    setIsExportModalOpen(false);
+  }, [isExporting]);
+
   const handleExportWallpaper = () => {
     const preset =
       WALLPAPER_PRESETS.find((p) => p.id === selectedResolution) || WALLPAPER_PRESETS[1];
+    setExportError(null);
     setIsExporting(true);
 
-    setTimeout(() => {
+    scheduleTimeout(() => {
       try {
         const offscreen = document.createElement('canvas');
         offscreen.width = preset.width;
         offscreen.height = preset.height;
 
-        renderFractalOnCanvas(
+        const rendered = renderFractalOnCanvas(
           offscreen,
           fractalType,
           centerX,
@@ -400,82 +207,62 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
           juliaC
         );
 
-        const dataUrl = offscreen.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.download = `fractal-${fractalType}-${preset.width}x${preset.height}.png`;
-        link.href = dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        if (!rendered) {
+          setExportError('Unable to initialize canvas renderer for wallpaper export.');
+          return;
+        }
+
+        const filename = `fractal-${fractalType}-${preset.width}x${preset.height}.png`;
+        const exported = downloadCanvasPng(offscreen, filename);
+        if (!exported) {
+          setExportError('Failed to encode or download wallpaper PNG. Try a lower resolution.');
+          return;
+        }
+
+        setIsExportModalOpen(false);
       } catch {
-        // error
+        setExportError('Unexpected error occurred while exporting wallpaper PNG.');
       } finally {
         setIsExporting(false);
-        setIsExportModalOpen(false);
       }
     }, 50);
   };
 
   return (
     <div className="fractal-wrapper">
-      <header className="fractal-header">
-        <button
-          type="button"
-          className="back-btn"
-          onClick={onBack}
-          aria-label="Back to Tools Hub"
-        >
-          ← Back to Tools Hub
-        </button>
-
-        <div className="fractal-title-area">
-          <div className="fractal-badge">Wallpaper Studio</div>
-          <h1 className="fractal-title">Fractal Explorer</h1>
-          <p className="fractal-subtitle">
-            Explore Mandelbrot, Julia & Burning Ship fractals with deep zoom & 4K export.
-          </p>
-        </div>
-      </header>
+      <ToolHeader
+        onBack={onBack}
+        title="Fractal Explorer"
+        badge="Wallpaper Studio"
+        subtitle="Explore Mandelbrot, Julia & Burning Ship fractals with deep zoom & 4K export."
+        className="fractal-header"
+      />
 
       <main className="fractal-main">
         {/* Top Control Bar: Fractal Type, Palette & Wallpapers */}
         <div className="fractal-controls-bar">
-          <div className="control-group">
-            <span className="control-label">Fractal:</span>
-            <div className="btn-group" role="group" aria-label="Select fractal type">
-              <button
-                type="button"
-                className={`type-btn ${fractalType === 'mandelbrot' ? 'active' : ''}`}
-                onClick={() => handleSelectFractalType('mandelbrot')}
-                aria-pressed={fractalType === 'mandelbrot'}
-              >
-                Mandelbrot
-              </button>
-              <button
-                type="button"
-                className={`type-btn ${fractalType === 'julia' ? 'active' : ''}`}
-                onClick={() => handleSelectFractalType('julia')}
-                aria-pressed={fractalType === 'julia'}
-              >
-                Julia Set
-              </button>
-              <button
-                type="button"
-                className={`type-btn ${fractalType === 'burningship' ? 'active' : ''}`}
-                onClick={() => handleSelectFractalType('burningship')}
-                aria-pressed={fractalType === 'burningship'}
-              >
-                Burning Ship
-              </button>
-            </div>
+          <div className="fractal-control-group">
+            <span className="fractal-control-label">Fractal:</span>
+            <SegmentedControl<FractalType>
+              ariaLabel="Select fractal type"
+              value={fractalType}
+              onChange={handleSelectFractalType}
+              options={FRACTAL_OPTIONS}
+              className="fractal-type-segmented"
+            />
           </div>
 
-          <div className="control-group">
-            <span className="control-label">Palette:</span>
+          <div className="fractal-control-group">
+            <label htmlFor="fractal-palette-select" className="fractal-control-label">
+              Palette:
+            </label>
             <select
-              className="palette-select"
+              id="fractal-palette-select"
+              className="fractal-palette-select"
               value={paletteId}
-              onChange={(e) => setPaletteId(e.target.value as PaletteId)}
+              onChange={(e) =>
+                setPrefs((prev) => ({ ...prev, palette: e.target.value as PaletteId }))
+              }
               aria-label="Select color palette"
             >
               {Object.entries(PALETTES).map(([id, info]) => (
@@ -486,28 +273,36 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             </select>
           </div>
 
-          <div className="control-group iterations-group">
-            <label htmlFor="iter-slider" className="control-label">
+          <div className="fractal-control-group fractal-iterations-group">
+            <label htmlFor="iter-slider" className="fractal-control-label">
               Detail: {iterations}
             </label>
             <input
               id="iter-slider"
               type="range"
-              min="40"
-              max="500"
+              min={MIN_ITERATIONS}
+              max={MAX_ITERATIONS}
               step="10"
               value={iterations}
-              onChange={(e) => setIterations(Number(e.target.value))}
-              className="iter-slider"
+              onChange={(e) =>
+                setPrefs((prev) => ({
+                  ...prev,
+                  iterations: clampIterations(Number(e.target.value)),
+                }))
+              }
+              className="fractal-iter-slider"
               aria-label="Iteration depth slider"
             />
           </div>
 
-          <div className="control-group export-control">
+          <div className="fractal-control-group fractal-export-control">
             <button
               type="button"
-              className="export-btn"
-              onClick={() => setIsExportModalOpen(true)}
+              className="fractal-export-btn"
+              onClick={() => {
+                setExportError(null);
+                setIsExportModalOpen(true);
+              }}
               aria-label="Open wallpaper export modal"
             >
               🖼️ Export Wallpaper
@@ -516,14 +311,14 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
         </div>
 
         {/* Landmarks Quick-Warp Bar */}
-        <div className="landmarks-bar" role="group" aria-label="Curated landmark bookmarks">
-          <span className="landmarks-title">Landmarks:</span>
-          <div className="landmarks-scroll">
+        <div className="fractal-landmarks-bar" role="group" aria-label="Curated landmark bookmarks">
+          <span className="fractal-landmarks-title">Landmarks:</span>
+          <div className="fractal-landmarks-scroll">
             {LANDMARKS.filter((lm) => lm.fractal === fractalType).map((lm) => (
               <button
                 key={lm.id}
                 type="button"
-                className="landmark-chip"
+                className="fractal-landmark-chip"
                 onClick={() => handleSelectLandmark(lm)}
                 title={lm.description}
               >
@@ -532,6 +327,14 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             ))}
           </div>
         </div>
+
+        {renderWarning ? (
+          <InlineAlert
+            variant="warning"
+            message={renderWarning}
+            onDismiss={() => setRenderWarning(null)}
+          />
+        ) : null}
 
         {/* Interactive Canvas Stage */}
         <div className="fractal-canvas-container">
@@ -544,13 +347,12 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            onWheel={handleWheel}
             data-testid="fractal-canvas"
           />
 
           {/* Floating On-Canvas Telemetry HUD */}
-          <div className="telemetry-hud">
-            <div className="telemetry-data">
+          <div className="fractal-telemetry-hud">
+            <div className="fractal-telemetry-data">
               <span>
                 <strong>Center:</strong> {centerX.toFixed(5)}, {centerY.toFixed(5)}
               </span>
@@ -560,20 +362,24 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             </div>
             <button
               type="button"
-              className="copy-telemetry-btn"
+              className="fractal-copy-telemetry-btn"
               onClick={handleCopyTelemetry}
               title="Copy coordinate telemetry"
               aria-label="Copy coordinate telemetry"
             >
-              {copiedTelemetry ? '✓ Copied' : '📋 Copy'}
+              {copyStatus === 'copied'
+                ? '✓ Copied'
+                : copyStatus === 'error'
+                  ? '⚠ Failed'
+                  : '📋 Copy'}
             </button>
           </div>
 
           {/* Floating Navigation Buttons (+ / - / Reset) */}
-          <div className="canvas-nav-overlay">
+          <div className="fractal-canvas-nav-overlay">
             <button
               type="button"
-              className="nav-btn"
+              className="fractal-nav-btn"
               onClick={() => handleZoom(1.5)}
               title="Zoom In (+)"
               aria-label="Zoom In"
@@ -582,7 +388,7 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             </button>
             <button
               type="button"
-              className="nav-btn"
+              className="fractal-nav-btn"
               onClick={() => handleZoom(1 / 1.5)}
               title="Zoom Out (-)"
               aria-label="Zoom Out"
@@ -591,7 +397,7 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
             </button>
             <button
               type="button"
-              className="nav-btn"
+              className="fractal-nav-btn"
               onClick={handleReset}
               title="Reset View"
               aria-label="Reset View"
@@ -604,167 +410,87 @@ export default function FractalExplorer({ onBack }: FractalExplorerProps) {
         {/* Instructions / Tip Card */}
         <div className="fractal-tip-card">
           <p>
-            💡 <strong>Exploration Guide:</strong> Click and drag to pan across the fractal. Use the mouse wheel or on-screen buttons to zoom in endlessly. Pick landmark presets or switch color palettes to discover hidden self-similar worlds!
+            💡 <strong>Exploration Guide:</strong> Click and drag to pan across the fractal. Use the
+            mouse wheel or on-screen buttons to zoom in endlessly. Pick landmark presets or switch
+            color palettes to discover hidden self-similar worlds!
           </p>
         </div>
       </main>
 
       {/* Wallpaper Studio Export Modal */}
-      {isExportModalOpen && (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="modal-card">
-            <h2 id="modal-title" className="modal-title">
-              🖼️ Wallpaper Studio Export
-            </h2>
-            <p className="modal-desc">
-              Render and download the current fractal view at crystal-clear high resolutions.
-            </p>
+      <Modal
+        isOpen={isExportModalOpen}
+        onClose={handleCloseExportModal}
+        title="🖼️ Wallpaper Studio Export"
+        closeLabel="Close wallpaper export modal"
+        maxWidth="440px"
+        className="fractal-modal-card"
+      >
+        <p className="fractal-modal-desc">
+          Render and download the current fractal view at crystal-clear high resolutions.
+        </p>
 
-            <div className="resolution-options" role="radiogroup" aria-label="Select export resolution">
-              {WALLPAPER_PRESETS.map((p) => (
-                <label
-                  key={p.id}
-                  className={`res-label ${selectedResolution === p.id ? 'active' : ''}`}
-                >
-                  <input
-                    type="radio"
-                    name="wallpaper-res"
-                    value={p.id}
-                    checked={selectedResolution === p.id}
-                    onChange={(e) => setSelectedResolution(e.target.value)}
-                  />
-                  <div className="res-info">
-                    <span className="res-name">{p.name}</span>
-                    <span className="res-dim">{p.width} × {p.height} px</span>
-                  </div>
-                </label>
-              ))}
-            </div>
+        {exportError ? (
+          <InlineAlert
+            variant="error"
+            message={exportError}
+            onDismiss={() => setExportError(null)}
+          />
+        ) : null}
 
-            <div className="modal-actions">
-              <button
-                type="button"
-                className="modal-cancel-btn"
-                onClick={() => setIsExportModalOpen(false)}
-                disabled={isExporting}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="modal-download-btn"
-                onClick={handleExportWallpaper}
-                disabled={isExporting}
-              >
-                {isExporting ? 'Rendering...' : '⬇️ Download PNG'}
-              </button>
-            </div>
-          </div>
+        <div
+          className="fractal-resolution-options"
+          role="radiogroup"
+          aria-label="Select export resolution"
+        >
+          {WALLPAPER_PRESETS.map((p) => (
+            <label
+              key={p.id}
+              className={`fractal-res-label ${selectedResolution === p.id ? 'active' : ''}`}
+            >
+              <input
+                type="radio"
+                name="wallpaper-res"
+                value={p.id}
+                checked={selectedResolution === p.id}
+                onChange={(e) => setSelectedResolution(e.target.value)}
+              />
+              <div className="fractal-res-info">
+                <span className="fractal-res-name">{p.name}</span>
+                <span className="fractal-res-dim">
+                  {p.width} × {p.height} px
+                </span>
+              </div>
+            </label>
+          ))}
         </div>
-      )}
+
+        <div className="fractal-modal-actions">
+          <button
+            type="button"
+            className="fractal-modal-cancel-btn"
+            onClick={handleCloseExportModal}
+            disabled={isExporting}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="fractal-modal-download-btn"
+            onClick={handleExportWallpaper}
+            disabled={isExporting}
+          >
+            {isExporting ? 'Rendering...' : '⬇️ Download PNG'}
+          </button>
+        </div>
+      </Modal>
+
+      <Toast
+        visible={copyStatus === 'error'}
+        variant="error"
+        message="Unable to copy coordinate telemetry to clipboard."
+        onDismiss={resetCopyStatus}
+      />
     </div>
   );
-}
-
-// -----------------------------------------------------------
-// FRACTAL COMPUTATION & CANVAS RENDERING ENGINE
-// -----------------------------------------------------------
-
-function renderFractalOnCanvas(
-  canvas: HTMLCanvasElement,
-  type: FractalType,
-  centerX: number,
-  centerY: number,
-  zoom: number,
-  maxIterations: number,
-  paletteId: PaletteId,
-  juliaC: [number, number]
-) {
-  const width = canvas.width;
-  const height = canvas.height;
-  if (width === 0 || height === 0) return;
-
-  const aspect = width / height;
-  const scale = 3.0 / zoom;
-  const palette = PALETTES[paletteId] || PALETTES.cyan;
-  const colors = palette.colors;
-
-  // Try 2D Context rendering (fast pixel array buffer)
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const imgData = ctx.createImageData(width, height);
-  const data = imgData.data;
-
-  const [jRe, jIm] = juliaC;
-
-  for (let py = 0; py < height; py++) {
-    const im = centerY + ((py - height / 2) / height) * scale;
-    const rowOffset = py * width * 4;
-
-    for (let px = 0; px < width; px++) {
-      const re = centerX + ((px - width / 2) / width) * scale * aspect;
-
-      let zr = type === 'julia' ? re : 0;
-      let zi = type === 'julia' ? im : 0;
-      const cr = type === 'julia' ? jRe : re;
-      const ci = type === 'julia' ? jIm : im;
-
-      let iter = 0;
-      let zr2 = zr * zr;
-      let zi2 = zi * zi;
-
-      if (type === 'burningship') {
-        zr = 0;
-        zi = 0;
-        zr2 = 0;
-        zi2 = 0;
-        while (zr2 + zi2 <= 4.0 && iter < maxIterations) {
-          const absZr = Math.abs(zr);
-          const absZi = Math.abs(zi);
-          zi = 2.0 * absZr * absZi + ci;
-          zr = zr2 - zi2 + cr;
-          zr2 = zr * zr;
-          zi2 = zi * zi;
-          iter++;
-        }
-      } else {
-        while (zr2 + zi2 <= 4.0 && iter < maxIterations) {
-          zi = 2.0 * zr * zi + ci;
-          zr = zr2 - zi2 + cr;
-          zr2 = zr * zr;
-          zi2 = zi * zi;
-          iter++;
-        }
-      }
-
-      const pixelIndex = rowOffset + px * 4;
-
-      if (iter === maxIterations) {
-        // Inside set: deep dark obsidian
-        data[pixelIndex] = 10;
-        data[pixelIndex + 1] = 15;
-        data[pixelIndex + 2] = 24;
-        data[pixelIndex + 3] = 255;
-      } else {
-        // Continuous smooth coloring across an aesthetic 48-step cycle
-        const CYCLE_PERIOD = 48;
-        const cycleVal = (iter % CYCLE_PERIOD) / CYCLE_PERIOD;
-        const scaled = cycleVal * (colors.length - 1);
-        const colorIdx = Math.floor(scaled);
-        const nextIdx = Math.min(colors.length - 1, colorIdx + 1);
-        const t = scaled - colorIdx;
-
-        const c1 = colors[colorIdx];
-        const c2 = colors[nextIdx];
-
-        data[pixelIndex] = Math.round(c1[0] + (c2[0] - c1[0]) * t);
-        data[pixelIndex + 1] = Math.round(c1[1] + (c2[1] - c1[1]) * t);
-        data[pixelIndex + 2] = Math.round(c1[2] + (c2[2] - c1[2]) * t);
-        data[pixelIndex + 3] = 255;
-      }
-    }
-  }
-
-  ctx.putImageData(imgData, 0, 0);
 }

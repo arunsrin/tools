@@ -1,29 +1,22 @@
 /* Tools Hub Global & Dashboard Styles (Dark Theme by Default) */
 
 :root {
-  --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "Ubuntu Mono", monospace;
-
-  /* Consistent Dark Theme (Strictly aligned with arunsr.in dark mode) */
-  --bg-color: #0f172a;
-  --bg-secondary: #1e293b;
-  --card-bg: #1e293b;
-  --card-border: #334155;
-  --text-color: #f1f5f9;
-  --text-muted: #94a3b8;
-  --border-color: #334155;
-  --link-color: #38bdf8;
-  --accent-color: #38bdf8;
-  --accent-hover: #7dd3fc;
-  --header-glow: rgba(56, 189, 248, 0.12);
+  /* Legacy aliases backed by src/styles/tokens.css */
+  --bg-color: var(--bg-canvas, #0f172a);
+  --bg-secondary: var(--bg-surface, #1e293b);
+  --card-bg: var(--bg-surface, #1e293b);
+  --card-border: var(--border-subtle, #334155);
+  --text-color: var(--text-primary, #f1f5f9);
+  --border-color: var(--border-subtle, #334155);
+  --link-color: var(--accent, #38bdf8);
+  --accent-color: var(--accent, #38bdf8);
+  --header-glow: var(--accent-tint, rgba(56, 189, 248, 0.12));
 
   /* Chessboard Watermark Tokens */
   --chess-dark-sq: rgba(56, 189, 248, 0.25);
   --chess-light-sq: rgba(56, 189, 248, 0.04);
   --chess-border: rgba(56, 189, 248, 0.38);
   --chess-piece: rgba(56, 189, 248, 0.75);
-
-  color-scheme: dark;
 }
 
 * {
@@ -181,9 +174,18 @@ code, pre {
 }
 
 .coming-soon {
-  opacity: 0.65;
-  cursor: default;
+  background: var(--bg-elevated, #0b1120);
+  border-color: var(--border-subtle, #334155);
   border-style: dashed;
+  cursor: default;
+}
+
+.coming-soon h2 {
+  color: var(--text-primary, #f1f5f9);
+}
+
+.coming-soon p {
+  color: var(--text-muted, #94a3b8);
 }
 
 /* Footer */

@@ -74,9 +74,14 @@ This project is designed to be hosted as a static-only Worker using **Cloudflare
 ## 📖 Project Structure
 
 - `SPEC.md`: Master specification for the hub.
-- `src/App.tsx`: Central hub dashboard and view switcher.
-- `src/components/`: Shared UI components (ThemeToggle, ChessWatermark).
-- `src/theme/`: ThemeContext and localStorage persistence hooks.
+- `src/App.tsx`: Central hub dashboard, view switcher, and `ToolErrorBoundary` wrapper.
+- `src/routes.ts`: Central `TOOL_REGISTRY`, direct tool routes (`TOOL_ROUTES`), and URL parser/normalizer.
+- `src/styles/`: Unified dark-theme design tokens (`tokens.css`) and base accessibility/UI primitives (`primitives.css`).
+- `src/shared/`: Reusable cross-tool building blocks:
+  - `src/shared/components/`: `ToolHeader`, `Modal`, `SegmentedControl`, `InlineAlert`, `Toast`, `ToolErrorBoundary`, and shared `types.ts`.
+  - `src/shared/hooks/`: `usePersistedState`, `useTimeoutRegistry`, `useCopyFeedback`, and `useDocumentTitle`.
+  - `src/shared/utils/`: `clipboard.ts`, `canvas.ts`, and `audio.ts`.
+- `src/components/`: Hub-level components (`ChessWatermark`).
 - `src/tools/`: Directory containing individual modular tools:
   - `src/tools/big/`: The Big Text tool module.
   - `src/tools/biomorphs/`: The Biomorphs Evolutionary Watchmaker artificial selection sandbox tool module.
