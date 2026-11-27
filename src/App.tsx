@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback, type MouseEvent } from 'react';
+import './styles/tokens.css';
+import './styles/primitives.css';
+import './index.css';
 import BigText from './tools/big/BigText';
 import TimezoneConverter from './tools/timezone/TimezoneConverter';
 import ChoicePicker from './tools/picker/ChoicePicker';
@@ -7,11 +10,21 @@ import Pals from './tools/pals/Pals';
 import FractalExplorer from './tools/fractal/FractalExplorer';
 import Biomorphs from './tools/biomorphs/Biomorphs';
 import ChessWatermark from './components/ChessWatermark';
-import { parseRoute, getPathForView, TOOL_ROUTES, type ToolKey, type View } from './routes';
-import './index.css';
+import ToolErrorBoundary from './shared/components/ToolErrorBoundary';
+import {
+  parseRoute,
+  getPathForView,
+  buildNormalizedUrl,
+  TOOL_ROUTES,
+  TOOL_BY_KEY,
+  type ToolKey,
+  type View,
+} from './routes';
 
 export default function App() {
-  const [view, setView] = useState<View>(() => parseRoute(window.location.pathname, window.location.hash));
+  const [view, setView] = useState<View>(() =>
+    parseRoute(window.location.pathname, window.location.hash)
+  );
 
   // Sync state on browser back/forward buttons
   useEffect(() => {
@@ -25,11 +38,20 @@ export default function App() {
     };
   }, []);
 
-  // Normalize URL bar if an invalid route redirected to hub or if hash was used
+  // Normalize URL bar if an invalid route redirected to hub or if hash fallback was used,
+  // preserving query params and non-route hashes.
   useEffect(() => {
     const targetPath = getPathForView(view);
-    if (window.location.pathname !== targetPath || window.location.hash) {
-      window.history.replaceState({}, '', targetPath);
+    const currentUrl =
+      window.location.pathname + window.location.search + window.location.hash;
+    const normalizedUrl = buildNormalizedUrl(
+      targetPath,
+      window.location.search,
+      window.location.hash
+    );
+
+    if (currentUrl !== normalizedUrl) {
+      window.history.replaceState({}, '', normalizedUrl);
     }
   }, [view]);
 
@@ -41,41 +63,56 @@ export default function App() {
     setView(nextView);
   }, []);
 
-  const handleCardClick = (targetView: ToolKey) => (e: MouseEvent<HTMLAnchorElement>) => {
-    // Retain default browser behavior for modifier clicks or middle clicks (open in new tab)
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
-      return;
+  const handleBackToHub = useCallback(() => {
+    navigate('hub');
+  }, [navigate]);
+
+  const handleCardClick =
+    (targetView: ToolKey) => (e: MouseEvent<HTMLAnchorElement>) => {
+      // Retain default browser behavior for modifier clicks or middle clicks (open in new tab)
+      if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.altKey ||
+        e.shiftKey
+      ) {
+        return;
+      }
+      e.preventDefault();
+      navigate(targetView);
+    };
+
+  if (view !== 'hub') {
+    const toolTitle = TOOL_BY_KEY[view].title;
+    let activeTool = null;
+
+    if (view === 'big') {
+      activeTool = <BigText onBack={handleBackToHub} />;
+    } else if (view === 'timezone') {
+      activeTool = <TimezoneConverter onBack={handleBackToHub} />;
+    } else if (view === 'picker') {
+      activeTool = <ChoicePicker onBack={handleBackToHub} />;
+    } else if (view === 'pomo') {
+      activeTool = <PomoTimer onBack={handleBackToHub} />;
+    } else if (view === 'pals') {
+      activeTool = <Pals onBack={handleBackToHub} />;
+    } else if (view === 'fractal') {
+      activeTool = <FractalExplorer onBack={handleBackToHub} />;
+    } else if (view === 'biomorphs') {
+      activeTool = <Biomorphs onBack={handleBackToHub} />;
     }
-    e.preventDefault();
-    navigate(targetView);
-  };
 
-  if (view === 'big') {
-    return <BigText onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'timezone') {
-    return <TimezoneConverter onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'picker') {
-    return <ChoicePicker onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'pomo') {
-    return <PomoTimer onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'pals') {
-    return <Pals onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'fractal') {
-    return <FractalExplorer onBack={() => navigate('hub')} />;
-  }
-
-  if (view === 'biomorphs') {
-    return <Biomorphs onBack={() => navigate('hub')} />;
+    return (
+      <ToolErrorBoundary
+        onBack={handleBackToHub}
+        toolName={toolTitle}
+        resetKey={view}
+      >
+        {activeTool}
+      </ToolErrorBoundary>
+    );
   }
 
   return (

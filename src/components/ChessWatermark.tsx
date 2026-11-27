@@ -1,15 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { CHESS_QUOTES } from './chessQuotes';
+import { useTimeoutRegistry, type TimeoutId } from '../shared/hooks/useTimeoutRegistry';
 import './ChessWatermark.css';
 
-export const ChessWatermark: React.FC = () => {
+export default function ChessWatermark() {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState<number | null>(null);
   const [isHopping, setIsHopping] = useState(false);
-  const autoDismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { schedule, clear } = useTimeoutRegistry();
+  const hopTimerRef = useRef<TimeoutId | null>(null);
+  const autoDismissTimerRef = useRef<TimeoutId | null>(null);
+
+  const dismissQuote = () => {
+    clear(autoDismissTimerRef.current);
+    autoDismissTimerRef.current = null;
+    setCurrentQuoteIndex(null);
+  };
 
   const triggerQuote = () => {
+    clear(hopTimerRef.current);
     setIsHopping(true);
-    setTimeout(() => setIsHopping(false), 500);
+    hopTimerRef.current = schedule(() => {
+      hopTimerRef.current = null;
+      setIsHopping(false);
+    }, 500);
+
+    clear(autoDismissTimerRef.current);
+    autoDismissTimerRef.current = schedule(() => {
+      autoDismissTimerRef.current = null;
+      setCurrentQuoteIndex(null);
+    }, 7000);
 
     setCurrentQuoteIndex((prev) => {
       if (prev === null) {
@@ -18,22 +37,6 @@ export const ChessWatermark: React.FC = () => {
       return (prev + 1) % CHESS_QUOTES.length;
     });
   };
-
-  useEffect(() => {
-    if (currentQuoteIndex !== null) {
-      if (autoDismissTimerRef.current) {
-        clearTimeout(autoDismissTimerRef.current);
-      }
-      autoDismissTimerRef.current = setTimeout(() => {
-        setCurrentQuoteIndex(null);
-      }, 7000);
-    }
-    return () => {
-      if (autoDismissTimerRef.current) {
-        clearTimeout(autoDismissTimerRef.current);
-      }
-    };
-  }, [currentQuoteIndex]);
 
   const activeQuote = currentQuoteIndex !== null ? CHESS_QUOTES[currentQuoteIndex] : null;
 
@@ -87,7 +90,7 @@ export const ChessWatermark: React.FC = () => {
           <button
             type="button"
             className="chess-quote-close"
-            onClick={() => setCurrentQuoteIndex(null)}
+            onClick={dismissQuote}
             aria-label="Close chess quote"
           >
             ✕
@@ -102,6 +105,4 @@ export const ChessWatermark: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default ChessWatermark;
+}

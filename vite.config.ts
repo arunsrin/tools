@@ -11,5 +11,14 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/test/setup.ts',
     exclude: [...configDefaults.exclude, '.worktrees/**'],
+    coverage: {
+      provider: 'v8',
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80,
+      },
+    },
   },
 } as any)

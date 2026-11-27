@@ -1,0 +1,45 @@
+.shared-segmented-control {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  max-width: 100%;
+  background: var(--bg-elevated, #0b1120);
+  border: 1px solid var(--border-subtle, #334155);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.shared-segmented-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 8px);
+  background: transparent;
+  color: var(--text-muted, #94a3b8);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.shared-segmented-btn:hover:not(:disabled):not(.is-selected) {
+  background: var(--bg-surface, #1e293b);
+  color: var(--text-primary, #f1f5f9);
+}
+
+.shared-segmented-btn.is-selected {
+  background: var(--accent-solid, #0369a1);
+  border-color: var(--accent, #38bdf8);
+  color: var(--accent-solid-on, #ffffff);
+}
+
+.shared-segmented-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

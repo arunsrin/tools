@@ -1,23 +1,47 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  parseRoute,
+  parseToolRoute,
+  getPathForView,
+  buildNormalizedUrl,
+  TOOL_ROUTES,
+  TOOL_REGISTRY,
+} from './routes';
+
+let shouldCrashBigText = false;
+
+vi.mock('./tools/big/BigText', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./tools/big/BigText')>();
+  return {
+    default: function MockableBigText(props: { onBack: () => void }) {
+      if (shouldCrashBigText) {
+        throw new Error('Simulated BigText failure');
+      }
+      return <actual.default {...props} />;
+    },
+  };
+});
+
 import App from './App';
-import { parseRoute, getPathForView, TOOL_ROUTES } from './routes';
 
 describe('App (Tools Hub Dashboard & URL Routing)', () => {
   beforeEach(() => {
-    // Reset path to root before each test
+    shouldCrashBigText = false;
     window.history.replaceState({}, '', '/');
   });
 
   afterEach(() => {
+    shouldCrashBigText = false;
     vi.restoreAllMocks();
   });
 
-  it('renders the hub header, badge, and featured tools as accessible links', () => {
+  it('renders the hub header, badge, ChessWatermark, and featured tools as accessible links', () => {
     render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
     expect(screen.getByText(/simple, self-contained utilities/i)).toBeInTheDocument();
     expect(screen.getByText(/utility toolkit/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /click the chess knight/i })).toBeInTheDocument();
 
     const bigLink = screen.getByRole('link', { name: /big text/i });
     expect(bigLink).toHaveAttribute('href', TOOL_ROUTES.big);
@@ -43,7 +67,7 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByText(/more tools/i)).toBeInTheDocument();
   });
 
-  it('renders active tool cards in strictly alphabetical order', () => {
+  it('renders active tool cards in strictly alphabetical order matching TOOL_REGISTRY', () => {
     const { container } = render(<App />);
     const cardHeadings = Array.from(
       container.querySelectorAll('.tools-grid .tool-card:not(.coming-soon) h2')
@@ -58,10 +82,21 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       'Random Picker',
       'Timezone Converter',
     ]);
+    expect(cardHeadings).toEqual(TOOL_REGISTRY.map((entry) => entry.title));
 
-    // Explicitly verify alphabetical sequence
     const sortedHeadings = [...cardHeadings].sort((a, b) => a.localeCompare(b));
     expect(cardHeadings).toEqual(sortedHeadings);
+  });
+
+  it('marks the Coming soon card as aria-disabled="true" and keeps user on hub when clicked', () => {
+    render(<App />);
+    const comingSoonHeading = screen.getByRole('heading', { level: 2, name: /more tools/i });
+    const comingSoonCard = comingSoonHeading.closest('.tool-card');
+    expect(comingSoonCard).toHaveAttribute('aria-disabled', 'true');
+
+    fireEvent.click(comingSoonCard!);
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
   it('renders a Featured badge on the Biomorphs card', () => {
@@ -93,31 +128,31 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const tzCard = screen.getByRole('link', { name: /timezone converter/i });
     fireEvent.click(tzCard);
 
-    // In TimezoneConverter tool & URL updated
     expect(window.location.pathname).toBe('/timezone');
     expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
-    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
-  it('navigates to Big Text tool when its card is clicked and back to hub', () => {
+  it('navigates to Big Text tool when its card is clicked, unmounts ChessWatermark, and returns to hub', () => {
     render(<App />);
+    expect(screen.getByRole('button', { name: /click the chess knight/i })).toBeInTheDocument();
+
     const bigTextCard = screen.getByRole('link', { name: /big text/i });
     fireEvent.click(bigTextCard);
 
-    // In BigText tool & URL updated
     expect(window.location.pathname).toBe('/big');
+    expect(screen.queryByRole('button', { name: /click the chess knight/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
 
-    // Navigate back
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /click the chess knight/i })).toBeInTheDocument();
   });
 
   it('navigates to Random Picker tool when its card is clicked and back to hub', () => {
@@ -125,12 +160,10 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const pickerCard = screen.getByRole('link', { name: /random picker/i });
     fireEvent.click(pickerCard);
 
-    // In ChoicePicker tool & URL updated
     expect(window.location.pathname).toBe('/picker');
     expect(screen.getByRole('heading', { level: 1, name: /random picker & decision maker/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
-    // Navigate back
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -141,13 +174,11 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const pomoCard = screen.getByRole('link', { name: /cute pomo/i });
     fireEvent.click(pomoCard);
 
-    // In PomoTimer tool & URL updated
     expect(window.location.pathname).toBe('/pomo');
     expect(screen.getByTestId('pomo-mascot')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByText(/focus session/i)).toBeInTheDocument();
 
-    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -158,13 +189,11 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const palsCard = screen.getByRole('link', { name: /desktop pals/i });
     fireEvent.click(palsCard);
 
-    // In Desktop Pals tool & URL updated
     expect(window.location.pathname).toBe('/pals');
     expect(screen.getByRole('heading', { level: 1, name: /desktop pals/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByTestId('pals-canvas')).toBeInTheDocument();
 
-    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -175,13 +204,11 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const fractalCard = screen.getByRole('link', { name: /fractal explorer/i });
     fireEvent.click(fractalCard);
 
-    // In Fractal Explorer tool & URL updated
     expect(window.location.pathname).toBe('/fractal');
     expect(screen.getByRole('heading', { level: 1, name: /fractal explorer/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
     expect(screen.getByTestId('fractal-canvas')).toBeInTheDocument();
 
-    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -192,12 +219,10 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     const biomorphsCard = screen.getByRole('link', { name: /biomorphs/i });
     fireEvent.click(biomorphsCard);
 
-    // In Biomorphs tool & URL updated
     expect(window.location.pathname).toBe('/biomorphs');
     expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to tools hub/i })).toBeInTheDocument();
 
-    // Navigate back to hub
     fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
     expect(window.location.pathname).toBe('/');
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
@@ -254,67 +279,120 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /biomorphs: the evolutionary watchmaker/i })).toBeInTheDocument();
   });
 
-  it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL to /timezone', () => {
-    window.history.replaceState({}, '', '/#/timezone');
+  it('handles hash fallback routes cleanly (e.g. #/timezone) and normalizes URL while preserving query params', () => {
+    window.history.replaceState({}, '', '/#/timezone?tz=UTC');
     render(<App />);
 
     expect(screen.getByRole('heading', { level: 1, name: /world time & timezone converter/i })).toBeInTheDocument();
     expect(window.location.pathname).toBe('/timezone');
+    expect(window.location.search).toBe('?tz=UTC');
     expect(window.location.hash).toBe('');
   });
 
-  it('falls back gracefully to hub view on unrecognized path (e.g. /unknown-tool)', () => {
-    window.history.replaceState({}, '', '/unknown-tool');
+  it('preserves query parameters and non-route hashes on direct tool URL sync', () => {
+    window.history.replaceState({}, '', '/big?text=hello#section');
     render(<App />);
 
+    expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/big');
+    expect(window.location.search).toBe('?text=hello');
+    expect(window.location.hash).toBe('#section');
+  });
+
+  it('falls back gracefully to hub view on unrecognized or nested paths (e.g. /unknown-tool, /big/extra)', () => {
+    window.history.replaceState({}, '', '/unknown-tool');
+    const { unmount } = render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
+    unmount();
+
+    window.history.replaceState({}, '', '/big/extra');
+    render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
     expect(window.location.pathname).toBe('/');
   });
 
-  it('responds to browser back and forward popstate events', () => {
+  it('responds to browser back, forward, and invalid nested popstate events', () => {
     render(<App />);
     const bigCard = screen.getByRole('link', { name: /big text/i });
     fireEvent.click(bigCard);
     expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
     expect(window.location.pathname).toBe('/big');
 
-    // Simulate browser Back button: URL goes to /
     window.history.replaceState({}, '', '/');
     act(() => {
       window.dispatchEvent(new PopStateEvent('popstate'));
     });
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
 
-    // Simulate browser Forward button: URL goes to /big
     window.history.replaceState({}, '', '/big');
     act(() => {
       window.dispatchEvent(new PopStateEvent('popstate'));
     });
     expect(screen.getByPlaceholderText(/type something/i)).toBeInTheDocument();
+
+    window.history.replaceState({}, '', '/big/extra');
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
   });
 
-  it('allows modifier clicks (Ctrl, Cmd, Shift, middle-click) without preventDefault', () => {
+  it('allows modifier clicks (Ctrl, Meta, Shift, Alt, middle-click) without preventDefault', () => {
     render(<App />);
     const pomoCard = screen.getByRole('link', { name: /cute pomo/i });
 
-    // Ctrl+click should not navigate via SPA (lets browser handle new tab)
     fireEvent.click(pomoCard, { ctrlKey: true });
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
 
-    // Middle click (button 1) should not navigate via SPA
+    fireEvent.click(pomoCard, { metaKey: true });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+
+    fireEvent.click(pomoCard, { shiftKey: true });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+
+    fireEvent.click(pomoCard, { altKey: true });
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+
     fireEvent.click(pomoCard, { button: 1 });
     expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
   });
 
-  describe('Route helper functions (parseRoute and getPathForView)', () => {
-    it('parses valid paths correctly', () => {
+  it('catches active tool rendering errors in ToolErrorBoundary and recovers back to hub', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    shouldCrashBigText = true;
+
+    render(<App />);
+    fireEvent.click(screen.getByRole('link', { name: /big text/i }));
+
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /big text encountered an error/i })).toBeInTheDocument();
+    expect(screen.getByText(/simulated bigtext failure/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /back to tools hub/i }));
+    expect(window.location.pathname).toBe('/');
+    expect(screen.getByRole('heading', { level: 1, name: /tools hub/i })).toBeInTheDocument();
+  });
+
+  describe('Route helper functions (parseToolRoute, parseRoute, getPathForView, buildNormalizedUrl)', () => {
+    it('parses valid single-segment paths case-insensitively', () => {
       expect(parseRoute('/big')).toBe('big');
+      expect(parseRoute('/BIG')).toBe('big');
       expect(parseRoute('/timezone')).toBe('timezone');
       expect(parseRoute('/picker/')).toBe('picker');
       expect(parseRoute('/pomo')).toBe('pomo');
       expect(parseRoute('/pals')).toBe('pals');
       expect(parseRoute('/fractal')).toBe('fractal');
       expect(parseRoute('/biomorphs')).toBe('biomorphs');
+    });
+
+    it('rejects trailing segments in parseToolRoute and falls back to hub in parseRoute', () => {
+      expect(parseToolRoute('/big/extra')).toBeNull();
+      expect(parseRoute('/big/extra')).toBe('hub');
+      expect(parseToolRoute('/', '#/big/extra')).toBeNull();
+      expect(parseRoute('/', '#/big/extra')).toBe('hub');
     });
 
     it('parses hash fallback correctly', () => {
@@ -343,6 +421,13 @@ describe('App (Tools Hub Dashboard & URL Routing)', () => {
       expect(getPathForView('pals')).toBe('/pals');
       expect(getPathForView('fractal')).toBe('/fractal');
       expect(getPathForView('biomorphs')).toBe('/biomorphs');
+    });
+
+    it('preserves query params and non-route hashes in buildNormalizedUrl', () => {
+      expect(buildNormalizedUrl('/timezone', '?tz=UTC', '#/timezone')).toBe('/timezone?tz=UTC');
+      expect(buildNormalizedUrl('/timezone', '', '#/timezone?tz=UTC')).toBe('/timezone?tz=UTC');
+      expect(buildNormalizedUrl('/big', '?mode=dark', '#preview')).toBe('/big?mode=dark#preview');
+      expect(buildNormalizedUrl('/', '', '')).toBe('/');
     });
   });
 });
