@@ -1,4 +1,4 @@
-import type { CalculatedZoneTime, TimeFormat, TimezoneItem } from './types';
+import type { CalculatedZoneTime, TimeFormat, TimezoneItem, TimezonePreferences } from './types';
 
 export const DEFAULT_TIMEZONES: TimezoneItem[] = [
   {
@@ -409,6 +409,85 @@ export function getZonedParts(date: Date, timeZone: string): ZonedParts {
 }
 
 /**
+ * Validates that an IANA timezone identifier is accepted by Intl.DateTimeFormat.
+ */
+export function isValidIanaTimeZone(timeZone: string): boolean {
+  if (typeof timeZone !== 'string' || !timeZone.trim()) {
+    return false;
+  }
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Validates and sanitizes persisted timezone preferences loaded from storage.
+ */
+export function sanitizeTimezonePreferences(raw: unknown): TimezonePreferences {
+  const fallback: TimezonePreferences = {
+    timezones: DEFAULT_TIMEZONES,
+    timeFormat: '12h',
+    referenceId: DEFAULT_TIMEZONES[0].id,
+  };
+
+  if (typeof raw !== 'object' || raw === null) {
+    return fallback;
+  }
+
+  const record = raw as Record<string, unknown>;
+  const rawList = Array.isArray(record.timezones) ? record.timezones : [];
+  const seenIds = new Set<string>();
+  const validTimezones: TimezoneItem[] = [];
+
+  for (const entry of rawList) {
+    if (typeof entry !== 'object' || entry === null) continue;
+    const item = entry as Record<string, unknown>;
+    if (
+      typeof item.id !== 'string' ||
+      !item.id.trim() ||
+      typeof item.city !== 'string' ||
+      !item.city.trim() ||
+      typeof item.country !== 'string' ||
+      typeof item.iana !== 'string' ||
+      !isValidIanaTimeZone(item.iana)
+    ) {
+      continue;
+    }
+
+    if (seenIds.has(item.id)) continue;
+    seenIds.add(item.id);
+
+    const sanitized: TimezoneItem = {
+      id: item.id,
+      city: item.city,
+      country: item.country,
+      iana: item.iana,
+    };
+    if (typeof item.label === 'string') {
+      sanitized.label = item.label;
+    }
+    if (Array.isArray(item.aliases)) {
+      sanitized.aliases = item.aliases.filter((a): a is string => typeof a === 'string');
+    }
+    validTimezones.push(sanitized);
+  }
+
+  const timezones = validTimezones.length > 0 ? validTimezones : DEFAULT_TIMEZONES;
+  const timeFormat: TimeFormat = record.timeFormat === '24h' ? '24h' : '12h';
+  const rawRefId = typeof record.referenceId === 'string' ? record.referenceId : '';
+  const referenceId = timezones.some((tz) => tz.id === rawRefId) ? rawRefId : timezones[0].id;
+
+  return {
+    timezones,
+    timeFormat,
+    referenceId,
+  };
+}
+
+/**
  * Returns UTC timestamp for a specified local date & time in a timezone
  */
 export function getTimestampForZone(
@@ -421,12 +500,21 @@ export function getTimestampForZone(
 ): number {
   const targetLocalMs = Date.UTC(year, month - 1, day, hour, minute, 0, 0);
   let guess = targetLocalMs;
-  for (let i = 0; i < 3; i++) {
+  const seenGuesses = new Set<number>();
+
+  for (let i = 0; i < 4; i++) {
+    seenGuesses.add(guess);
     const parts = getZonedParts(new Date(guess), timeZone);
     const localGuess = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, 0, 0);
     const diff = targetLocalMs - localGuess;
     if (diff === 0) break;
-    guess += diff;
+    const nextGuess = guess + diff;
+    if (seenGuesses.has(nextGuess)) {
+      // Non-existent local time during Spring Forward gap: pick the later (post-jump) instant
+      guess = Math.max(guess, nextGuess);
+      break;
+    }
+    guess = nextGuess;
   }
   return guess;
 }
@@ -441,13 +529,16 @@ export function getTimelineStartMs(referenceDate: Date, referenceIana: string): 
 }
 
 /**
- * Generates an array of 72 UTC timestamp numbers (1 hour apart) covering yesterday, today, and tomorrow
+ * Generates an array of hourly UTC timestamp numbers covering yesterday, today, and tomorrow
+ * in the reference timezone without drifting across DST transitions.
  */
 export function getThreeDayTimelineHours(referenceTimestampMs: number, referenceIana: string): number[] {
-  const startMs = getTimelineStartMs(new Date(referenceTimestampMs), referenceIana);
+  const parts = getZonedParts(new Date(referenceTimestampMs), referenceIana);
+  const startMs = getTimestampForZone(parts.year, parts.month, parts.day - 1, 0, 0, referenceIana);
+  const endMs = getTimestampForZone(parts.year, parts.month, parts.day + 2, 0, 0, referenceIana);
   const hours: number[] = [];
-  for (let i = 0; i < 72; i++) {
-    hours.push(startMs + i * 3600000);
+  for (let ts = startMs; ts < endMs; ts += 3600000) {
+    hours.push(ts);
   }
   return hours;
 }
