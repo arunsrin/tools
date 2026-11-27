@@ -1,17 +1,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import FractalExplorer from './FractalExplorer';
+import { clampZoom } from './fractalEngine';
 
 const STORAGE_KEY = 'tools_hub_fractal_prefs';
 
 describe('Fractal Explorer Component', () => {
   const onBackMock = vi.fn();
 
+  const origGetContext = HTMLCanvasElement.prototype.getContext;
+  const origToDataURL = HTMLCanvasElement.prototype.toDataURL;
+  const origSetPointerCapture = HTMLCanvasElement.prototype.setPointerCapture;
+  const origReleasePointerCapture = HTMLCanvasElement.prototype.releasePointerCapture;
+  const origGetBoundingClientRect = HTMLCanvasElement.prototype.getBoundingClientRect;
+  const origClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+
   beforeEach(() => {
     localStorage.clear();
     onBackMock.mockClear();
 
-    // Mock Canvas 2D context
     const mockContext = {
       createImageData: vi.fn((w: number, h: number) => ({
         data: new Uint8ClampedArray(w * h * 4),
@@ -45,7 +52,19 @@ describe('Fractal Explorer Component', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
+    HTMLCanvasElement.prototype.getContext = origGetContext;
+    HTMLCanvasElement.prototype.toDataURL = origToDataURL;
+    HTMLCanvasElement.prototype.setPointerCapture = origSetPointerCapture;
+    HTMLCanvasElement.prototype.releasePointerCapture = origReleasePointerCapture;
+    HTMLCanvasElement.prototype.getBoundingClientRect = origGetBoundingClientRect;
+
+    if (origClipboardDescriptor) {
+      Object.defineProperty(navigator, 'clipboard', origClipboardDescriptor);
+    } else {
+      delete (navigator as unknown as { clipboard?: Clipboard }).clipboard;
+    }
   });
 
   it('renders Fractal Explorer header, controls, canvas, and landmarks', () => {
@@ -70,18 +89,15 @@ describe('Fractal Explorer Component', () => {
   it('switches between fractal types (Mandelbrot, Julia, Burning Ship)', () => {
     render(<FractalExplorer onBack={onBackMock} />);
 
-    // Initial is Mandelbrot
     const mandelbrotBtn = screen.getByRole('button', { name: /^mandelbrot$/i });
     expect(mandelbrotBtn).toHaveAttribute('aria-pressed', 'true');
 
-    // Switch to Julia
     const juliaBtn = screen.getByRole('button', { name: /^julia set$/i });
     fireEvent.click(juliaBtn);
     expect(juliaBtn).toHaveAttribute('aria-pressed', 'true');
     expect(mandelbrotBtn).toHaveAttribute('aria-pressed', 'false');
     expect(screen.getByRole('button', { name: /📍 douady's rabbit/i })).toBeInTheDocument();
 
-    // Switch to Burning Ship
     const shipBtn = screen.getByRole('button', { name: /^burning ship$/i });
     fireEvent.click(shipBtn);
     expect(shipBtn).toHaveAttribute('aria-pressed', 'true');
@@ -95,19 +111,15 @@ describe('Fractal Explorer Component', () => {
 
     expect(select).toHaveValue('cyan');
 
-    // Switch to Twilight Neon
     fireEvent.change(select, { target: { value: 'neon' } });
     expect(select).toHaveValue('neon');
 
-    // Switch to Sunset Ember
     fireEvent.change(select, { target: { value: 'sunset' } });
     expect(select).toHaveValue('sunset');
 
-    // Switch to Emerald Nebula
     fireEvent.change(select, { target: { value: 'emerald' } });
     expect(select).toHaveValue('emerald');
 
-    // Switch to Monochrome
     fireEvent.change(select, { target: { value: 'monochrome' } });
     expect(select).toHaveValue('monochrome');
   });
@@ -125,71 +137,102 @@ describe('Fractal Explorer Component', () => {
   it('warps to curated landmarks when clicked', () => {
     render(<FractalExplorer onBack={onBackMock} />);
 
-    // Click Seahorse Valley
     const seahorseBtn = screen.getByRole('button', { name: /📍 seahorse valley/i });
     fireEvent.click(seahorseBtn);
     expect(screen.getByText(/-0.74364/i)).toBeInTheDocument();
 
-    // Click Elephant Valley
     const elephantBtn = screen.getByRole('button', { name: /📍 elephant valley/i });
     fireEvent.click(elephantBtn);
     expect(screen.getByText(/0.27500/i)).toBeInTheDocument();
 
-    // Switch to Julia and warp to Douady's Rabbit
     fireEvent.click(screen.getByRole('button', { name: /^julia set$/i }));
     const rabbitBtn = screen.getByRole('button', { name: /📍 douady's rabbit/i });
     fireEvent.click(rabbitBtn);
     expect(screen.getByText(/0.00000/i)).toBeInTheDocument();
   });
 
-  it('handles zoom in, zoom out, and reset buttons', () => {
+  it('handles zoom in, zoom out, and reset buttons and enforces zoom bounds', () => {
     render(<FractalExplorer onBack={onBackMock} />);
 
     const zoomInBtn = screen.getByRole('button', { name: /zoom in/i });
     const zoomOutBtn = screen.getByRole('button', { name: /zoom out/i });
     const resetBtn = screen.getByRole('button', { name: /reset view/i });
 
-    // Zoom in
     fireEvent.click(zoomInBtn);
     expect(screen.getByText(/1.5x/i)).toBeInTheDocument();
 
-    // Zoom out
     fireEvent.click(zoomOutBtn);
     expect(screen.getByText(/1.0x/i)).toBeInTheDocument();
 
-    // Reset
+    // Zoom out repeatedly to hit lower bound (0.2x)
+    for (let i = 0; i < 6; i++) {
+      fireEvent.click(zoomOutBtn);
+    }
+    expect(screen.getByText(/0.2x/i)).toBeInTheDocument();
+
+    // Reset restores 1.0x
     fireEvent.click(resetBtn);
     expect(screen.getByText(/1.0x/i)).toBeInTheDocument();
+
+    // Verify zoom clamping helper bounds (min 0.2, max 1e12, non-finite fallback)
+    expect(clampZoom(0.01)).toBe(0.2);
+    expect(clampZoom(1e15)).toBe(1e12);
+    expect(clampZoom(Number.NaN)).toBe(1.0);
   });
 
-  it('handles mouse wheel zoom on canvas', () => {
+  it('handles non-passive native wheel zoom on canvas and calls preventDefault', () => {
     render(<FractalExplorer onBack={onBackMock} />);
     const canvas = screen.getByTestId('fractal-canvas');
 
-    // Wheel zoom in
-    fireEvent.wheel(canvas, { deltaY: -100 });
+    const wheelIn = new WheelEvent('wheel', { deltaY: -100, bubbles: true, cancelable: true });
+    act(() => {
+      canvas.dispatchEvent(wheelIn);
+    });
+    expect(wheelIn.defaultPrevented).toBe(true);
     expect(screen.getByText(/1.3x/i)).toBeInTheDocument();
 
-    // Wheel zoom out
-    fireEvent.wheel(canvas, { deltaY: 100 });
+    const wheelOut = new WheelEvent('wheel', { deltaY: 100, bubbles: true, cancelable: true });
+    act(() => {
+      canvas.dispatchEvent(wheelOut);
+    });
+    expect(wheelOut.defaultPrevented).toBe(true);
     expect(screen.getByText(/1.0x/i)).toBeInTheDocument();
   });
 
-  it('handles pointer dragging to pan across coordinates', () => {
+  it('handles pointer dragging to pan using canvas aspect ratio and ignores zero-size rect', () => {
     render(<FractalExplorer onBack={onBackMock} />);
     const canvas = screen.getByTestId('fractal-canvas');
 
     fireEvent.pointerDown(canvas, { clientX: 200, clientY: 200, pointerId: 1 });
     fireEvent.pointerMove(canvas, { clientX: 250, clientY: 220, pointerId: 1 });
     fireEvent.pointerUp(canvas, { clientX: 250, clientY: 220, pointerId: 1 });
+
+    // Center should shift left/up from (-0.65, 0)
+    expect(screen.queryByText(/-0\.65000, 0\.00000/)).not.toBeInTheDocument();
+
+    // Zero-size bounding rect must not produce NaN
+    HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0,
+      right: 0,
+      bottom: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    }));
+    fireEvent.pointerDown(canvas, { clientX: 200, clientY: 200, pointerId: 2 });
+    fireEvent.pointerMove(canvas, { clientX: 240, clientY: 240, pointerId: 2 });
+    fireEvent.pointerUp(canvas, { clientX: 240, clientY: 240, pointerId: 2 });
+    expect(screen.queryByText(/NaN/)).not.toBeInTheDocument();
   });
 
   it('copies coordinate telemetry to clipboard', async () => {
     const writeTextMock = vi.fn().mockResolvedValue(undefined);
-    Object.assign(navigator, {
-      clipboard: {
-        writeText: writeTextMock,
-      },
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      configurable: true,
     });
 
     render(<FractalExplorer onBack={onBackMock} />);
@@ -203,21 +246,36 @@ describe('Fractal Explorer Component', () => {
     expect(screen.getByText(/✓ copied/i)).toBeInTheDocument();
   });
 
+  it('shows error alert toast when clipboard copy rejects', async () => {
+    const writeTextMock = vi.fn().mockRejectedValue(new Error('Clipboard denied'));
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: writeTextMock },
+      configurable: true,
+    });
+
+    render(<FractalExplorer onBack={onBackMock} />);
+    const copyBtn = screen.getByRole('button', { name: /copy coordinate telemetry/i });
+
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
+
+    expect(screen.getByText(/⚠ failed/i)).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(/unable to copy coordinate telemetry/i);
+  });
+
   it('opens wallpaper export modal, selects resolution, and triggers download', () => {
     vi.useFakeTimers();
     render(<FractalExplorer onBack={onBackMock} />);
 
-    // Open export modal
     const openExportBtn = screen.getByRole('button', { name: /open wallpaper export modal/i });
     fireEvent.click(openExportBtn);
 
     expect(screen.getByRole('heading', { level: 2, name: /wallpaper studio export/i })).toBeInTheDocument();
 
-    // Pick 4K Ultra HD
     const res4kInput = screen.getByLabelText(/4k ultra hd/i);
     fireEvent.click(res4kInput);
 
-    // Mock link click
     const mockClick = vi.fn();
     const origCreateElement = document.createElement.bind(document);
     vi.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
@@ -228,7 +286,6 @@ describe('Fractal Explorer Component', () => {
       return el;
     });
 
-    // Click Download PNG
     const downloadBtn = screen.getByRole('button', { name: /download png/i });
     fireEvent.click(downloadBtn);
 
@@ -240,23 +297,87 @@ describe('Fractal Explorer Component', () => {
     vi.useRealTimers();
   });
 
-  it('closes wallpaper export modal when clicking Cancel', () => {
+  it('shows an error alert if toDataURL fails during wallpaper export', () => {
+    vi.useFakeTimers();
+    HTMLCanvasElement.prototype.toDataURL = vi.fn(() => {
+      throw new Error('SecurityError');
+    });
+
     render(<FractalExplorer onBack={onBackMock} />);
     fireEvent.click(screen.getByRole('button', { name: /open wallpaper export modal/i }));
+    fireEvent.click(screen.getByRole('button', { name: /download png/i }));
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(screen.getByRole('alert')).toHaveTextContent(/failed to encode or download wallpaper png/i);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it('handles null 2D canvas context gracefully on render and export', () => {
+    vi.useFakeTimers();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
+
+    render(<FractalExplorer onBack={onBackMock} />);
+    expect(screen.getByRole('alert')).toHaveTextContent(/2d canvas rendering is unavailable/i);
+
+    fireEvent.click(screen.getByRole('button', { name: /open wallpaper export modal/i }));
+    fireEvent.click(screen.getByRole('button', { name: /download png/i }));
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    const alerts = screen.getAllByRole('alert');
+    expect(alerts.some((el) => /unable to initialize canvas renderer/i.test(el.textContent ?? ''))).toBe(true);
+    vi.useRealTimers();
+  });
+
+  it('cleans up pending export timer on unmount without triggering download', () => {
+    vi.useFakeTimers();
+    const toDataUrlSpy = vi.fn(() => 'data:image/png;base64,mockPngData');
+    HTMLCanvasElement.prototype.toDataURL = toDataUrlSpy;
+
+    const { unmount } = render(<FractalExplorer onBack={onBackMock} />);
+    fireEvent.click(screen.getByRole('button', { name: /open wallpaper export modal/i }));
+    fireEvent.click(screen.getByRole('button', { name: /download png/i }));
+
+    unmount();
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(toDataUrlSpy).not.toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
+  it('closes wallpaper export modal via Cancel and Escape and restores focus', () => {
+    render(<FractalExplorer onBack={onBackMock} />);
+    const openBtn = screen.getByRole('button', { name: /open wallpaper export modal/i });
+    openBtn.focus();
+    fireEvent.click(openBtn);
 
     const cancelBtn = screen.getByRole('button', { name: /cancel/i });
     fireEvent.click(cancelBtn);
-
     expect(screen.queryByRole('heading', { level: 2, name: /wallpaper studio export/i })).not.toBeInTheDocument();
+
+    fireEvent.click(openBtn);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(openBtn).toHaveFocus();
   });
 
-  it('restores preferences from localStorage on mount', () => {
+  it('restores preferences from localStorage on mount and clamps out-of-range iterations', () => {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
         type: 'julia',
         palette: 'sunset',
-        iterations: 200,
+        iterations: 9999,
       })
     );
 
@@ -264,7 +385,21 @@ describe('Fractal Explorer Component', () => {
 
     expect(screen.getByRole('button', { name: /^julia set$/i })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('combobox', { name: /select color palette/i })).toHaveValue('sunset');
-    expect(screen.getByText(/detail: 200/i)).toBeInTheDocument();
+    expect(screen.getByText(/detail: 500/i)).toBeInTheDocument();
+  });
+
+  it('clamps low stored iterations to minimum 30', () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        type: 'mandelbrot',
+        palette: 'cyan',
+        iterations: 5,
+      })
+    );
+
+    render(<FractalExplorer onBack={onBackMock} />);
+    expect(screen.getByText(/detail: 30/i)).toBeInTheDocument();
   });
 
   it('persists preferences to localStorage when changed', () => {
