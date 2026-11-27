@@ -33,13 +33,13 @@ Fractal Explorer is a high-performance interactive fractal renderer and wallpape
 - *Monochrome Silver* (sharp metallic silver/ink)
 
 ### 2.5 Wallpaper Studio & Guide
-- Client-side PNG snapshot export (`downloadCanvasPng`) at selectable resolutions (`Current Viewport`, `Full HD 1920 × 1080`, `4K Ultra HD 3840 × 2160`, `Mobile Portrait 1080 × 2400`) as `fractal-wallpaper.png`.
-- Shareable coordinate copy with visual feedback (`useCopyFeedback`) and an interactive Help/Guide `Modal`.
+- Client-side PNG snapshot export (`downloadCanvasPng`) via an interactive Wallpaper Studio Export `Modal` at selectable resolutions (`Screen Viewport 1200 × 750`, `Full HD 1920 × 1080`, `4K Ultra HD 3840 × 2160`, `Mobile Portrait 1080 × 2400`) as `fractal-<type>-<width>x<height>.png`.
+- Shareable coordinate copy with visual feedback (`useCopyFeedback`) and an inline Exploration Guide tip card below the canvas.
 
 ## 3. Acceptance Criteria
 - **Hub Navigation & Direct Route**: Uses shared `ToolHeader` (`"← Back to Tools Hub"` calling `onBack()`), registers `/fractal` in `src/routes.ts`, `src/App.tsx`, and `src/App.test.tsx`.
 - **Error & Clipboard Feedback**: Canvas `getContext('2d') === null`, `toDataURL` export errors, and clipboard rejections surface clear user feedback via `InlineAlert` / `Toast` rather than failing silently.
-- **Modal & Wheel Listener Cleanup**: Help `Modal` supports `Escape` dismissal, close button, and focus restoration; native `{ passive: false }` wheel listeners and `useTimeoutRegistry` timers clean up on unmount.
+- **Modal & Wheel Listener Cleanup**: Wallpaper Studio Export `Modal` supports `Escape` dismissal, close button, and focus restoration; native `{ passive: false }` wheel listeners and `useTimeoutRegistry` timers clean up on unmount.
 - **Persistence & Clamping**: Preferences (fractal type, palette, iterations clamped to 30–500) are stored in `localStorage` under `tools_hub_fractal_prefs` via `usePersistedState` with validation.
 - **Responsive Dark Theme & CSS Isolation**: Consumes `src/styles/tokens.css`, prefixes classes (`.fractal-*`), wraps button groups, and avoids HUD/overlay collisions on 320px mobile viewports.
 - **Modular Isolation & Test Coverage**: `FractalExplorer.tsx` exports only `default function FractalExplorer` (types in `types.ts`, engine in `fractalEngine.ts`), with companion tests in `FractalExplorer.test.tsx` restoring patched prototypes/mocks in `afterEach` and exceeding 80% coverage.

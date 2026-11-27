@@ -61,7 +61,7 @@ function BigText({ onBack }: BigTextProps) {
       container.clientHeight
     );
 
-    textElement.classList.remove('force-break');
+    textElement.classList.remove('bigtext-force-break');
 
     const minSize = MIN_FONT_SIZE;
     const bestSize = findBestFontSize(
@@ -80,11 +80,11 @@ function BigText({ onBack }: BigTextProps) {
     textElement.style.fontSize = `${bestSize}px`;
 
     // Fallback: If even at the minimum font size floor the unbroken text overflows horizontally,
-    // apply force-break to avoid horizontal clipping or window scrollbars.
+    // apply bigtext-force-break to avoid horizontal clipping or window scrollbars.
     if (bestSize <= minSize && textElement.scrollWidth > availableWidth) {
-      textElement.classList.add('force-break');
+      textElement.classList.add('bigtext-force-break');
     } else {
-      textElement.classList.remove('force-break');
+      textElement.classList.remove('bigtext-force-break');
     }
 
     setFontSize(bestSize);
@@ -211,7 +211,7 @@ function BigText({ onBack }: BigTextProps) {
       ) : (
         <>
           <div
-            className="bigtext-display-mode display-mode"
+            className="bigtext-display-mode"
             role="button"
             tabIndex={0}
             aria-label="Tap or press Escape to exit display mode"
@@ -220,12 +220,12 @@ function BigText({ onBack }: BigTextProps) {
           >
             <div
               ref={textRef}
-              className="big-text"
+              className="bigtext-display-text"
               style={{ fontSize: `${fontSize}px` }}
             >
               {text}
             </div>
-            <div className="back-hint">Tap or press Esc to edit</div>
+            <div className="bigtext-back-hint">Tap or press Esc to edit</div>
           </div>
           <button
             type="button"

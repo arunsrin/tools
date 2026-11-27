@@ -540,7 +540,12 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       : null;
 
   const playerEnergy = biosphere?.playerAgent?.energy ?? 100;
-  const energyClass = playerEnergy > 50 ? 'high' : playerEnergy > 20 ? 'med' : 'low';
+  const energyClass =
+    playerEnergy > 50
+      ? 'biomorphs-energy-high'
+      : playerEnergy > 20
+        ? 'biomorphs-energy-med'
+        : 'biomorphs-energy-low';
   const elapsedMinutes = Math.floor((biosphere?.elapsedSeconds ?? 0) / 60);
   const elapsedSeconds = Math.floor((biosphere?.elapsedSeconds ?? 0) % 60);
   const formattedTime = `${elapsedMinutes}:${elapsedSeconds.toString().padStart(2, '0')}`;
@@ -567,14 +572,14 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 }
               }}
               options={MODE_OPTIONS}
-              className="biomorph-mode-switcher"
+              className="biomorphs-mode-switcher"
             />
           }
         />
 
-        <div className="how-to-play-guide" data-testid="how-to-play-guide">
-          <span className="guide-title">💡 How to Play:</span>
-          <div className="guide-steps">
+        <div className="biomorphs-how-to-play-guide" data-testid="how-to-play-guide">
+          <span className="biomorphs-guide-title">💡 How to Play:</span>
+          <div className="biomorphs-guide-steps">
             <span>
               1. Study the <strong>Active Biosphere</strong> pressures (Terrain, Climate, Threat).
             </span>
@@ -594,13 +599,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       {viewMode === 'lab' && (
         <>
           <section
-            className="ecosystem-bar"
+            className="biomorphs-ecosystem-bar"
             aria-label="Ecosystem & Environmental Pressures"
             data-testid="ecosystem-bar"
           >
-            <div className="ecosystem-controls-row">
-              <div className="ecosystem-select-group">
-                <label htmlFor="terrain-select" className="ecosystem-label">
+            <div className="biomorphs-ecosystem-controls-row">
+              <div className="biomorphs-ecosystem-select-group">
+                <label htmlFor="terrain-select" className="biomorphs-ecosystem-label">
                   Terrain:
                 </label>
                 <select
@@ -608,7 +613,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                   aria-label="Terrain"
                   value={ecosystem.terrain}
                   onChange={(e) => handleEcosystemChange('terrain', e.target.value as TerrainType)}
-                  className="ecosystem-dropdown"
+                  className="biomorphs-ecosystem-dropdown"
                 >
                   {TERRAINS.map((t) => (
                     <option key={t.id} value={t.id}>
@@ -618,8 +623,8 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 </select>
               </div>
 
-              <div className="ecosystem-select-group">
-                <label htmlFor="climate-select" className="ecosystem-label">
+              <div className="biomorphs-ecosystem-select-group">
+                <label htmlFor="climate-select" className="biomorphs-ecosystem-label">
                   Climate:
                 </label>
                 <select
@@ -627,7 +632,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                   aria-label="Climate"
                   value={ecosystem.climate}
                   onChange={(e) => handleEcosystemChange('climate', e.target.value as ClimateType)}
-                  className="ecosystem-dropdown"
+                  className="biomorphs-ecosystem-dropdown"
                 >
                   {CLIMATES.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -637,8 +642,8 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 </select>
               </div>
 
-              <div className="ecosystem-select-group">
-                <label htmlFor="threat-select" className="ecosystem-label">
+              <div className="biomorphs-ecosystem-select-group">
+                <label htmlFor="threat-select" className="biomorphs-ecosystem-label">
                   Threat:
                 </label>
                 <select
@@ -646,7 +651,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                   aria-label="Threat"
                   value={ecosystem.threat}
                   onChange={(e) => handleEcosystemChange('threat', e.target.value as ThreatType)}
-                  className="ecosystem-dropdown"
+                  className="biomorphs-ecosystem-dropdown"
                 >
                   {THREATS.map((th) => (
                     <option key={th.id} value={th.id}>
@@ -658,7 +663,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
               <button
                 type="button"
-                className="bio-btn btn-random-ecosystem"
+                className="biomorphs-btn biomorphs-btn-random-ecosystem"
                 onClick={handleRandomizeEcosystem}
                 title="Roll random new biosphere"
                 aria-label="Roll random ecosystem"
@@ -667,22 +672,22 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
             </div>
 
-            <div className="ecosystem-narrative-bar">
-              <div className="narrative-headline">
-                <span className="narrative-tag">Active Biosphere:</span>
-                <span className="narrative-title">
+            <div className="biomorphs-ecosystem-narrative-bar">
+              <div className="biomorphs-narrative-headline">
+                <span className="biomorphs-narrative-tag">Active Biosphere:</span>
+                <span className="biomorphs-narrative-title">
                   {activeTerrain.icon} {activeTerrain.name} · {activeClimate.icon}{' '}
                   {activeClimate.name} · {activeThreat.icon} {activeThreat.name}
                 </span>
               </div>
-              <p className="narrative-desc">
+              <p className="biomorphs-narrative-desc">
                 {activeTerrain.desc} {activeClimate.desc} {activeThreat.desc}
               </p>
             </div>
           </section>
 
           {/* 2-Way Comparative Duel Arena */}
-          <main className="duel-arena">
+          <main className="biomorphs-duel-arena">
             <SpecimenCard
               offspringLabel="OFFSPRING 1"
               specimen={specimenAlpha}
@@ -711,16 +716,16 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
           </main>
 
           {/* Ancestor Lineage Scrubber */}
-          <section className="lineage-section" aria-label="Ancestor Evolutionary Lineage">
-            <div className="lineage-header">
-              <div className="lineage-title">
+          <section className="biomorphs-lineage-section" aria-label="Ancestor Evolutionary Lineage">
+            <div className="biomorphs-lineage-header">
+              <div className="biomorphs-lineage-title">
                 <span>📜 Lineage & Ancestor Tree</span>
-                <span className="stat-label">({lineage.length} generations)</span>
+                <span className="biomorphs-stat-label">({lineage.length} generations)</span>
               </div>
-              <span className="lineage-hint">Click any ancestor to rewind & branch evolution</span>
+              <span className="biomorphs-lineage-hint">Click any ancestor to rewind & branch evolution</span>
             </div>
 
-            <div className="lineage-scroll" data-testid="lineage-timeline">
+            <div className="biomorphs-lineage-scroll" data-testid="lineage-timeline">
               {lineage.map((ancestor, index) => (
                 <LineageThumbnail
                   key={`${ancestor.id}-${index}`}
@@ -734,25 +739,25 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
           {/* Streamlined Bottom Utility Dock */}
           <div className="biomorphs-bottom-dock">
-            <div className="dock-stats">
-              <div className="stat-item" data-testid="generation-counter">
-                <span className="stat-label">Generation</span>
-                <span className="stat-value">Gen {parentGenome.generation}</span>
+            <div className="biomorphs-dock-stats">
+              <div className="biomorphs-stat-item" data-testid="generation-counter">
+                <span className="biomorphs-stat-label">Generation</span>
+                <span className="biomorphs-stat-value">Gen {parentGenome.generation}</span>
               </div>
-              <div className="stat-item">
-                <span className="stat-label">Champion</span>
-                <span className="stat-value champion-name">{parentGenome.name}</span>
+              <div className="biomorphs-stat-item">
+                <span className="biomorphs-stat-label">Champion</span>
+                <span className="biomorphs-stat-value biomorphs-champion-name">{parentGenome.name}</span>
               </div>
-              <div className="stat-item">
-                <span className="stat-label">Champion Fitness</span>
-                <span className="stat-value fitness-highlight">{parentFitness.score}%</span>
+              <div className="biomorphs-stat-item">
+                <span className="biomorphs-stat-label">Champion Fitness</span>
+                <span className="biomorphs-stat-value biomorphs-fitness-highlight">{parentFitness.score}%</span>
               </div>
             </div>
 
-            <div className="dock-actions">
+            <div className="biomorphs-dock-actions">
               <button
                 type="button"
-                className="bio-btn btn-primary"
+                className="biomorphs-btn biomorphs-btn-primary"
                 onClick={() => handleLaunchBiosphere(parentGenome)}
                 title="Launch champion organism into autonomous living biosphere (L)"
                 data-testid="btn-launch-champion"
@@ -761,7 +766,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={() => void handleCopyDNA()}
                 title="Copy DNA sequence payload"
               >
@@ -769,7 +774,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleOpenDnaModal}
                 title="Load DNA from sequence payload"
               >
@@ -777,7 +782,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleExportPNG}
                 title="Export off-screen HD specimen image"
               >
@@ -785,7 +790,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleRandomizeEcosystem}
                 title="Migrate species to a new random biosphere"
               >
@@ -793,7 +798,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleNewGenesis}
                 title="Restart simulation from Gen 0"
               >
@@ -806,16 +811,16 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
       {/* VIEW MODE 2: LIVING AUTONOMOUS BIOSPHERE */}
       {viewMode === 'biosphere' && (
-        <section className="biosphere-stage-section" data-testid="biosphere-section">
+        <section className="biomorphs-biosphere-stage-section" data-testid="biosphere-section">
           {biosphere?.apexDominanceAchieved && (
-            <div className="apex-dominance-banner" data-testid="apex-dominance-banner">
+            <div className="biomorphs-apex-dominance-banner" data-testid="apex-dominance-banner">
               🏆 APEX DOMINANCE ACHIEVED: {parentGenome.name} is the supreme adapted ruler of this
               biosphere!
             </div>
           )}
 
-          <div className="biosphere-hud-bar">
-            <div className="hud-biome-badge">
+          <div className="biomorphs-biosphere-hud-bar">
+            <div className="biomorphs-hud-biome-badge">
               <span>
                 {activeTerrain.icon} {activeTerrain.name}
               </span>
@@ -829,87 +834,87 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </span>
             </div>
 
-            <div className="hud-vitals-group">
-              <div className="bio-energy-bar-wrap" title="Organism Energy / Stamina">
-                <span className="hud-vital-item">
+            <div className="biomorphs-hud-vitals-group">
+              <div className="biomorphs-energy-bar-wrap" title="Organism Energy / Stamina">
+                <span className="biomorphs-hud-vital-item">
                   ⚡ Energy:{' '}
-                  <span className="hud-vital-val" data-testid="player-energy-val">
+                  <span className="biomorphs-hud-vital-val" data-testid="player-energy-val">
                     {Math.round(playerEnergy)}%
                   </span>
                 </span>
-                <div className="bio-energy-track">
+                <div className="biomorphs-energy-track">
                   <div
-                    className={`bio-energy-fill ${energyClass}`}
+                    className={`biomorphs-energy-fill ${energyClass}`}
                     style={{ width: `${Math.max(0, Math.min(100, playerEnergy))}%` }}
                   />
                 </div>
               </div>
 
-              <div className="hud-vital-item">
-                🌿 Fitness: <span className="hud-vital-val">{parentFitness.score}%</span>
+              <div className="biomorphs-hud-vital-item">
+                🌿 Fitness: <span className="biomorphs-hud-vital-val">{parentFitness.score}%</span>
               </div>
 
-              <div className="hud-vital-item">
+              <div className="biomorphs-hud-vital-item">
                 ⏱️ Survived:{' '}
-                <span className="hud-vital-val" data-testid="survival-timer">
+                <span className="biomorphs-hud-vital-val" data-testid="survival-timer">
                   {formattedTime}
                 </span>
               </div>
 
-              <div className="hud-vital-item">
-                🌱 Eaten: <span className="hud-vital-val">{biosphere?.preyEaten ?? 0}</span>
+              <div className="biomorphs-hud-vital-item">
+                🌱 Eaten: <span className="biomorphs-hud-vital-val">{biosphere?.preyEaten ?? 0}</span>
               </div>
-              <div className="hud-vital-item">
+              <div className="biomorphs-hud-vital-item">
                 🛡️ Repelled:{' '}
-                <span className="hud-vital-val">{biosphere?.predatorsRepelled ?? 0}</span>
+                <span className="biomorphs-hud-vital-val">{biosphere?.predatorsRepelled ?? 0}</span>
               </div>
             </div>
           </div>
 
-          <div className="biosphere-canvas-card">
+          <div className="biomorphs-biosphere-canvas-card">
             <canvas
               ref={canvasRefBiosphere}
               width={800}
               height={500}
-              className="biosphere-canvas"
+              className="biomorphs-biosphere-canvas"
               onClick={handleCanvasClick}
               data-testid="biosphere-canvas"
             />
-            <div className="biosphere-canvas-hint">Click canvas to attract organism</div>
+            <div className="biomorphs-biosphere-canvas-hint">Click canvas to attract organism</div>
 
             {biosphere?.isExtinct && extinctionData && (
-              <div className="extinction-overlay" data-testid="extinction-overlay">
-                <div className="extinction-card">
-                  <div className="extinction-header">
-                    <span className="extinction-badge">Extinction Event</span>
-                    <h3 className="extinction-title">Organism Extinct in Biosphere</h3>
+              <div className="biomorphs-extinction-overlay" data-testid="extinction-overlay">
+                <div className="biomorphs-extinction-card">
+                  <div className="biomorphs-extinction-header">
+                    <span className="biomorphs-extinction-badge">Extinction Event</span>
+                    <h3 className="biomorphs-extinction-title">Organism Extinct in Biosphere</h3>
                   </div>
 
-                  <div className="extinction-stats-row">
-                    <div className="extinction-stat-cell">
-                      <span className="stat-lbl">Time Survived</span>
-                      <span className="stat-num">{formattedTime}</span>
+                  <div className="biomorphs-extinction-stats-row">
+                    <div className="biomorphs-extinction-stat-cell">
+                      <span className="biomorphs-stat-lbl">Time Survived</span>
+                      <span className="biomorphs-stat-num">{formattedTime}</span>
                     </div>
-                    <div className="extinction-stat-cell">
-                      <span className="stat-lbl">Prey Consumed</span>
-                      <span className="stat-num">{biosphere.preyEaten}</span>
+                    <div className="biomorphs-extinction-stat-cell">
+                      <span className="biomorphs-stat-lbl">Prey Consumed</span>
+                      <span className="biomorphs-stat-num">{biosphere.preyEaten}</span>
                     </div>
-                    <div className="extinction-stat-cell">
-                      <span className="stat-lbl">Threats Repelled</span>
-                      <span className="stat-num">{biosphere.predatorsRepelled}</span>
+                    <div className="biomorphs-extinction-stat-cell">
+                      <span className="biomorphs-stat-lbl">Threats Repelled</span>
+                      <span className="biomorphs-stat-num">{biosphere.predatorsRepelled}</span>
                     </div>
                   </div>
 
-                  <div className="extinction-advice-box">
+                  <div className="biomorphs-extinction-advice-box">
                     <strong>🔬 Evolutionary Diagnosis:</strong>
                     <p style={{ margin: '0 0 0.4rem 0' }}>{extinctionData.analysis}</p>
                     <p style={{ margin: 0, color: '#fef08a' }}>💡 {extinctionData.advice}</p>
                   </div>
 
-                  <div className="extinction-actions">
+                  <div className="biomorphs-extinction-actions">
                     <button
                       type="button"
-                      className="bio-btn"
+                      className="biomorphs-btn"
                       onClick={handleRespawn}
                       title="Respawn current creature with full energy"
                     >
@@ -917,7 +922,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                     </button>
                     <button
                       type="button"
-                      className="bio-btn btn-primary"
+                      className="biomorphs-btn biomorphs-btn-primary"
                       onClick={handleReturnToLab}
                       title="Return to Breeding Lab to evolve counter-adaptations"
                       data-testid="btn-extinction-back-to-lab"
@@ -929,19 +934,19 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </div>
             )}
 
-            <div className="biosphere-action-ticker" data-testid="biosphere-action-ticker">
-              <span className="ticker-label">Action Log:</span>
-              <span className="ticker-msg">
+            <div className="biomorphs-biosphere-action-ticker" data-testid="biosphere-action-ticker">
+              <span className="biomorphs-ticker-label">Action Log:</span>
+              <span className="biomorphs-ticker-msg">
                 {biosphere?.actionLog[0] ?? 'Biosphere operating in equilibrium.'}
               </span>
             </div>
           </div>
 
-          <div className="biosphere-controls-bar">
-            <div className="controls-group">
+          <div className="biomorphs-biosphere-controls-bar">
+            <div className="biomorphs-controls-group">
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleTogglePause}
                 title="Pause / Resume simulation (Space)"
                 data-testid="btn-toggle-pause"
@@ -955,12 +960,12 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 value={String(biosphere?.simSpeed ?? 1) as '1' | '2' | '3'}
                 onChange={(spd) => handleChangeSimSpeed(Number(spd))}
                 options={SPEED_OPTIONS}
-                className="speed-btn-group"
+                className="biomorphs-speed-btn-group"
               />
 
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleAddPrey}
                 title="Introduce new bio-spore prey to the biome"
               >
@@ -968,7 +973,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleAddPredator}
                 title="Spawn a hostile native predator"
               >
@@ -976,10 +981,10 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
             </div>
 
-            <div className="controls-group">
+            <div className="biomorphs-controls-group">
               <button
                 type="button"
-                className="bio-btn"
+                className="biomorphs-btn"
                 onClick={handleRespawn}
                 title="Respawn organism with full health (R)"
               >
@@ -987,7 +992,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
               <button
                 type="button"
-                className="bio-btn btn-primary"
+                className="biomorphs-btn biomorphs-btn-primary"
                 onClick={handleReturnToLab}
                 title="Return to Breeding Lab to mutate new generations (L)"
                 data-testid="btn-back-to-lab"
@@ -1006,9 +1011,9 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         title="🧬 Import Creature DNA"
         closeLabel="Close DNA import modal"
         maxWidth="520px"
-        className="dna-modal"
+        className="biomorphs-dna-modal"
       >
-        <p className="dna-modal-desc">
+        <p className="biomorphs-dna-modal-desc">
           Paste a base64 encoded genome string to reconstruct an ancestor organism.
         </p>
 
@@ -1017,7 +1022,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         ) : null}
 
         <textarea
-          className="dna-textarea"
+          className="biomorphs-dna-textarea"
           placeholder="Paste base64 DNA sequence here..."
           aria-label="Base64 DNA sequence"
           value={dnaInput}
@@ -1026,13 +1031,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
             if (dnaError) setDnaError(null);
           }}
         />
-        <div className="dna-modal-actions">
-          <button type="button" className="bio-btn" onClick={handleCloseDnaModal}>
+        <div className="biomorphs-dna-modal-actions">
+          <button type="button" className="biomorphs-btn" onClick={handleCloseDnaModal}>
             Cancel
           </button>
           <button
             type="button"
-            className="bio-btn btn-primary"
+            className="biomorphs-btn biomorphs-btn-primary"
             onClick={handleLoadDNA}
             disabled={!dnaInput.trim()}
           >
@@ -1046,7 +1051,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
         message={toast?.message ?? ''}
         variant={toast?.variant ?? 'info'}
         onDismiss={dismissToast}
-        className="bio-toast"
+        className="biomorphs-toast"
       />
     </div>
   );

@@ -35,6 +35,11 @@ interface PickRecord {
   time: string;
 }
 
+interface ChoicePoolState {
+  active: string[];
+  eliminated: string[];
+}
+
 const PRESETS: Record<string, string[]> = {
   'Yes / No / Maybe': ['Yes', 'No', 'Maybe'],
   'What to Eat': ['Pizza', 'North Indian', 'South Indian', 'Sandwiches', 'Chaat', 'Chinese'],
@@ -201,7 +206,13 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   // --- Confetti Canvas & Timer Registry ---
   const confettiCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const confettiAnimRef = useRef<number | null>(null);
+  const historyIdCounterRef = useRef(0);
   const timeouts = useTimeoutRegistry();
+
+  const nextHistoryId = () => {
+    historyIdCounterRef.current += 1;
+    return `${Date.now()}-${historyIdCounterRef.current}`;
+  };
 
   useEffect(() => {
     return () => {
@@ -354,7 +365,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
       const sum = newDice.reduce((acc, val) => acc + val, 0);
       const record: RollRecord = {
-        id: Date.now().toString(),
+        id: nextHistoryId(),
         dice: newDice,
         sum,
         time: new Date().toLocaleTimeString([], {
@@ -386,8 +397,12 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     }
   );
 
-  const [activePool, setActivePool] = useState<string[]>(() => parseChoices(rawInput));
-  const [eliminatedItems, setEliminatedItems] = useState<string[]>([]);
+  const [pool, setPool] = useState<ChoicePoolState>(() => ({
+    active: parseChoices(rawInput),
+    eliminated: [],
+  }));
+  const activePool = pool.active;
+  const eliminatedItems = pool.eliminated;
   const [eliminateMode, setEliminateMode] = useState<boolean>(false);
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
   const [isChoosing, setIsChoosing] = useState(false);
@@ -401,9 +416,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   const handleInputChange = (val: string) => {
     if (isChoosing) return;
     setRawInput(val);
-    const parsed = parseChoices(val);
-    setActivePool(parsed);
-    setEliminatedItems([]);
+    setPool({ active: parseChoices(val), eliminated: [] });
     setSelectedWinner(null);
   };
 
@@ -416,9 +429,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
   const resetPool = () => {
     if (isChoosing) return;
-    const parsed = parseChoices(rawInput);
-    setActivePool(parsed);
-    setEliminatedItems([]);
+    setPool({ active: parseChoices(rawInput), eliminated: [] });
     setSelectedWinner(null);
   };
 
@@ -428,7 +439,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     triggerConfetti();
 
     const record: PickRecord = {
-      id: Date.now().toString(),
+      id: nextHistoryId(),
       item: winner,
       time: new Date().toLocaleTimeString([], {
         hour: '2-digit',
@@ -439,14 +450,14 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     setPickHistory((prev) => [record, ...prev].slice(0, 15));
 
     if (shouldEliminate) {
-      let removed = false;
-      setActivePool((prev) => {
-        const idx = prev.indexOf(winner);
+      setPool((prev) => {
+        const idx = prev.active.indexOf(winner);
         if (idx === -1) return prev;
-        removed = true;
-        return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+        return {
+          active: [...prev.active.slice(0, idx), ...prev.active.slice(idx + 1)],
+          eliminated: [...prev.eliminated, winner],
+        };
       });
-      setEliminatedItems((prev) => (removed ? [...prev, winner] : prev));
     }
   };
 

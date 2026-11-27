@@ -17,14 +17,14 @@ export default function LineageThumbnail({ ancestor, isActive, onClick }: Lineag
   return (
     <button
       type="button"
-      className={`lineage-card ${isActive ? 'active-ancestor' : ''}`}
+      className={`biomorphs-lineage-card ${isActive ? 'biomorphs-active-ancestor' : ''}`}
       onClick={onClick}
       title={`Gen ${ancestor.generation}: ${ancestor.name}`}
       aria-pressed={isActive}
     >
-      <canvas ref={canvasRef} width={76} height={60} className="lineage-thumb-canvas" />
-      <span className="lineage-gen-label">Gen {ancestor.generation}</span>
-      <span className="lineage-name-label">{ancestor.name.split(' ')[0]}</span>
+      <canvas ref={canvasRef} width={76} height={60} className="biomorphs-lineage-thumb-canvas" />
+      <span className="biomorphs-lineage-gen-label">Gen {ancestor.generation}</span>
+      <span className="biomorphs-lineage-name-label">{ancestor.name.split(' ')[0]}</span>
     </button>
   );
 }

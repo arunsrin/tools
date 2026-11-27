@@ -191,10 +191,10 @@
   box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--accent);
 }
 
-.theme-btn-dark { background-color: #000000; border-color: #64748b; }
-.theme-btn-light { background-color: #eeeeee; border-color: #cbd5e1; }
-.theme-btn-matrix { background-color: #000000; border: 2px solid #00ff41; }
-.theme-btn-bumblebee { background-color: #ffff00; border-color: #000000; }
+.bigtext-theme-btn-dark { background-color: #000000; border-color: #64748b; }
+.bigtext-theme-btn-light { background-color: #eeeeee; border-color: #cbd5e1; }
+.bigtext-theme-btn-matrix { background-color: #000000; border: 2px solid #00ff41; }
+.bigtext-theme-btn-bumblebee { background-color: #ffff00; border-color: #000000; }
 
 /* Display Mode Styles */
 .bigtext-display-mode {
@@ -239,7 +239,7 @@
   transform: translateX(-2px);
 }
 
-.big-text {
+.bigtext-display-text {
   max-width: 100%;
   text-align: center;
   line-height: 1.05;
@@ -251,12 +251,12 @@
   user-select: none;
 }
 
-.big-text.force-break {
+.bigtext-display-text.bigtext-force-break {
   word-break: break-all;
   overflow-wrap: anywhere;
 }
 
-.back-hint {
+.bigtext-back-hint {
   position: absolute;
   bottom: 20px;
   left: 50%;

@@ -40,8 +40,8 @@ export const findBestFontSize = (
 export const PRESETS = ['Yes', 'No', '🍺 1 more please', '👋 Hi!', 'Help!', 'Bill please 💳'];
 
 export const THEMES = [
-  { id: 'theme-dark', label: 'Dark', className: 'theme-btn-dark' },
-  { id: 'theme-light', label: 'Light', className: 'theme-btn-light' },
-  { id: 'theme-matrix', label: 'Matrix', className: 'theme-btn-matrix' },
-  { id: 'theme-bumblebee', label: 'Bumblebee', className: 'theme-btn-bumblebee' },
+  { id: 'theme-dark', label: 'Dark', className: 'bigtext-theme-btn-dark' },
+  { id: 'theme-light', label: 'Light', className: 'bigtext-theme-btn-light' },
+  { id: 'theme-matrix', label: 'Matrix', className: 'bigtext-theme-btn-matrix' },
+  { id: 'theme-bumblebee', label: 'Bumblebee', className: 'bigtext-theme-btn-bumblebee' },
 ];

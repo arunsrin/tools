@@ -246,16 +246,16 @@ describe('BigText Tool', () => {
       vi.advanceTimersByTime(50);
     });
 
-    expect(textEl).toHaveClass('force-break');
+    expect(textEl).toHaveClass('bigtext-force-break');
     expect(textEl.style.fontSize).toBe(`${MIN_FONT_SIZE}px`);
 
-    // Resize when text fits removes force-break
+    // Resize when text fits removes bigtext-force-break
     forceOverflow = false;
     act(() => {
       fireEvent(window, new Event('resize'));
     });
 
-    expect(textEl).not.toHaveClass('force-break');
+    expect(textEl).not.toHaveClass('bigtext-force-break');
     expect(parseInt(textEl.style.fontSize, 10)).toBeGreaterThan(MIN_FONT_SIZE);
   });
 

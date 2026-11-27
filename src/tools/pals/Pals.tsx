@@ -62,7 +62,14 @@ export default function Pals({ onBack }: PalsProps) {
 
   const [mood, setMood] = useState<PalMood>('Playful');
   const [energy, setEnergy] = useState<number>(90);
-  const [canvasUnavailable, setCanvasUnavailable] = useState(false);
+  const [canvasUnavailable] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return false;
+    try {
+      return document.createElement('canvas').getContext('2d') === null;
+    } catch {
+      return true;
+    }
+  });
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const audioControllerRef = useRef<AudioController | null>(null);
@@ -275,18 +282,8 @@ export default function Pals({ onBack }: PalsProps) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    let cancelled = false;
     const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      queueMicrotask(() => {
-        if (!cancelled) {
-          setCanvasUnavailable(true);
-        }
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
+    if (!ctx) return;
 
     let animId = 0;
     let lastTimestamp: number | null = null;

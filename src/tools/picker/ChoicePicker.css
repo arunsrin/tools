@@ -538,7 +538,11 @@
 
 .picker-coin-heads {
   background: radial-gradient(circle at 35% 35%, #eab308 0%, #ca8a04 60%, #a16207 100%);
-  color: var(--accent-solid-on);
+  color: var(--accent-on, #0f172a);
+}
+
+.picker-coin-heads .picker-coin-text {
+  text-shadow: none;
 }
 
 .picker-coin-tails {

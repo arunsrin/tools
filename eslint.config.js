@@ -20,10 +20,4 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-  {
-    files: ['vite.config.ts'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-    },
-  },
 ])
