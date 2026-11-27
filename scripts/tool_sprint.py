@@ -140,7 +140,8 @@ def cmd_run_tests(worktree_path: str):
     if sys.platform == "win32":
         ps_script = os.path.abspath(os.path.join(worktree_path, "scripts", "test.ps1"))
         if os.path.exists(ps_script):
-            proc = run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps_script], cwd=worktree_path)
+            ps_bin = "pwsh" if shutil.which("pwsh") else "powershell"
+            proc = run_cmd([ps_bin, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps_script], cwd=worktree_path)
         else:
             sh_script = os.path.abspath(os.path.join(worktree_path, "scripts", "test.sh"))
             if not os.path.exists(sh_script):

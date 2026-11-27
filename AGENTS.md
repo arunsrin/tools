@@ -18,17 +18,24 @@ This repository contains **Tools Hub**, a centralized static hub for hosting mul
 ## 2. Directory Layout
 
 - `src/`:
-  - `App.tsx`: Central Tools Hub dashboard and view switcher.
-  - `App.test.tsx`: Companion tests for hub rendering and view transitions.
-  - `main.tsx`: React entry point.
-  - `index.css`: Hub global styles, layout containers, and theme variables.
+  - `App.tsx`: Central Tools Hub dashboard, view switcher, and `ToolErrorBoundary` wrapper.
+  - `App.test.tsx`: Companion tests for hub rendering, direct routes, and error boundary recovery.
+  - `routes.ts`: Central `TOOL_REGISTRY`, `TOOL_BY_KEY`, `TOOL_ROUTES`, `parseToolRoute`, `parseRoute`, and `buildNormalizedUrl`.
+  - `main.tsx`: React entry point importing `tokens.css` and `primitives.css`.
+  - `index.css`: Hub global styles and layout containers consuming `tokens.css` variables.
+  - `styles/`: Unified dark-theme design tokens (`tokens.css`) and shared CSS/focus primitives (`primitives.css`).
+  - `shared/`: Reusable cross-tool building blocks (preferred over duplicating logic in `src/tools/`):
+    - `shared/components/`: `ToolHeader`, `Modal`, `SegmentedControl`, `InlineAlert`, `Toast`, `ToolErrorBoundary`, and shared `types.ts`.
+    - `shared/hooks/`: `usePersistedState`, `useTimeoutRegistry`, `useCopyFeedback`, `useDocumentTitle`.
+    - `shared/utils/`: `clipboard.ts` (`copyToClipboard`), `canvas.ts` (`downloadCanvasPng`, `getCanvasPointerPos`, `syncCanvasDpr`), `audio.ts` (`createAudioController`, `playWithAudio`).
+  - `components/`: Hub-level components (`ChessWatermark.tsx`).
   - `test/setup.ts`: Vitest global test setup and DOM matchers (`@testing-library/jest-dom`).
-  - `tools/`: Modular tool implementations.
+  - `tools/`: Modular tool implementations (zero cross-tool imports allowed):
     - `tools/<tool-name>/`:
-      - `<ToolName>.tsx`: Main tool component.
-      - `<ToolName>.css`: Scoped stylesheet.
+      - `<ToolName>.tsx`: Main tool component (single default export only).
+      - `<ToolName>.css`: Tool-prefixed stylesheet consuming `src/styles/tokens.css` variables.
       - `<ToolName>.test.tsx`: Companion unit and component tests.
-      - `SPEC.md`: Tool-specific specification and acceptance criteria.
+      - `SPEC.md`: Tool-specific specification (`Overview`, `Functional Requirements`, `Acceptance Criteria`).
 - `docs/specs/`: Feature specifications authored during sprints (`docs/specs/<feature-name>.md`).
 - `.devcontainer/`: Containerized development environment config (`devcontainer.json`).
 - `scripts/`: Development, testing, and sprint automation tooling:
@@ -108,10 +115,10 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
    - **Feature Worktree Preview (:5174):** Candidate feature running from `.worktrees/<feature-name>` on `http://localhost:5174/`.
    - **Parallel Worktree Previews (:5175, :5176, etc.):** When multiple tasks proceed in parallel, each feature worktree binds to its own dedicated port via `python scripts/tool_sprint.py preview <feature-name> --port <port>`.
    - All server termination logic is strictly scoped to the exact port-bound process IDs without killing unrelated servers.
-5. **Mandatory Companion Automated Test Authoring & CI Parity:**
-   Zero untested features. Every new tool module must have a `<ToolName>.test.tsx` file asserting render behavior, user interactions, presets, persistence, and edge cases, maintaining >80% test coverage. Every check must also run in `.github/workflows/test.yml`.
+5. **Mandatory Companion Automated Test Authoring, Thresholds & CI Parity:**
+   Zero untested features. Every new tool module must have a `<ToolName>.test.tsx` file asserting render behavior, user interactions, presets, persistence, and edge cases. `vite.config.ts` physically enforces `test.coverage.thresholds` (`lines: 80`, `functions: 80`, `branches: 75`, `statements: 80`) during `npm run coverage`. Every check must also run in `.github/workflows/test.yml`.
 6. **Dynamic CI Test Discovery & Parity Enforcement (`scripts/test_ci_parity.py`):**
-   GitHub Actions CI (`.github/workflows/test.yml`) strictly mirrors the local verification pipeline. CI parity is enforced by `scripts/test_ci_parity.py`, which physically fails the local build if any test script or validation step is missing from CI. Never bypass CI parity.
+   GitHub Actions CI (`.github/workflows/test.yml`) strictly mirrors the local verification pipeline. CI parity is enforced by `scripts/test_ci_parity.py`, which dynamically discovers all `scripts/test_*.py` scripts and physically fails if any check or test script is missing from `.github/workflows/test.yml`, `scripts/test.ps1`, or `scripts/test.sh`. Never bypass CI parity.
 7. **Cross-Platform Safety & Windows Python UTF-8 Stdout:**
    Windows PowerShell console defaults to `cp1252`. Python scripts that print Unicode symbols (e.g. checkmarks `✓` or emojis `🛠️`) will crash with `UnicodeEncodeError`. All Python scripts (`scripts/*.py`) MUST include at the top:
    ```python
@@ -122,19 +129,20 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
    ```
 8. **Scoped Port Termination & Anti-Blanket Process Killing:**
    Test suites and process termination helpers must NEVER execute blanket process killers (`taskkill /IM node.exe` or `pkill -f vite`). All termination logic must be strictly scoped to the exact process IDs bound to the specified TCP ports (5173, 5174). Blanket process killers collateral-damage and kill unrelated tools or services on the developer's machine.
-9. **Modular Component Isolation Pattern:**
+9. **Modular Component Isolation Pattern & Zero Cross-Tool Imports:**
    Every tool must reside in its own folder under `src/tools/<tool-name>/` and contain:
    - `<ToolName>.tsx`
    - `<ToolName>.css`
    - `<ToolName>.test.tsx`
    - `SPEC.md`
-   Root files must not be polluted with tool-specific styles or helper logic.
-10. **Mandatory Hub Navigation & "Back to Hub" Button:**
-    Every tool must provide an explicit, accessible, and high-contrast "Back to Hub" button calling `onBack()`. Users must never be trapped inside a tool view without an obvious way to return to the dashboard.
+   Tools must NEVER import from sibling tools (`src/tools/A` -> `src/tools/B` is forbidden; enforced by `scripts/test_tools_structure.py`). Shared components, hooks, utilities, and tokens live in `src/shared/` and `src/styles/`. Root files must not be polluted with tool-specific styles or helper logic.
+10. **Mandatory Hub Navigation via `ToolHeader` (`"← Back to Tools Hub"`):**
+    Every tool must provide an explicit, accessible, high-contrast `"← Back to Tools Hub"` control calling `onBack()`, standardized via `ToolHeader` (`src/shared/components/ToolHeader.tsx`). Do not invent ad-hoc labels like `"← Hub"` or `"← Back to Hub"`, and ensure full-screen modes (e.g., BigText Display Mode) also expose an accessible keyboard/pointer exit affordance.
 11. **React 19 State, Hooks & Memory Discipline:**
-    - Every `useEffect` binding window event listeners, intervals, or timers MUST return a cleanup function (`return () => ...`).
-    - Dependency arrays in `useEffect`, `useCallback`, and `useMemo` must be exhaustive (enforced by `eslint-plugin-react-hooks`).
-    - `localStorage` operations must always be wrapped in `try/catch` to gracefully tolerate private browsing or restricted quota exceptions.
+    - Every `useEffect` binding window/element event listeners (use native `{ passive: false }` listeners when calling `e.preventDefault()` on wheel/touch), `setInterval`, `setTimeout`, `requestAnimationFrame` (`cancelAnimationFrame`), or Web Audio contexts (`AudioContext.close()`) MUST clean up on unmount.
+    - Prefer `useTimeoutRegistry` (`src/shared/hooks/useTimeoutRegistry.ts`), `useCopyFeedback`, `useDocumentTitle`, and `createAudioController` / `playWithAudio` (`src/shared/utils/audio.ts`) over ad-hoc timers, `document.title` mutations, or module-level `AudioContext` singletons. Never capture mutable `.current` timer arrays at mount.
+    - Dependency arrays in `useEffect`, `useCallback`, and `useMemo` must be exhaustive (enforced by `eslint-plugin-react-hooks`). Keep animation/physics callbacks independent of transient UI toggles (use refs when needed) so toggling sound or selecting items does not reset active loops.
+    - `localStorage` operations must always use `usePersistedState` (`src/shared/hooks/usePersistedState.ts`) with runtime shape validation or be explicitly wrapped in `try/catch` (enforced by `scripts/test_tools_structure.py`).
 12. **TypeScript Strictness & Type Safety:**
     - Zero `any` types in newly authored components and utilities.
     - All props, state shapes, and event handlers must be explicitly typed.
@@ -143,10 +151,12 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     - Rely on native Web APIs (e.g. `Intl`, `crypto`, `Canvas`, `fetch`) and React state.
     - Avoid heavy third-party component libraries or utilities (e.g. lodash, moment.js) unless explicitly justified.
     - Scrutinize bundle sizes in `dist/assets/`.
-14. **High-Contrast & Responsive Accessibility:**
-    - Contrast ratios must satisfy WCAG AA standards (minimum 4.5:1 for normal text).
-    - Interfaces must scale gracefully across viewports, from compact mobile devices (320px) to desktop and ultrawide screens.
-    - **Visual Stage Mobile Scaling Rule:** All visual stages, wheels, canvases, and animated cards MUST specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions (`width: 320px`). Card containers must provide responsive padding (`padding: 1rem` on viewports ≤ 480px) to guarantee zero horizontal scroll on 320px–375px viewports.
+14. **High-Contrast, Accessible UX, CSS Isolation & Responsive Scaling:**
+    - **Design Tokens & CSS Isolation:** All tools must consume unified tokens from `src/styles/tokens.css` (`--bg-canvas`, `--bg-elevated`, `--bg-surface`, `--text-primary`, `--text-muted`, `--accent`, `--accent-on`, `--accent-solid`, `--accent-solid-on`, `--status-danger`, etc.). Tool CSS must NEVER redeclare `:root {` and must prefix all selectors (`.<tool>-*`) so shared names like `.back-btn`, `.btn-group`, or `.energy-fill` never collide across the single bundle.
+    - **WCAG AA Contrast (>= 4.5:1):** Never pair `#64748b` or `#475569` text on dark slate surfaces (`#0f172a` / `#1e293b`), and never pair `#ffffff` text on `#38bdf8` or `#0284c7` for normal text (use `--accent` + `--accent-on` `#0f172a`, or `--accent-solid` `#0369a1` + `--accent-solid-on` `#ffffff`).
+    - **Keyboard Focus & Modals:** Preserve `:focus-visible` outlines (`--focus-ring` in `src/styles/primitives.css`); never strip `outline: none` without a visible focus indicator. Use `Modal` (`src/shared/components/Modal.tsx`) for dialogs (`Escape` dismissal, `aria-modal`, focus restoration) and `SegmentedControl` for mode/phase tabs.
+    - **Ban Blocking Browser Dialogs:** NEVER use `window.alert(`, `window.confirm(`, `window.prompt(`, or standalone `alert(` in `src/tools/` (enforced by `scripts/test_tools_structure.py`). Report validation and clipboard/export failures via `InlineAlert` (`role="alert"`) or `Toast`.
+    - **Visual Stage Mobile Scaling Rule:** Interfaces must wrap control/button rows (`flex-wrap: wrap`) and scale cleanly from 320px mobile to ultrawide screens with zero horizontal scroll. Visual stages, wheels, canvases, and animated cards MUST specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions, with responsive card padding (`padding: 1rem` on `<= 480px`).
 15. **Subagent Permission Minimization & The Interruption-Free Reviewer Principle:**
     Subagents should be granted the minimum tool privileges strictly required for their role. In particular, code review agents (like Elrond) must NOT be spawned with write/shell tools (`enable_write_tools: false`). Arbitrary shell commands (`git log`, `git diff`, `git status`) executed by subagents trigger interactive Antigravity CLI permission prompts that disrupt the author. Instead:
     - Gandalf pre-gathers the git diff, commit history, and living spec context and passes them directly in Elrond's prompt.
@@ -160,27 +170,35 @@ cd .worktrees/<feature-name> && npm run dev -- --port 5174 --host 0.0.0.0
     - Script execution is permitted exclusively via verified test runners (`./scripts/test.ps1`, `./scripts/test.sh`).
     - GitHub CLI commands are scoped to PR lifecycle management (`gh pr *`).
 18. **Tool Specification Integrity:**
-    Every tool must have its own specification in `src/tools/<tool-name>/SPEC.md`, and master `SPEC.md` must register the tool under the Current Tools section. Enforced automatically by `python scripts/test_tools_structure.py`.
-19. **Negative Testing & Boundary Assertions:**
-    Tests must verify failure modes, invalid inputs, empty states, and error handling—not merely the happy path.
+    Every tool must have its own specification in `src/tools/<tool-name>/SPEC.md` containing standardized `Overview`, `Functional Requirements`, and `Acceptance Criteria` sections, and master `SPEC.md` must register `./src/tools/<tool-name>/SPEC.md` under Current Tools. Enforced automatically by `python scripts/test_tools_structure.py`.
+19. **Negative Testing, Storage Resilience & Boundary Assertions:**
+    Tests must verify failure modes, invalid inputs, empty states, and error handling—not merely the happy path:
+    - Assert `localStorage.getItem` and `localStorage.setItem` (`QuotaExceededError`) error tolerance, plus corrupt JSON and invalid/partial schema sanitization.
+    - Assert active timer, `requestAnimationFrame` (`cancelAnimationFrame`), `AudioContext` missing/throw fallbacks, and `document.title` cleanup on unmount.
+    - Assert keyboard guards (ignoring shortcuts while typing in inputs/modals), `Modal` `Escape` closing, and error-alert UI rendering (`role="alert"`).
 20. **Cloudflare Workers Assets Compatibility:**
     The application outputs to `./dist` and is deployed as static assets via `wrangler.json`. Ensure `not_found_handling` is configured for single-page applications and no Node.js runtime APIs bleed into client bundles.
 21. **Line Ending Normalization (`.gitattributes`):**
     All shell scripts (`*.sh`), Python scripts (`*.py`), TypeScript files (`*.ts`, `*.tsx`), markdown (`*.md`), and JSON (`*.json`) must use LF line endings. PowerShell scripts (`*.ps1`) use CRLF. Enforced by `.gitattributes`.
 22. **Mandatory README Tool Registration:**
-    Whenever a new tool is introduced, `README.md` MUST be updated under Featured Tools and Project Structure to maintain public documentation integrity. Enforced automatically by `python scripts/test_tools_structure.py`.
+    Whenever a new tool is introduced, `README.md` MUST be updated under both `Featured Tools` (alphabetical, `https://tools.arunsr.in/<tool>`) and `Project Structure` (`src/tools/<tool>/`) to maintain public documentation integrity. Enforced automatically by `python scripts/test_tools_structure.py`.
 23. **Dark Theme Standard:**
     The Tools Hub and all tools strictly adopt a high-contrast dark theme by default, matching the dark theme of the main `arunsr.in` Hugo site (deep slate/navy `#0f172a`, card surfaces `#1e293b`, borders `#334155`, text `#f1f5f9` / `#94a3b8`, and vivid cyan accents `#38bdf8` / `#7dd3fc`). Avoid introducing global light/dark mode toggles unless explicitly requested for a specific tool.
 24. **Mandatory Direct Link & Route Registration for New Tools:**
     Whenever a new tool is introduced:
-    - It MUST be registered in `src/routes.ts` (`ToolKey`, `TOOL_ROUTES`, and `ROUTE_TO_TOOL`).
-    - Its hub dashboard card in `src/App.tsx` MUST be rendered as an accessible semantic `<a>` anchor (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}` to support middle-click / open-in-new-tab while providing fast SPA transition on standard left-clicks.
-    - Its direct URL mount (e.g. `/<tool>`), hub card link attributes, and "Back to Tools Hub" URL synchronization back to `/` MUST be tested with companion automated tests in `src/App.test.tsx`.
+    - It MUST be registered in `src/routes.ts` (`ToolKey`, `TOOL_ROUTES`, `ROUTE_TO_TOOL`, `TOOL_REGISTRY`, and `TOOL_BY_KEY`), with `parseToolRoute` matching exact single segments only.
+    - Its hub dashboard card in `src/App.tsx` MUST be rendered as an accessible semantic `<a>` anchor (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}` to support middle-click / open-in-new-tab while providing fast SPA transition on standard left-clicks, wrapped inside `ToolErrorBoundary`.
+    - Its direct URL mount (e.g. `/<tool>`), hub card link attributes, and `"← Back to Tools Hub"` URL synchronization back to `/` MUST be tested with companion automated tests in `src/App.test.tsx`.
     - Enforced automatically by `python scripts/test_tools_structure.py`.
-25. **Modular Component Export Discipline (`react-refresh/only-export-components`):**
-    Main tool component files (`<ToolName>.tsx`) must exclusively export the React component (e.g. `export default function <ToolName>`). Never export helper functions, simulation engines, or data types directly from the component file, which violates Vite's Fast Refresh ESLint rules. Always extract helper functions, mathematical generators, and interfaces into dedicated companion modules (e.g. `<tool>Engine.ts` or `helpers.ts`).
-26. **Scoped Canvas Mock Discipline in Tests:**
-    When authoring tests for canvas-based tools in headless `jsdom`, never globally override `HTMLCanvasElement.prototype.getContext('2d')` in `src/test/setup.ts`, as persistent global canvas mocks can interfere with other tools' timer and animation loops (such as confetti physics in `ChoicePicker`). Always scope canvas mocks strictly within the companion test file (`<ToolName>.test.tsx`) with proper restoration in `afterEach()`, or pass a mock context directly to pure renderer functions.
+25. **Single-Default-Export Component Discipline (`react-refresh/only-export-components`):**
+    Every non-test `.tsx` component file (`<ToolName>.tsx` and extracted subcomponents like `PomoMascot.tsx` or `SpecimenCard.tsx`) MUST exclusively export a single React component via `export default` (enforced by `scripts/test_tools_structure.py` and ESLint). Never export `type`, `interface`, `enum`, `const`, or helper/subcomponent `function` declarations from `.tsx` files—extract types into `types.ts` and engines/helpers into `<tool>Engine.ts` or `src/shared/`.
+26. **Scoped Mock & Global Restoration Discipline in Tests:**
+    When authoring tests in headless `jsdom`, never globally override `HTMLCanvasElement.prototype.getContext('2d')` in `src/test/setup.ts`, as persistent global canvas mocks interfere with other tools' timer and animation loops (such as confetti physics in `ChoicePicker`). Always scope mocks (`HTMLCanvasElement.prototype`, `navigator.clipboard`, `window.AudioContext`, `document.execCommand`) strictly within the companion test file (`<ToolName>.test.tsx`) and save/restore originals cleanly in `afterEach()` (alongside `vi.restoreAllMocks()`), or pass a mock context directly to pure renderer functions.
+27. **Shared Primitives & Design Tokens Architecture (`src/shared/` & `src/styles/`):**
+    New tools and enhancements must reuse the shared building blocks in `src/shared/` and `src/styles/tokens.css` rather than reimplementing common patterns:
+    - **UI Components (`src/shared/components/`):** `ToolHeader`, `Modal`, `SegmentedControl`, `InlineAlert`, `Toast`, `ToolErrorBoundary` (types in `src/shared/components/types.ts`).
+    - **Hooks (`src/shared/hooks/`):** `usePersistedState`, `useTimeoutRegistry`, `useCopyFeedback`, `useDocumentTitle`.
+    - **Utilities (`src/shared/utils/`):** `clipboard.ts` (`copyToClipboard`), `canvas.ts` (`downloadCanvasPng`, `getCanvasPointerPos`, `syncCanvasDpr`), `audio.ts` (`createAudioController`, `playWithAudio`).
 
 ---
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Validates CI Parity: Ensures test and verification steps defined in local test scripts
-are also executed in GitHub Actions CI (.github/workflows/test.yml).
+Validates CI Parity: Dynamically discovers all `scripts/test_*.py` suites and
+ensures both GitHub Actions CI (`.github/workflows/test.yml`) and local test runners
+(`scripts/test.ps1`, `scripts/test.sh`) execute every required check and test script.
 """
 import os
 import sys
@@ -13,37 +14,70 @@ if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SCRIPTS_DIR = os.path.join(ROOT_DIR, "scripts")
 WORKFLOW_FILE = os.path.join(ROOT_DIR, ".github", "workflows", "test.yml")
+PS1_FILE = os.path.join(SCRIPTS_DIR, "test.ps1")
+SH_FILE = os.path.join(SCRIPTS_DIR, "test.sh")
+
+
+def discover_python_tests() -> list[str]:
+    return sorted(
+        f for f in os.listdir(SCRIPTS_DIR)
+        if f.startswith("test_") and f.endswith(".py") and os.path.isfile(os.path.join(SCRIPTS_DIR, f))
+    )
 
 
 def main():
-    if not os.path.exists(WORKFLOW_FILE):
-        print(f"Error: CI workflow not found at {WORKFLOW_FILE}", file=sys.stderr)
-        sys.exit(1)
+    targets = [
+        (".github/workflows/test.yml", WORKFLOW_FILE),
+        ("scripts/test.ps1", PS1_FILE),
+        ("scripts/test.sh", SH_FILE),
+    ]
 
-    with open(WORKFLOW_FILE, "r", encoding="utf-8") as f:
-        workflow_content = f.read()
+    contents: dict[str, str] = {}
+    for label, path in targets:
+        if not os.path.exists(path):
+            print(f"Error: Required runner file not found at {path}", file=sys.stderr)
+            sys.exit(1)
+        with open(path, "r", encoding="utf-8") as f:
+            contents[label] = f.read()
 
-    required_checks = [
+    core_checks = [
         ("npm run lint", "ESLint static analysis check"),
         ("npm run coverage", "Vitest test suite with coverage"),
         ("npm run build", "TypeScript compilation & Vite production build"),
-        ("test_tools_structure.py", "Modular tool structure & spec validation"),
-        ("test_cleanup_tooling.py", "Sprint cleanup tooling regression tests"),
     ]
 
-    missing = []
-    for snippet, desc in required_checks:
-        if snippet not in workflow_content:
-            missing.append(f"  - Missing {desc} ('{snippet}')")
-
-    if missing:
-        print("❌ CI Parity Failure! The following checks are missing from .github/workflows/test.yml:", file=sys.stderr)
-        for m in missing:
-            print(m, file=sys.stderr)
+    discovered_scripts = discover_python_tests()
+    if not discovered_scripts:
+        print("Error: No scripts/test_*.py files discovered.", file=sys.stderr)
         sys.exit(1)
 
-    print("✓ CI Parity verified: All local validation steps are present in GitHub Actions CI.")
+    dynamic_checks = [
+        (script_name, f"Python verification suite ({script_name})")
+        for script_name in discovered_scripts
+    ]
+
+    all_checks = core_checks + dynamic_checks
+    failures = []
+
+    for label, text in contents.items():
+        for snippet, desc in all_checks:
+            if snippet not in text:
+                failures.append(f"  - [{label}] Missing {desc} ('{snippet}')")
+
+    if failures:
+        print("❌ CI Parity Failure! Local runners and GitHub Actions CI are out of sync:", file=sys.stderr)
+        for failure in failures:
+            print(failure, file=sys.stderr)
+        sys.exit(1)
+
+    print(
+        f"✓ CI Parity verified: All {len(core_checks)} core checks and "
+        f"{len(discovered_scripts)} discovered Python test script(s) "
+        f"({', '.join(discovered_scripts)}) are aligned across "
+        f".github/workflows/test.yml, scripts/test.ps1, and scripts/test.sh."
+    )
 
 
 if __name__ == "__main__":

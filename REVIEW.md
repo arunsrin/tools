@@ -20,27 +20,28 @@ As Elrond, your job is **not** to rubber-stamp PRs. Your mission is to protect t
 Every review conducted by Elrond must ruthlessly audit the diff across these 12 gates:
 
 ### Gate 1: CI Parity & Silent Test Omission
-- **The Trap:** Tests or lint checks are executed locally in `scripts/test.ps1` but omitted from `.github/workflows/test.yml`.
+- **The Trap:** Tests or lint checks are executed locally in `scripts/test.ps1` or `scripts/test.sh` but omitted from `.github/workflows/test.yml`, or a new `scripts/test_*.py` suite is bypassed.
 - **The Audit:**
-  - Verify that `python scripts/test_ci_parity.py` passes cleanly.
-  - Verify `.github/workflows/test.yml` executes `npm run lint`, `npm run coverage`, `npm run build`, and all Python validation scripts.
-  - Reject immediately if any local check is excluded from GitHub Actions CI.
+  - Verify that `python scripts/test_ci_parity.py` passes cleanly (dynamically discovering all `scripts/test_*.py` scripts).
+  - Verify `.github/workflows/test.yml`, `scripts/test.ps1`, and `scripts/test.sh` all execute `npm run lint`, `npm run coverage`, `npm run build`, and every discovered `scripts/test_*.py` script.
+  - Reject immediately if any local check is excluded from GitHub Actions CI or vice versa.
 
 ### Gate 2: React 19 State, Hooks & Memory Discipline
-- **The Trap:** Stale closures in `useEffect` or `useCallback`, missing dependency arrays, or updating state on unmounted components after async timeouts or event listeners.
+- **The Trap:** Stale closures in `useEffect` or `useCallback`, missing dependency arrays, leaked `requestAnimationFrame` loops, unclosed `AudioContext` instances, stale timer refs, or updating state on unmounted components after async timeouts or event listeners.
 - **The Audit:**
-  - Assert that all `useEffect` hooks with event listeners, intervals, or timeouts return cleanup functions (`return () => ...`).
-  - Verify dependencies in `useEffect`, `useCallback`, and `useMemo` are complete and exhaustive (enforced by `eslint-plugin-react-hooks`).
-  - Verify `localStorage` operations are wrapped in `try/catch` to avoid crashes in private browsing or storage-disabled environments.
-  - Verify main component files (`<ToolName>.tsx`) exclusively export React components to satisfy Vite Fast Refresh (`react-refresh/only-export-components`). Engines and helpers must reside in companion files.
+  - Assert that all `useEffect` hooks with event listeners (using native `{ passive: false }` listeners when calling `e.preventDefault()` on wheel/touch), intervals, `setTimeout`s, `requestAnimationFrame` (`cancelAnimationFrame`), or Web Audio (`AudioContext.close()`) clean up on unmount.
+  - Verify tools reuse `useTimeoutRegistry`, `useCopyFeedback`, `useDocumentTitle`, `usePersistedState`, and `createAudioController` / `playWithAudio` (`src/shared/`) rather than duplicating timers, `document.title` mutations, or module-level `AudioContext` singletons.
+  - Verify dependencies in `useEffect`, `useCallback`, and `useMemo` are complete and exhaustive (enforced by `eslint-plugin-react-hooks`) and do not restart active animation/physics loops when unrelated UI toggles change.
+  - Verify `localStorage` operations use `usePersistedState` with runtime shape validation or are wrapped in `try/catch` to avoid crashes in private browsing or storage-disabled environments.
+  - Verify EVERY non-test `.tsx` file (`<ToolName>.tsx` and extracted subcomponents) exclusively exports a single React component via `export default` (`react-refresh/only-export-components`). Types go in `types.ts` and engines/helpers in companion `.ts` files.
 
-### Gate 3: UI/UX & Responsive Scaling
-- **The Trap:** Tools look fine at standard 1080p desktop resolutions, but break or cause horizontal scrollbars on mobile viewports (320px–420px) or ultrawide screens.
+### Gate 3: UI/UX, Design Tokens, Accessibility & Responsive Scaling
+- **The Trap:** Tools redeclare `:root` CSS variables, collide on unprefixed class names (`.back-btn`, `.btn-group`), fail WCAG AA contrast, strip focus outlines, call blocking `window.alert()`, or overflow mobile viewports (320px–420px).
 - **The Audit:**
-  - Test responsive styling across viewport widths (320px to 2560px).
-  - Every tool MUST have a clear, accessible "Back to Hub" button with high contrast and intuitive placement.
-  - Ensure contrast ratios satisfy WCAG AA standards (minimum 4.5:1 for normal text).
-  - **Visual Stage Mobile Scaling Rule:** Audit that visual stages, wheels, canvases, and animated cards specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions (`width: 320px`). Card containers must provide responsive padding (`padding: 1rem` on viewports ≤ 480px) to guarantee zero horizontal scroll on 320px–375px viewports.
+  - Verify every tool consumes unified dark-theme tokens from `src/styles/tokens.css`, NEVER redeclares `:root {`, and prefixes all tool-specific CSS selectors (`.<tool>-*`, zero unprefixed `.back-btn` or `.btn-group`).
+  - Verify every tool uses shared `ToolHeader` (`"← Back to Tools Hub"` calling `onBack()`), `Modal` (`Escape` dismissal, `role="dialog"`, focus restoration), `SegmentedControl`, and `InlineAlert` / `Toast` instead of ad-hoc headers, dialogs, or `window.alert`/`confirm`/`prompt`.
+  - Ensure contrast ratios satisfy WCAG AA standards (minimum 4.5:1 for normal text; never pair `#64748b`/`#475569` on dark slate or `#ffffff` on `#38bdf8`/`#0284c7`) and `:focus-visible` outlines (`--focus-ring`) remain visible on all interactive elements.
+  - **Visual Stage Mobile Scaling Rule:** Audit that button/control groups wrap (`flex-wrap: wrap`) and visual stages, wheels, canvases, and animated cards specify fluid width constraints (e.g. `width: min(320px, 100%)` and `aspect-ratio: 1`) rather than fixed pixel dimensions, with responsive card padding (`padding: 1rem` on `<= 480px`) for zero horizontal scroll on 320px–375px viewports.
 
 ### Gate 4: TypeScript Strictness & Type Safety
 - **The Trap:** Bypassing the type checker with `any`, untyped props, or loose type assertions (`as unknown as ...`).
@@ -69,14 +70,14 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Assert zero Node runtime dependencies in client code.
   - Verify single-page routing compatibility configured in `wrangler.json`.
 
-### Gate 7: Modular Isolation & Spec Compliance
-- **The Trap:** New tools polluting root files, lacking a specification, missing back navigation to the hub, or failing to register direct shareable URLs.
+### Gate 7: Modular Isolation, Shared Reuse & Spec Compliance
+- **The Trap:** New tools pollute root files, import from sibling tools, duplicate shared hooks/modals/utilities, lack canonical specification sections, fail to register direct URLs/README/App tests, or crash the entire hub on error.
 - **The Audit:**
-  - Modular directory structure enforced: `src/tools/<tool-name>/` containing `<ToolName>.tsx`, `<ToolName>.css`, `<ToolName>.test.tsx`, and `SPEC.md`.
-  - Master `SPEC.md` must list the tool in its registered tools section.
-  - `src/routes.ts` must register the tool key and route in `TOOL_ROUTES` and `ROUTE_TO_TOOL`.
-  - Tool card on hub must be an accessible semantic `<a>` link (`href={TOOL_ROUTES.<tool>}`) with `onClick={handleCardClick('<tool>')}`.
-  - Living specification `docs/specs/<feature-name>.md` must match the final implementation exactly.
+  - Modular directory structure enforced: `src/tools/<tool-name>/` containing `<ToolName>.tsx`, `<ToolName>.css`, `<ToolName>.test.tsx`, and `SPEC.md` (with `Overview`, `Functional Requirements`, and `Acceptance Criteria` sections).
+  - Zero cross-tool imports (`src/tools/A` must never import from `src/tools/B`; shared components, hooks, utils, and tokens live in `src/shared/` and `src/styles/`).
+  - Master `SPEC.md` (`Current Tools`) must link `./src/tools/<tool-name>/SPEC.md`, and `README.md` must register the tool in both `Featured Tools` (alphabetical, `https://tools.arunsr.in/<tool>`) and `Project Structure` (`src/tools/<tool>/`).
+  - `src/routes.ts` must register the tool in `ToolKey`, `TOOL_ROUTES`, `ROUTE_TO_TOOL`, `TOOL_REGISTRY`, and `TOOL_BY_KEY`, with `src/App.tsx` rendering an alphabetical semantic `<a>` card wrapped in `ToolErrorBoundary` and `src/App.test.tsx` verifying the direct route and hub link.
+  - Living specification `docs/specs/<feature-name>.md` must match the final implementation, and `python scripts/test_tools_structure.py` must pass cleanly.
 
 ### Gate 8: Performance, Zero Bloat & Minimal Dependencies
 - **The Trap:** Installing heavy npm packages (e.g. lodash, moment.js, huge UI libraries) for trivial tasks achievable with native JavaScript or Web APIs.
@@ -84,13 +85,12 @@ Every review conducted by Elrond must ruthlessly audit the diff across these 12 
   - Scrutinize any new entry in `package.json`. Prefer native Web APIs (e.g. `Intl`, `crypto`, `Canvas`, `fetch`).
   - Scrutinize bundle size (`dist/assets/*.js`). Alert if a single tool adds disproportionate weight.
 
-### Gate 9: Test Coverage & Negative Assertions
-- **The Trap:** Tests only test the "happy path" with mock data, leaving error handling, empty states, and invalid inputs untested.
+### Gate 9: Test Coverage, Storage Resilience, Mock Restoration & Negative Assertions
+- **The Trap:** Tests only test the "happy path" with mock data, ignore storage/audio/canvas failures, leave global prototype mocks mutated across suites, or skip timer/RAF unmount assertions.
 - **The Audit:**
-  - Verify companion tests exist in `src/tools/<tool-name>/<ToolName>.test.tsx`.
-  - Test coverage for the new tool module must exceed 80% (validated via `npm run coverage`).
-  - Verify negative assertions: invalid inputs handled gracefully, preset buttons update state correctly, reset/clear actions function properly.
-  - Verify canvas 2D mocks are scoped strictly to the companion test file and not registered globally in `setup.ts`, avoiding cross-test animation leaks.
+  - Verify companion tests exist in `src/tools/<tool-name>/<ToolName>.test.tsx` and `npm run coverage` satisfies `vite.config.ts` physical thresholds (`lines: 80`, `functions: 80`, `branches: 75`, `statements: 80`).
+  - Verify negative & resilience assertions: invalid/empty inputs, `localStorage.getItem` and `localStorage.setItem` (`QuotaExceededError`) failures, corrupt JSON and invalid/partial schema sanitization, `AudioContext` / `getContext('2d') === null` / clipboard rejections, keyboard guards inside inputs/modals, and active timer / `cancelAnimationFrame` / `document.title` unmount cleanup.
+  - Verify all patched globals/prototypes (`HTMLCanvasElement.prototype`, `navigator.clipboard`, `window.AudioContext`, `document.execCommand`) are scoped to the companion test file and restored cleanly in `afterEach()` (alongside `vi.restoreAllMocks()`), never registered globally in `src/test/setup.ts`.
 
 ### Gate 10: Interruption-Free Subagent Protocol
 - **The Trap:** Subagents running arbitrary interactive shell commands (`git log`, `git diff`, `grep`) and spamming the author with CLI permission prompts.
