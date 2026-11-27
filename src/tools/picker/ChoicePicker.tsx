@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef, useId, useCallback } from 'react';
+import ToolHeader from '../../shared/components/ToolHeader';
+import SegmentedControl from '../../shared/components/SegmentedControl';
+import { usePersistedState } from '../../shared/hooks/usePersistedState';
+import { useTimeoutRegistry } from '../../shared/hooks/useTimeoutRegistry';
 import './ChoicePicker.css';
 
 interface ChoicePickerProps {
@@ -53,6 +57,113 @@ const SLICE_COLORS = [
   '#3b82f6', // Blue
 ];
 
+const EMPTY_COIN_STATS: CoinStats = {
+  heads: 0,
+  tails: 0,
+  total: 0,
+  streak: { side: null, count: 0 },
+};
+
+const DEFAULT_CHOICES_TEXT = PRESETS['What to Eat'].join('\n');
+
+function isNonNegativeInt(val: unknown): val is number {
+  return typeof val === 'number' && Number.isInteger(val) && val >= 0;
+}
+
+function validateCoinStats(raw: unknown): CoinStats {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    return EMPTY_COIN_STATS;
+  }
+  const obj = raw as Record<string, unknown>;
+  if (
+    !isNonNegativeInt(obj.heads) ||
+    !isNonNegativeInt(obj.tails) ||
+    !isNonNegativeInt(obj.total)
+  ) {
+    return EMPTY_COIN_STATS;
+  }
+  const streakRaw = obj.streak;
+  if (!streakRaw || typeof streakRaw !== 'object' || Array.isArray(streakRaw)) {
+    return EMPTY_COIN_STATS;
+  }
+  const streakObj = streakRaw as Record<string, unknown>;
+  const side = streakObj.side;
+  if (side !== null && side !== 'heads' && side !== 'tails') {
+    return EMPTY_COIN_STATS;
+  }
+  if (!isNonNegativeInt(streakObj.count)) {
+    return EMPTY_COIN_STATS;
+  }
+  return {
+    heads: obj.heads,
+    tails: obj.tails,
+    total: obj.total,
+    streak: { side, count: streakObj.count },
+  };
+}
+
+function validateDiceHistory(raw: unknown): RollRecord[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const valid: RollRecord[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    const rec = item as Record<string, unknown>;
+    if (
+      typeof rec.id === 'string' &&
+      typeof rec.time === 'string' &&
+      typeof rec.sum === 'number' &&
+      Number.isFinite(rec.sum) &&
+      Array.isArray(rec.dice) &&
+      rec.dice.length > 0 &&
+      rec.dice.every((d) => typeof d === 'number' && Number.isInteger(d) && d >= 1 && d <= 6)
+    ) {
+      valid.push({
+        id: rec.id,
+        dice: [...rec.dice],
+        sum: rec.sum,
+        time: rec.time,
+      });
+    }
+    if (valid.length >= 15) break;
+  }
+  return valid;
+}
+
+function validateChoiceHistory(raw: unknown): PickRecord[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  const valid: PickRecord[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    const rec = item as Record<string, unknown>;
+    if (typeof rec.id === 'string' && typeof rec.item === 'string' && typeof rec.time === 'string') {
+      valid.push({
+        id: rec.id,
+        item: rec.item,
+        time: rec.time,
+      });
+    }
+    if (valid.length >= 15) break;
+  }
+  return valid;
+}
+
+function validateCustomChoices(raw: unknown): string {
+  return typeof raw === 'string' && raw.length > 0 ? raw : DEFAULT_CHOICES_TEXT;
+}
+
+function parseChoices(text: string): string[] {
+  // If text contains newlines, delimit by line; otherwise allow comma separation
+  const delimiter = text.includes('\n') ? '\n' : text.includes(',') ? ',' : '\n';
+  return text
+    .split(delimiter)
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}
+
 // Helper for crypto random int between min (inclusive) and max (inclusive)
 function getRandomInt(min: number, max: number): number {
   if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
@@ -77,32 +188,26 @@ interface Particle {
   vr: number;
 }
 
+const MODE_OPTIONS = [
+  { value: 'choices', label: '🎡 Multiple Choice' },
+  { value: 'coin', label: '🪙 Coin Toss' },
+  { value: 'dice', label: '🎲 Dice Roll' },
+] as const;
+
 export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   const [mode, setMode] = useState<Mode>('choices');
   const textareaId = useId();
 
-  // --- Confetti Canvas Ref ---
+  // --- Confetti Canvas & Timer Registry ---
   const confettiCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const confettiAnimRef = useRef<number | null>(null);
-  const activeTimersRef = useRef<number[]>([]);
-
-  const registerTimeout = useCallback((fn: () => void, delayMs: number) => {
-    const id = window.setTimeout(() => {
-      activeTimersRef.current = activeTimersRef.current.filter((t) => t !== id);
-      fn();
-    }, delayMs);
-    activeTimersRef.current.push(id);
-    return id;
-  }, []);
+  const timeouts = useTimeoutRegistry();
 
   useEffect(() => {
-    const activeTimers = activeTimersRef.current;
     return () => {
-      for (const t of activeTimers) {
-        window.clearTimeout(t);
-      }
-      if (confettiAnimRef.current) {
+      if (confettiAnimRef.current !== null) {
         cancelAnimationFrame(confettiAnimRef.current);
+        confettiAnimRef.current = null;
       }
     };
   }, []);
@@ -133,8 +238,9 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
       });
     }
 
-    if (confettiAnimRef.current) {
+    if (confettiAnimRef.current !== null) {
       cancelAnimationFrame(confettiAnimRef.current);
+      confettiAnimRef.current = null;
     }
 
     const render = () => {
@@ -163,6 +269,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
       if (activeCount > 0) {
         confettiAnimRef.current = requestAnimationFrame(render);
       } else {
+        confettiAnimRef.current = null;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     };
@@ -170,27 +277,17 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     confettiAnimRef.current = requestAnimationFrame(render);
   }, []);
 
-
   // ==========================================
   // MODE 1: COIN TOSS STATE & ACTIONS
   // ==========================================
   const [coinSide, setCoinSide] = useState<'heads' | 'tails' | null>('heads');
   const [isFlippingCoin, setIsFlippingCoin] = useState(false);
   const [coinRotation, setCoinRotation] = useState(0);
-  const [coinStats, setCoinStats] = useState<CoinStats>(() => {
-    try {
-      const saved = localStorage.getItem('picker_coin_stats');
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // Ignore localStorage errors
-    }
-    return {
-      heads: 0,
-      tails: 0,
-      total: 0,
-      streak: { side: null, count: 0 },
-    };
-  });
+  const [coinStats, setCoinStats] = usePersistedState<CoinStats>(
+    'picker_coin_stats',
+    EMPTY_COIN_STATS,
+    { validate: validateCoinStats }
+  );
 
   const flipCoin = () => {
     if (isFlippingCoin) return;
@@ -199,14 +296,13 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     const isHeads = getRandomInt(0, 1) === 0;
     const outcome = isHeads ? 'heads' : 'tails';
 
-    // Calculate rotation so the visual orientation strictly aligns with heads (0 deg mod 360) or tails (180 deg mod 360)
     const targetAngle = isHeads ? 0 : 180;
     const currentAngle = coinRotation % 360;
     const delta = (targetAngle - currentAngle + 360) % 360;
     const extraTurns = getRandomInt(5, 7) * 360;
     setCoinRotation((prev) => prev + extraTurns + delta);
 
-    registerTimeout(() => {
+    timeouts.schedule(() => {
       setCoinSide(outcome);
       setIsFlippingCoin(false);
       triggerConfetti();
@@ -216,30 +312,18 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
         const newTails = outcome === 'tails' ? prev.tails + 1 : prev.tails;
         const newTotal = prev.total + 1;
         const streakCount = prev.streak.side === outcome ? prev.streak.count + 1 : 1;
-        const updated: CoinStats = {
+        return {
           heads: newHeads,
           tails: newTails,
           total: newTotal,
           streak: { side: outcome, count: streakCount },
         };
-        try {
-          localStorage.setItem('picker_coin_stats', JSON.stringify(updated));
-        } catch {
-          // Ignore storage quota
-        }
-        return updated;
       });
     }, 1200);
   };
 
   const resetCoinStats = () => {
-    const empty: CoinStats = { heads: 0, tails: 0, total: 0, streak: { side: null, count: 0 } };
-    setCoinStats(empty);
-    try {
-      localStorage.removeItem('picker_coin_stats');
-    } catch {
-      // Ignore
-    }
+    setCoinStats(EMPTY_COIN_STATS);
   };
 
   // ==========================================
@@ -248,15 +332,11 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   const [diceCount, setDiceCount] = useState<number>(2);
   const [diceValues, setDiceValues] = useState<number[]>([3, 4]);
   const [isRollingDice, setIsRollingDice] = useState(false);
-  const [rollHistory, setRollHistory] = useState<RollRecord[]>(() => {
-    try {
-      const saved = localStorage.getItem('picker_dice_history');
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // Ignore
-    }
-    return [];
-  });
+  const [rollHistory, setRollHistory] = usePersistedState<RollRecord[]>(
+    'picker_dice_history',
+    [],
+    { validate: validateDiceHistory }
+  );
 
   const rollDice = () => {
     if (isRollingDice) return;
@@ -267,7 +347,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
       newDice.push(getRandomInt(1, 6));
     }
 
-    registerTimeout(() => {
+    timeouts.schedule(() => {
       setDiceValues(newDice);
       setIsRollingDice(false);
       triggerConfetti();
@@ -277,52 +357,34 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
         id: Date.now().toString(),
         dice: newDice,
         sum,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        }),
       };
 
-      setRollHistory((prev) => {
-        const updated = [record, ...prev].slice(0, 15);
-        try {
-          localStorage.setItem('picker_dice_history', JSON.stringify(updated));
-        } catch {
-          // Ignore
-        }
-        return updated;
-      });
+      setRollHistory((prev) => [record, ...prev].slice(0, 15));
     }, 650);
   };
 
   const clearDiceHistory = () => {
     setRollHistory([]);
-    try {
-      localStorage.removeItem('picker_dice_history');
-    } catch {
-      // Ignore
-    }
   };
 
   // ==========================================
   // MODE 3: MULTIPLE CHOICE STATE & ACTIONS
   // ==========================================
   const [choiceView, setChoiceView] = useState<ChoiceView>('wheel');
-  const [rawInput, setRawInput] = useState<string>(() => {
-    try {
-      const saved = localStorage.getItem('picker_custom_choices');
-      if (saved) return saved;
-    } catch {
-      // Ignore
+  const [rawInput, setRawInput] = usePersistedState<string>(
+    'picker_custom_choices',
+    DEFAULT_CHOICES_TEXT,
+    {
+      serialize: (val) => val,
+      deserialize: (raw) => raw,
+      validate: validateCustomChoices,
     }
-    return PRESETS['What to Eat'].join('\n');
-  });
-
-  const parseChoices = (text: string): string[] => {
-    // If text contains newlines, delimit by line; otherwise allow comma separation
-    const delimiter = text.includes('\n') ? '\n' : (text.includes(',') ? ',' : '\n');
-    return text
-      .split(delimiter)
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0);
-  };
+  );
 
   const [activePool, setActivePool] = useState<string[]>(() => parseChoices(rawInput));
   const [eliminatedItems, setEliminatedItems] = useState<string[]>([]);
@@ -330,24 +392,15 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
   const [isChoosing, setIsChoosing] = useState(false);
   const [wheelRotation, setWheelRotation] = useState<number>(0);
-  const [pickHistory, setPickHistory] = useState<PickRecord[]>(() => {
-    try {
-      const saved = localStorage.getItem('picker_choice_history');
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // Ignore
-    }
-    return [];
-  });
+  const [pickHistory, setPickHistory] = usePersistedState<PickRecord[]>(
+    'picker_choice_history',
+    [],
+    { validate: validateChoiceHistory }
+  );
 
-  // Keep active pool in sync if input changes and user hasn't eliminated yet
   const handleInputChange = (val: string) => {
+    if (isChoosing) return;
     setRawInput(val);
-    try {
-      localStorage.setItem('picker_custom_choices', val);
-    } catch {
-      // Ignore
-    }
     const parsed = parseChoices(val);
     setActivePool(parsed);
     setEliminatedItems([]);
@@ -355,16 +408,46 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
   };
 
   const applyPreset = (presetName: string) => {
+    if (isChoosing) return;
     const list = PRESETS[presetName] || [];
     const text = list.join('\n');
     handleInputChange(text);
   };
 
   const resetPool = () => {
+    if (isChoosing) return;
     const parsed = parseChoices(rawInput);
     setActivePool(parsed);
     setEliminatedItems([]);
     setSelectedWinner(null);
+  };
+
+  const finalizePick = (winner: string, shouldEliminate: boolean) => {
+    setSelectedWinner(winner);
+    setIsChoosing(false);
+    triggerConfetti();
+
+    const record: PickRecord = {
+      id: Date.now().toString(),
+      item: winner,
+      time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+    };
+    setPickHistory((prev) => [record, ...prev].slice(0, 15));
+
+    if (shouldEliminate) {
+      let removed = false;
+      setActivePool((prev) => {
+        const idx = prev.indexOf(winner);
+        if (idx === -1) return prev;
+        removed = true;
+        return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+      });
+      setEliminatedItems((prev) => (removed ? [...prev, winner] : prev));
+    }
   };
 
   const pickWinner = () => {
@@ -374,18 +457,14 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
     const winnerIndex = getRandomInt(0, activePool.length - 1);
     const winner = activePool[winnerIndex];
+    const eliminateSnapshot = eliminateMode;
 
     if (choiceView === 'wheel') {
       const numSlices = activePool.length;
       const sliceAngle = 360 / numSlices;
-      // Slice winnerIndex center angle is: (winnerIndex + 0.5) * sliceAngle
-      // In our SVG layout, 0 deg is right (3 o'clock). Top pointer is at 270 deg (12 o'clock).
-      // We want slice winnerIndex center to land at 270 deg after rotation R:
-      // (R + sliceCenter) % 360 = 270  ==>  R % 360 = (270 - sliceCenter + 360) % 360
       const sliceCenter = (winnerIndex + 0.5) * sliceAngle;
       const targetDeg = (270 - sliceCenter + 360) % 360;
 
-      // Add 6 to 9 full spins
       const extraSpins = getRandomInt(6, 9) * 360;
       const currentMod = wheelRotation % 360;
       const delta = (targetDeg - currentMod + 360) % 360;
@@ -393,56 +472,18 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
       setWheelRotation(finalRotation);
 
-      registerTimeout(() => {
-        finalizePick(winner);
+      timeouts.schedule(() => {
+        finalizePick(winner, eliminateSnapshot);
       }, 3600);
     } else {
-      // Cards / Instant Draw mode
-      registerTimeout(() => {
-        finalizePick(winner);
+      timeouts.schedule(() => {
+        finalizePick(winner, eliminateSnapshot);
       }, 700);
-    }
-  };
-
-  const finalizePick = (winner: string) => {
-    setSelectedWinner(winner);
-    setIsChoosing(false);
-    triggerConfetti();
-
-    // Log history
-    const record: PickRecord = {
-      id: Date.now().toString(),
-      item: winner,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-    };
-    setPickHistory((prev) => {
-      const updated = [record, ...prev].slice(0, 15);
-      try {
-        localStorage.setItem('picker_choice_history', JSON.stringify(updated));
-      } catch {
-        // Ignore
-      }
-      return updated;
-    });
-
-    // Handle elimination mode (single-ticket removal to support weighted/duplicate choices)
-    if (eliminateMode) {
-      setActivePool((prev) => {
-        const idx = prev.indexOf(winner);
-        if (idx === -1) return prev;
-        return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
-      });
-      setEliminatedItems((prev) => [...prev, winner]);
     }
   };
 
   const clearPickHistory = () => {
     setPickHistory([]);
-    try {
-      localStorage.removeItem('picker_choice_history');
-    } catch {
-      // Ignore
-    }
   };
 
   // SVG Wheel Path generator
@@ -454,7 +495,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
     if (count === 0) {
       return (
-        <svg viewBox={`0 0 ${size} ${size}`} className="wheel-svg" role="img" aria-label="Empty Wheel">
+        <svg viewBox={`0 0 ${size} ${size}`} className="picker-wheel-svg" role="img" aria-label="Empty Wheel">
           <circle cx={center} cy={center} r={radius} fill="#1e293b" stroke="#334155" strokeWidth="4" />
           <text x={center} y={center} textAnchor="middle" fill="#94a3b8" dominantBaseline="middle" fontSize="14">
             No items in pool
@@ -465,7 +506,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
     if (count === 1) {
       return (
-        <svg viewBox={`0 0 ${size} ${size}`} className="wheel-svg" role="img" aria-label="Single Option Wheel">
+        <svg viewBox={`0 0 ${size} ${size}`} className="picker-wheel-svg" role="img" aria-label="Single Option Wheel">
           <circle cx={center} cy={center} r={radius} fill={SLICE_COLORS[0]} stroke="#0f172a" strokeWidth="3" />
           <text
             x={center}
@@ -487,7 +528,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     return (
       <svg
         viewBox={`0 0 ${size} ${size}`}
-        className="wheel-svg"
+        className="picker-wheel-svg"
         style={{
           transform: `rotate(${wheelRotation}deg)`,
           transition: isChoosing ? 'transform 3.5s cubic-bezier(0.12, 0.8, 0.2, 1)' : 'none',
@@ -532,7 +573,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
                 fontSize={count > 8 ? '10' : '12'}
                 fontWeight="700"
                 transform={`rotate(${textRot}, ${tx}, ${ty})`}
-                className="slice-text"
+                className="picker-slice-text"
               >
                 {label}
               </text>
@@ -548,8 +589,6 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
   // Helper for rendering dice pip dots
   const renderDicePips = (value: number) => {
-    // 3x3 grid dot positions: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    // 1: tl, 2: tc, 3: tr, 4: ml, 5: mc, 6: mr, 7: bl, 8: bc, 9: br
     const pipMap: Record<number, number[]> = {
       1: [5],
       2: [1, 9],
@@ -561,11 +600,11 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
     const activePips = pipMap[value] || [5];
 
     return (
-      <div className="dice-pip-grid" aria-label={`Die showing ${value}`}>
+      <div className="picker-dice-pip-grid" aria-label={`Die showing ${value}`}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
           <span
             key={pos}
-            className={`pip-cell ${activePips.includes(pos) ? 'has-pip' : ''}`}
+            className={`picker-pip-cell ${activePips.includes(pos) ? 'has-pip' : ''}`.trim()}
           />
         ))}
       </div>
@@ -574,102 +613,64 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
   return (
     <div className="picker-container">
-      {/* Invisible Confetti Overlay */}
-      <canvas ref={confettiCanvasRef} className="confetti-canvas" aria-hidden="true" />
+      {/* Confetti Overlay */}
+      <canvas ref={confettiCanvasRef} className="picker-confetti-canvas" aria-hidden="true" />
 
-      {/* Header with Back button */}
-      <header className="picker-header">
-        <button
-          type="button"
-          onClick={onBack}
-          className="back-btn"
-          aria-label="Back to Tools Hub"
-        >
-          <span className="back-arrow" aria-hidden="true">←</span>
-          <span>Back to Tools Hub</span>
-        </button>
-        <div className="header-titles">
-          <h1>Random Picker & Decision Maker</h1>
-          <p>Instant, unbiased, and playful decisions with zero ads or tracking.</p>
-        </div>
-      </header>
+      <ToolHeader
+        onBack={onBack}
+        title="Random Picker & Decision Maker"
+        subtitle="Instant, unbiased, and playful decisions with zero ads or tracking."
+        className="picker-header"
+      />
 
-      {/* Mode Navigation Tabs */}
-      <nav className="mode-tabs" aria-label="Decision Modes">
-        <button
-          type="button"
-          className={`mode-tab ${mode === 'choices' ? 'active' : ''}`}
-          onClick={() => setMode('choices')}
-          aria-pressed={mode === 'choices'}
-        >
-          <span className="mode-icon">🎡</span>
-          <span>Multiple Choice</span>
-        </button>
-        <button
-          type="button"
-          className={`mode-tab ${mode === 'coin' ? 'active' : ''}`}
-          onClick={() => setMode('coin')}
-          aria-pressed={mode === 'coin'}
-        >
-          <span className="mode-icon">🪙</span>
-          <span>Coin Toss</span>
-        </button>
-        <button
-          type="button"
-          className={`mode-tab ${mode === 'dice' ? 'active' : ''}`}
-          onClick={() => setMode('dice')}
-          aria-pressed={mode === 'dice'}
-        >
-          <span className="mode-icon">🎲</span>
-          <span>Dice Roll</span>
-        </button>
-      </nav>
+      <SegmentedControl<Mode>
+        mode="tablist"
+        ariaLabel="Decision Modes"
+        value={mode}
+        onChange={setMode}
+        className="picker-mode-tabs"
+        options={MODE_OPTIONS}
+      />
 
       {/* ============================================================== */}
       {/* VIEW: MULTIPLE CHOICE PICKER                                   */}
       {/* ============================================================== */}
       {mode === 'choices' && (
-        <section className="mode-content choices-section" aria-label="Multiple Choice Picker">
-          <div className="choices-grid">
+        <section className="picker-mode-content" aria-label="Multiple Choice Picker">
+          <div className="picker-choices-grid">
             {/* Interactive Picker Column */}
             <div className="picker-display-card">
-              {/* Choice View Switcher */}
-              <div className="sub-view-switch" role="group" aria-label="Picker Display Style">
-                <button
-                  type="button"
-                  className={`sub-btn ${choiceView === 'wheel' ? 'active' : ''}`}
-                  onClick={() => setChoiceView('wheel')}
-                  aria-pressed={choiceView === 'wheel'}
-                >
-                  🎡 Spinning Wheel
-                </button>
-                <button
-                  type="button"
-                  className={`sub-btn ${choiceView === 'cards' ? 'active' : ''}`}
-                  onClick={() => setChoiceView('cards')}
-                  aria-pressed={choiceView === 'cards'}
-                >
-                  🃏 Instant Draw
-                </button>
-              </div>
+              <SegmentedControl<ChoiceView>
+                mode="group"
+                ariaLabel="Picker Display Style"
+                value={choiceView}
+                onChange={setChoiceView}
+                className="picker-sub-view-switch"
+                options={[
+                  { value: 'wheel', label: '🎡 Spinning Wheel', disabled: isChoosing },
+                  { value: 'cards', label: '🃏 Instant Draw', disabled: isChoosing },
+                ]}
+              />
 
               {/* Visual Display */}
-              <div className="visual-stage">
+              <div className="picker-visual-stage">
                 {choiceView === 'wheel' ? (
-                  <div className="wheel-wrapper">
-                    <div className="wheel-pointer" aria-hidden="true" />
+                  <div className="picker-wheel-wrapper">
+                    <div className="picker-wheel-pointer" aria-hidden="true" />
                     {renderWheelSvg()}
                   </div>
                 ) : (
-                  <div className="cards-wrapper">
-                    <div className={`draw-card ${isChoosing ? 'shuffling' : ''} ${selectedWinner ? 'revealed' : ''}`}>
-                      <div className="card-face card-back">
-                        <span className="mystery-mark">?</span>
-                        <span className="mystery-hint">Click Pick to Reveal</span>
+                  <div className="picker-cards-wrapper">
+                    <div
+                      className={`picker-draw-card ${isChoosing ? 'shuffling' : ''} ${selectedWinner ? 'revealed' : ''}`.trim()}
+                    >
+                      <div className="picker-card-face picker-card-back">
+                        <span className="picker-mystery-mark">?</span>
+                        <span className="picker-mystery-hint">Click Pick to Reveal</span>
                       </div>
-                      <div className="card-face card-front">
-                        <span className="winner-label">Selected:</span>
-                        <strong className="winner-title">{selectedWinner || '—'}</strong>
+                      <div className="picker-card-face picker-card-front">
+                        <span className="picker-winner-label">Selected:</span>
+                        <strong className="picker-winner-title">{selectedWinner || '—'}</strong>
                       </div>
                     </div>
                   </div>
@@ -677,10 +678,10 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {/* Action Button */}
-              <div className="action-row">
+              <div className="picker-action-row">
                 <button
                   type="button"
-                  className="primary-action-btn"
+                  className="picker-primary-action-btn"
                   onClick={pickWinner}
                   disabled={isChoosing || activePool.length === 0}
                   aria-label={isChoosing ? 'Choosing winner' : 'Pick a Winner'}
@@ -691,18 +692,18 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
 
               {/* Winner Announcement Banner */}
               {selectedWinner && (
-                <div className="winner-banner" role="status" aria-live="polite">
-                  <span className="winner-star">🎉</span>
-                  <div className="winner-text">
-                    <span className="winner-caption">Winner</span>
-                    <strong className="winner-value">{selectedWinner}</strong>
+                <div className="picker-winner-banner" role="status" aria-live="polite">
+                  <span className="picker-winner-star">🎉</span>
+                  <div className="picker-winner-text">
+                    <span className="picker-winner-caption">Winner</span>
+                    <strong className="picker-winner-value">{selectedWinner}</strong>
                   </div>
                 </div>
               )}
 
               {/* Elimination status & reset button */}
               {eliminateMode && (
-                <div className="elimination-bar">
+                <div className="picker-elimination-bar">
                   <span>
                     Pool Remaining: <strong>{activePool.length}</strong> · Eliminated:{' '}
                     <strong>{eliminatedItems.length}</strong>
@@ -710,8 +711,9 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
                   {eliminatedItems.length > 0 && (
                     <button
                       type="button"
-                      className="text-btn"
+                      className="picker-text-btn"
                       onClick={resetPool}
+                      disabled={isChoosing}
                       aria-label="Reset Elimination Pool"
                     >
                       Reset Pool
@@ -726,15 +728,16 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               <h3>Custom Choices</h3>
 
               {/* Preset Buttons */}
-              <div className="preset-group" aria-label="Presets">
-                <span className="preset-label">Quick Presets:</span>
-                <div className="preset-chips">
+              <div className="picker-preset-group" aria-label="Presets">
+                <span className="picker-preset-label">Quick Presets:</span>
+                <div className="picker-preset-chips">
                   {Object.keys(PRESETS).map((p) => (
                     <button
                       key={p}
                       type="button"
-                      className="preset-chip"
+                      className="picker-preset-chip"
                       onClick={() => applyPreset(p)}
+                      disabled={isChoosing}
                     >
                       {p}
                     </button>
@@ -743,13 +746,13 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {/* Input Area */}
-              <div className="input-group">
+              <div className="picker-input-group">
                 <label htmlFor={textareaId}>
-                  Enter Choices <span className="label-sub">(one per line)</span>:
+                  Enter Choices <span className="picker-label-sub">(one per line)</span>:
                 </label>
                 <textarea
                   id={textareaId}
-                  className="choice-textarea"
+                  className="picker-choice-textarea"
                   rows={6}
                   value={rawInput}
                   onChange={(e) => handleInputChange(e.target.value)}
@@ -759,25 +762,26 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {/* Elimination Toggle */}
-              <div className="toggle-group">
-                <label className="checkbox-label">
+              <div className="picker-toggle-group">
+                <label className="picker-checkbox-label">
                   <input
                     type="checkbox"
                     checked={eliminateMode}
                     onChange={(e) => setEliminateMode(e.target.checked)}
+                    disabled={isChoosing}
                   />
                   <span>Eliminate picked option (Raffle / No repeats)</span>
                 </label>
               </div>
 
               {/* Pick History */}
-              <div className="history-group">
-                <div className="history-header">
+              <div className="picker-history-group">
+                <div className="picker-history-header">
                   <h4>Recent Picks</h4>
                   {pickHistory.length > 0 && (
                     <button
                       type="button"
-                      className="clear-btn"
+                      className="picker-clear-btn"
                       onClick={clearPickHistory}
                       aria-label="Clear Pick History"
                     >
@@ -786,13 +790,13 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
                   )}
                 </div>
                 {pickHistory.length === 0 ? (
-                  <p className="empty-history">No picks yet.</p>
+                  <p className="picker-empty-history">No picks yet.</p>
                 ) : (
-                  <ul className="history-list">
+                  <ul className="picker-history-list">
                     {pickHistory.map((rec) => (
-                      <li key={rec.id} className="history-item">
-                        <span className="history-name">{rec.item}</span>
-                        <time className="history-time">{rec.time}</time>
+                      <li key={rec.id} className="picker-history-item">
+                        <span className="picker-history-name">{rec.item}</span>
+                        <time className="picker-history-time">{rec.time}</time>
                       </li>
                     ))}
                   </ul>
@@ -807,33 +811,33 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
       {/* VIEW: COIN TOSS                                                */}
       {/* ============================================================== */}
       {mode === 'coin' && (
-        <section className="mode-content coin-section" aria-label="Coin Toss">
-          <div className="coin-layout">
-            <div className="coin-display-card">
-              <div className="coin-stage">
+        <section className="picker-mode-content" aria-label="Coin Toss">
+          <div className="picker-coin-layout">
+            <div className="picker-coin-display-card">
+              <div className="picker-coin-stage">
                 <div
-                  className={`coin ${isFlippingCoin ? 'flipping' : ''}`}
+                  className={`picker-coin ${isFlippingCoin ? 'flipping' : ''}`.trim()}
                   style={{
                     transform: `rotateY(${coinRotation}deg)`,
                     transition: isFlippingCoin ? 'transform 1.2s cubic-bezier(0.2, 0.9, 0.3, 1)' : 'none',
                   }}
                   aria-label={`Coin showing ${coinSide || 'heads'}`}
                 >
-                  <div className="coin-side coin-heads">
-                    <span className="coin-glyph">👑</span>
-                    <span className="coin-text">HEADS</span>
+                  <div className="picker-coin-side picker-coin-heads">
+                    <span className="picker-coin-glyph">👑</span>
+                    <span className="picker-coin-text">HEADS</span>
                   </div>
-                  <div className="coin-side coin-tails">
-                    <span className="coin-glyph">⚡</span>
-                    <span className="coin-text">TAILS</span>
+                  <div className="picker-coin-side picker-coin-tails">
+                    <span className="picker-coin-glyph">⚡</span>
+                    <span className="picker-coin-text">TAILS</span>
                   </div>
                 </div>
               </div>
 
-              <div className="coin-action-row">
+              <div className="picker-coin-action-row">
                 <button
                   type="button"
-                  className="primary-action-btn"
+                  className="picker-primary-action-btn"
                   onClick={flipCoin}
                   disabled={isFlippingCoin}
                   aria-label="Flip Coin"
@@ -843,7 +847,7 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {coinSide && !isFlippingCoin && (
-                <div className="coin-outcome-banner" role="status" aria-live="polite">
+                <div className="picker-coin-outcome-banner" role="status" aria-live="polite">
                   <span>Outcome: </span>
                   <strong>{coinSide.toUpperCase()}</strong>
                 </div>
@@ -851,12 +855,12 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
             </div>
 
             {/* Coin Stats Card */}
-            <div className="coin-stats-card">
-              <div className="stats-header">
+            <div className="picker-coin-stats-card">
+              <div className="picker-stats-header">
                 <h3>Flip Statistics</h3>
                 <button
                   type="button"
-                  className="clear-btn"
+                  className="picker-clear-btn"
                   onClick={resetCoinStats}
                   aria-label="Reset Coin Statistics"
                 >
@@ -864,32 +868,32 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
                 </button>
               </div>
 
-              <div className="stats-metric-grid">
-                <div className="stat-box">
-                  <span className="stat-label">Total Flips</span>
-                  <span className="stat-value">{coinStats.total}</span>
+              <div className="picker-stats-metric-grid">
+                <div className="picker-stat-box">
+                  <span className="picker-stat-label">Total Flips</span>
+                  <span className="picker-stat-value">{coinStats.total}</span>
                 </div>
-                <div className="stat-box">
-                  <span className="stat-label">Heads</span>
-                  <span className="stat-value">
+                <div className="picker-stat-box">
+                  <span className="picker-stat-label">Heads</span>
+                  <span className="picker-stat-value">
                     {coinStats.heads}{' '}
-                    <small className="stat-pct">
+                    <small className="picker-stat-pct">
                       ({coinStats.total > 0 ? Math.round((coinStats.heads / coinStats.total) * 100) : 0}%)
                     </small>
                   </span>
                 </div>
-                <div className="stat-box">
-                  <span className="stat-label">Tails</span>
-                  <span className="stat-value">
+                <div className="picker-stat-box">
+                  <span className="picker-stat-label">Tails</span>
+                  <span className="picker-stat-value">
                     {coinStats.tails}{' '}
-                    <small className="stat-pct">
+                    <small className="picker-stat-pct">
                       ({coinStats.total > 0 ? Math.round((coinStats.tails / coinStats.total) * 100) : 0}%)
                     </small>
                   </span>
                 </div>
-                <div className="stat-box">
-                  <span className="stat-label">Current Streak</span>
-                  <span className="stat-value">
+                <div className="picker-stat-box">
+                  <span className="picker-stat-label">Current Streak</span>
+                  <span className="picker-stat-value">
                     {coinStats.streak.side
                       ? `${coinStats.streak.count} ${coinStats.streak.side.toUpperCase()}`
                       : 'None'}
@@ -905,18 +909,18 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
       {/* VIEW: DICE ROLL                                                */}
       {/* ============================================================== */}
       {mode === 'dice' && (
-        <section className="mode-content dice-section" aria-label="Dice Roll">
-          <div className="dice-layout">
-            <div className="dice-display-card">
+        <section className="picker-mode-content" aria-label="Dice Roll">
+          <div className="picker-dice-layout">
+            <div className="picker-dice-display-card">
               {/* Dice Quantity Selector */}
-              <div className="dice-count-selector" role="group" aria-label="Number of Dice">
-                <span className="selector-label">Number of Dice:</span>
-                <div className="dice-count-buttons">
+              <div className="picker-dice-count-selector" role="group" aria-label="Number of Dice">
+                <span className="picker-selector-label">Number of Dice:</span>
+                <div className="picker-dice-count-buttons">
                   {[1, 2, 3, 4, 5, 6].map((num) => (
                     <button
                       key={num}
                       type="button"
-                      className={`dice-count-btn ${diceCount === num ? 'active' : ''}`}
+                      className={`picker-dice-count-btn ${diceCount === num ? 'active' : ''}`.trim()}
                       onClick={() => {
                         setDiceCount(num);
                         const arr: number[] = [];
@@ -933,10 +937,10 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {/* Dice Stage */}
-              <div className="dice-stage">
-                <div className={`dice-collection ${isRollingDice ? 'tumbling' : ''}`}>
+              <div className="picker-dice-stage">
+                <div className={`picker-dice-collection ${isRollingDice ? 'tumbling' : ''}`.trim()}>
                   {diceValues.map((val, idx) => (
-                    <div key={`${idx}-${val}`} className="die-item">
+                    <div key={`${idx}-${val}`} className="picker-die-item">
                       {renderDicePips(val)}
                     </div>
                   ))}
@@ -944,20 +948,18 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {/* Total & Action */}
-              <div className="dice-total-banner" role="status" aria-live="polite">
-                <span className="dice-total-label">Sum Total:</span>
-                <span className="dice-total-sum">
+              <div className="picker-dice-total-banner" role="status" aria-live="polite">
+                <span className="picker-dice-total-label">Sum Total:</span>
+                <span className="picker-dice-total-sum">
                   {diceValues.reduce((acc, curr) => acc + curr, 0)}
                 </span>
-                <span className="dice-breakdown">
-                  ({diceValues.join(' + ')})
-                </span>
+                <span className="picker-dice-breakdown">({diceValues.join(' + ')})</span>
               </div>
 
-              <div className="dice-action-row">
+              <div className="picker-dice-action-row">
                 <button
                   type="button"
-                  className="primary-action-btn"
+                  className="picker-primary-action-btn"
                   onClick={rollDice}
                   disabled={isRollingDice}
                   aria-label="Roll Dice"
@@ -968,13 +970,13 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
             </div>
 
             {/* Roll History Card */}
-            <div className="dice-history-card">
-              <div className="history-header">
+            <div className="picker-dice-history-card">
+              <div className="picker-history-header">
                 <h3>Roll History</h3>
                 {rollHistory.length > 0 && (
                   <button
                     type="button"
-                    className="clear-btn"
+                    className="picker-clear-btn"
                     onClick={clearDiceHistory}
                     aria-label="Clear Dice History"
                   >
@@ -984,16 +986,16 @@ export default function ChoicePicker({ onBack }: ChoicePickerProps) {
               </div>
 
               {rollHistory.length === 0 ? (
-                <p className="empty-history">No rolls recorded yet.</p>
+                <p className="picker-empty-history">No rolls recorded yet.</p>
               ) : (
-                <ul className="history-list">
+                <ul className="picker-history-list">
                   {rollHistory.map((rec) => (
-                    <li key={rec.id} className="history-item">
-                      <div className="dice-hist-left">
-                        <strong className="dice-hist-sum">Total {rec.sum}</strong>
-                        <span className="dice-hist-dice">[{rec.dice.join(', ')}]</span>
+                    <li key={rec.id} className="picker-history-item">
+                      <div className="picker-dice-hist-left">
+                        <strong className="picker-dice-hist-sum">Total {rec.sum}</strong>
+                        <span className="picker-dice-hist-dice">[{rec.dice.join(', ')}]</span>
                       </div>
-                      <time className="history-time">{rec.time}</time>
+                      <time className="picker-history-time">{rec.time}</time>
                     </li>
                   ))}
                 </ul>
