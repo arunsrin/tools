@@ -1,90 +1,80 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { AlertVariant } from '../../shared/components/types';
+import InlineAlert from '../../shared/components/InlineAlert';
+import Modal from '../../shared/components/Modal';
+import SegmentedControl from '../../shared/components/SegmentedControl';
+import Toast from '../../shared/components/Toast';
+import ToolHeader from '../../shared/components/ToolHeader';
+import { useCopyFeedback } from '../../shared/hooks/useCopyFeedback';
+import { usePersistedState } from '../../shared/hooks/usePersistedState';
+import { useTimeoutRegistry, type TimeoutId } from '../../shared/hooks/useTimeoutRegistry';
+import { downloadCanvasPng, getCanvasPointerPos } from '../../shared/utils/canvas';
 import {
+  calculateFitness,
+  CLIMATES,
+  createPrimordialGenome,
+  createRandomEcosystem,
+  drawBiomorph,
+  mutateGenome,
+  TERRAINS,
+  THREATS,
   type BiomorphGenome,
+  type ClimateType,
   type EcosystemConfig,
   type TerrainType,
-  type ClimateType,
   type ThreatType,
-  TERRAINS,
-  CLIMATES,
-  THREATS,
-  createRandomEcosystem,
-  calculateFitness,
-  createPrimordialGenome,
-  mutateGenome,
-  drawBiomorph,
 } from './biomorphEngine';
 import {
+  BIOMORPHS_STORAGE_KEY,
+  createInitialPersistedState,
+  decodeDnaPayload,
+  encodeDnaPayload,
+  MAX_LINEAGE_GENERATIONS,
+  serializeBiomorphPersistedState,
+  validateBiomorphPersistedState,
+} from './biomorphPersistence';
+import {
+  addPredatorAgent,
+  addPreyAgent,
+  drawBiosphere,
+  generateExtinctionAdvice,
+  respawnPlayer,
+  stepBiosphere,
   type BiosphereState,
   createInitialBiosphere,
-  stepBiosphere,
-  drawBiosphere,
-  addPreyAgent,
-  addPredatorAgent,
-  respawnPlayer,
-  generateExtinctionAdvice,
 } from './ecosystemEngine';
+import LineageThumbnail from './LineageThumbnail';
+import SpecimenCard from './SpecimenCard';
+import type { BiomorphPersistedState, BiomorphsProps, CandidateSpecimen } from './types';
 import './Biomorphs.css';
 
-interface BiomorphsProps {
-  onBack: () => void;
-}
+const MODE_OPTIONS: readonly { value: 'lab' | 'biosphere'; label: string }[] = [
+  { value: 'lab', label: '🧬 Breeding Lab' },
+  { value: 'biosphere', label: '🌍 Living Biosphere' },
+];
 
-interface CandidateSpecimen {
-  genome: BiomorphGenome;
-  traits: string[];
-}
-
-const STORAGE_KEY = 'tools_hub_biomorphs';
+const SPEED_OPTIONS: readonly { value: '1' | '2' | '3'; label: string }[] = [
+  { value: '1', label: '1x' },
+  { value: '2', label: '2x' },
+  { value: '3', label: '3x' },
+];
 
 export default function Biomorphs({ onBack }: BiomorphsProps) {
-  // Mode switcher: 'lab' (Breeding Lab) vs 'biosphere' (Living Autonomous Ecosystem)
   const [viewMode, setViewMode] = useState<'lab' | 'biosphere'>('lab');
 
-  // Initialize ecosystem configuration
-  const [ecosystem, setEcosystem] = useState<EcosystemConfig>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed?.ecosystem?.terrain && parsed?.ecosystem?.climate && parsed?.ecosystem?.threat) {
-          return parsed.ecosystem;
-        }
-      }
-    } catch {
-      // ignore
+  const [persisted, setPersisted] = usePersistedState<BiomorphPersistedState>(
+    BIOMORPHS_STORAGE_KEY,
+    createInitialPersistedState,
+    {
+      validate: validateBiomorphPersistedState,
+      serialize: serializeBiomorphPersistedState,
     }
-    return createRandomEcosystem();
-  });
+  );
 
-  // Initialize state with persistence
-  const [parentGenome, setParentGenome] = useState<BiomorphGenome>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed?.parentGenome?.id) return parsed.parentGenome;
-      }
-    } catch {
-      // ignore
-    }
-    return createPrimordialGenome();
-  });
+  const parentGenome = persisted.parentGenome;
+  const lineage = persisted.lineage;
+  const ecosystem = persisted.ecosystem;
 
-  const [lineage, setLineage] = useState<BiomorphGenome[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed?.lineage) && parsed.lineage.length > 0) return parsed.lineage;
-      }
-    } catch {
-      // ignore
-    }
-    return [parentGenome];
-  });
-
-  // Mutated candidates: Both Alpha and Beta mutate atomically from parentGenome
   const [candidateAlpha, setCandidateAlpha] = useState<CandidateSpecimen>(() => {
     const res = mutateGenome(parentGenome);
     return { genome: res.child, traits: res.mutatedTraits };
@@ -100,76 +90,67 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   const specimenBeta = candidateBeta.genome;
   const betaTraits = candidateBeta.traits;
 
-  // Biosphere Simulation State & Refs
   const [biosphere, setBiosphere] = useState<BiosphereState | null>(null);
   const biosphereRef = useRef<BiosphereState | null>(null);
 
-  // UI Modals & Toast
   const [showDnaModal, setShowDnaModal] = useState(false);
   const [dnaInput, setDnaInput] = useState('');
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [dnaError, setDnaError] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; variant: AlertVariant } | null>(null);
 
   const canvasRefAlpha = useRef<HTMLCanvasElement | null>(null);
   const canvasRefBeta = useRef<HTMLCanvasElement | null>(null);
   const canvasRefBiosphere = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
-  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimeoutRef = useRef<TimeoutId | null>(null);
   const lastTimeRef = useRef<number>(0);
   const lastUiSyncRef = useRef<number>(0);
+  const lastUiFlagsRef = useRef<{ isExtinct: boolean; apexDominanceAchieved: boolean }>({
+    isExtinct: false,
+    apexDominanceAchieved: false,
+  });
 
-  // Show temporary toast with timer collision avoidance
-  const showToast = useCallback((msg: string) => {
-    if (toastTimeoutRef.current) {
-      clearTimeout(toastTimeoutRef.current);
-    }
-    setToastMessage(msg);
-    toastTimeoutRef.current = setTimeout(() => {
-      setToastMessage(null);
-      toastTimeoutRef.current = null;
-    }, 2800);
-  }, []);
+  const { schedule: scheduleTimeout, clear: clearTimeoutId } = useTimeoutRegistry();
+  const { copy: copyDnaToClipboard } = useCopyFeedback(2000);
 
-  // Cleanup pending toast timer on unmount
-  useEffect(() => {
-    return () => {
-      if (toastTimeoutRef.current) {
-        clearTimeout(toastTimeoutRef.current);
-      }
-    };
-  }, []);
+  const dismissToast = useCallback(() => {
+    clearTimeoutId(toastTimeoutRef.current);
+    toastTimeoutRef.current = null;
+    setToast(null);
+  }, [clearTimeoutId]);
 
-  // Sync to localStorage
-  useEffect(() => {
-    try {
-      const data = {
-        parentGenome,
-        lineage: lineage.slice(-25), // keep last 25 generations
-        ecosystem,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {
-      // LocalStorage error tolerated gracefully
-    }
-  }, [parentGenome, lineage, ecosystem]);
+  const showToast = useCallback(
+    (message: string, variant: AlertVariant = 'info') => {
+      clearTimeoutId(toastTimeoutRef.current);
+      setToast({ message, variant });
+      toastTimeoutRef.current = scheduleTimeout(() => {
+        toastTimeoutRef.current = null;
+        setToast(null);
+      }, 2800);
+    },
+    [clearTimeoutId, scheduleTimeout]
+  );
 
-  // Launch Champion / Specimen into Living Biosphere
   const handleLaunchBiosphere = useCallback(
     (organism: BiomorphGenome) => {
-      setParentGenome(organism);
+      setPersisted((prev) => ({ ...prev, parentGenome: organism }));
       const initial = createInitialBiosphere(organism, ecosystem, 800, 500);
       biosphereRef.current = initial;
+      lastUiFlagsRef.current = {
+        isExtinct: initial.isExtinct,
+        apexDominanceAchieved: initial.apexDominanceAchieved,
+      };
       setBiosphere(initial);
       setViewMode('biosphere');
       showToast(`🚀 Launched ${organism.name} into ${ecosystem.terrain} biosphere!`);
     },
-    [ecosystem, showToast]
+    [ecosystem, setPersisted, showToast]
   );
 
   const handleReturnToLab = useCallback(() => {
     setViewMode('lab');
   }, []);
 
-  // Biosphere Interactive Controls
   const handleTogglePause = useCallback(() => {
     if (!biosphereRef.current) return;
     const nextPaused = !biosphereRef.current.isPaused;
@@ -202,65 +183,90 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     if (!biosphereRef.current) return;
     const next = respawnPlayer(biosphereRef.current, 800, 500);
     biosphereRef.current = next;
+    lastUiFlagsRef.current = {
+      isExtinct: next.isExtinct,
+      apexDominanceAchieved: next.apexDominanceAchieved,
+    };
     setBiosphere(next);
     showToast('✨ Organism revived!');
   }, [showToast]);
 
   const handleCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRefBiosphere.current || !biosphereRef.current?.playerAgent) return;
-    const rect = canvasRefBiosphere.current.getBoundingClientRect();
-    const scaleX = canvasRefBiosphere.current.width / rect.width;
-    const scaleY = canvasRefBiosphere.current.height / rect.height;
-    const clickX = (e.clientX - rect.left) * scaleX;
-    const clickY = (e.clientY - rect.top) * scaleY;
-
-    // Direct player agent target towards click point
-    biosphereRef.current.playerAgent.targetX = clickX;
-    biosphereRef.current.playerAgent.targetY = clickY;
+    const canvas = canvasRefBiosphere.current;
+    if (!canvas || !biosphereRef.current?.playerAgent) return;
+    const pos = getCanvasPointerPos(e, canvas);
+    biosphereRef.current.playerAgent.targetX = pos.x;
+    biosphereRef.current.playerAgent.targetY = pos.y;
     biosphereRef.current.playerAgent.retargetTimer = 3.5;
   }, []);
 
-  // Unified Animation Loop
+  // Static specimen rendering in Lab mode (zero 60fps RAF overhead)
   useEffect(() => {
+    if (viewMode !== 'lab') return;
+
+    if (canvasRefAlpha.current) {
+      const ctxA = canvasRefAlpha.current.getContext('2d');
+      if (ctxA) {
+        drawBiomorph(
+          ctxA,
+          specimenAlpha,
+          canvasRefAlpha.current.width,
+          canvasRefAlpha.current.height,
+          0
+        );
+      }
+    }
+
+    if (canvasRefBeta.current) {
+      const ctxB = canvasRefBeta.current.getContext('2d');
+      if (ctxB) {
+        drawBiomorph(
+          ctxB,
+          specimenBeta,
+          canvasRefBeta.current.width,
+          canvasRefBeta.current.height,
+          0
+        );
+      }
+    }
+  }, [viewMode, specimenAlpha, specimenBeta]);
+
+  // Living Biosphere RAF loop (gated strictly on biosphere mode; dynamic state read via refs)
+  useEffect(() => {
+    if (viewMode !== 'biosphere') {
+      return;
+    }
+
     const startTime = performance.now();
-    lastTimeRef.current = performance.now();
+    lastTimeRef.current = startTime;
+    lastUiSyncRef.current = startTime;
 
     const loop = (now: number) => {
-      const dt = lastTimeRef.current ? Math.min(0.06, (now - lastTimeRef.current) / 1000) : 0.016;
+      const dt = lastTimeRef.current
+        ? Math.min(0.06, Math.max(0, (now - lastTimeRef.current) / 1000))
+        : 0.016;
       lastTimeRef.current = now;
       const animElapsed = (now - startTime) / 1000;
 
-      if (viewMode === 'lab') {
-        if (canvasRefAlpha.current) {
-          const ctxA = canvasRefAlpha.current.getContext('2d');
-          if (ctxA) {
-            drawBiomorph(ctxA, specimenAlpha, canvasRefAlpha.current.width, canvasRefAlpha.current.height, animElapsed);
-          }
-        }
-        if (canvasRefBeta.current) {
-          const ctxB = canvasRefBeta.current.getContext('2d');
-          if (ctxB) {
-            drawBiomorph(ctxB, specimenBeta, canvasRefBeta.current.width, canvasRefBeta.current.height, animElapsed);
-          }
-        }
-      } else if (viewMode === 'biosphere') {
-        if (canvasRefBiosphere.current && biosphereRef.current) {
-          const canvas = canvasRefBiosphere.current;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            const nextState = stepBiosphere(biosphereRef.current, dt, canvas.width, canvas.height);
-            biosphereRef.current = nextState;
-            drawBiosphere(ctx, nextState, canvas.width, canvas.height, animElapsed);
+      if (canvasRefBiosphere.current && biosphereRef.current) {
+        const canvas = canvasRefBiosphere.current;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          const nextState = stepBiosphere(biosphereRef.current, dt, canvas.width, canvas.height);
+          biosphereRef.current = nextState;
+          drawBiosphere(ctx, nextState, canvas.width, canvas.height, animElapsed);
 
-            // Throttle React state synchronization for HUD and modals to 10 FPS
-            if (
-              now - lastUiSyncRef.current > 100 ||
-              nextState.isExtinct !== biosphere?.isExtinct ||
-              nextState.apexDominanceAchieved !== biosphere?.apexDominanceAchieved
-            ) {
-              lastUiSyncRef.current = now;
-              setBiosphere({ ...nextState });
-            }
+          const flagsChanged =
+            nextState.isExtinct !== lastUiFlagsRef.current.isExtinct ||
+            nextState.apexDominanceAchieved !== lastUiFlagsRef.current.apexDominanceAchieved;
+
+          if (now - lastUiSyncRef.current > 100 || flagsChanged) {
+            lastUiSyncRef.current = now;
+            lastUiFlagsRef.current = {
+              isExtinct: nextState.isExtinct,
+              apexDominanceAchieved: nextState.apexDominanceAchieved,
+            };
+            setBiosphere({ ...nextState });
           }
         }
       }
@@ -271,13 +277,13 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     animFrameRef.current = requestAnimationFrame(loop);
 
     return () => {
-      if (animFrameRef.current) {
+      if (animFrameRef.current !== null) {
         cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
       }
     };
-  }, [viewMode, specimenAlpha, specimenBeta, biosphere?.isExtinct, biosphere?.apexDominanceAchieved]);
+  }, [viewMode]);
 
-  // Environmental Fitness Calculations for Breeding Lab
   const parentFitness = calculateFitness(parentGenome, ecosystem);
   const alphaFitness = calculateFitness(specimenAlpha, ecosystem);
   const betaFitness = calculateFitness(specimenBeta, ecosystem);
@@ -285,38 +291,45 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
   const alphaDelta = alphaFitness.score - parentFitness.score;
   const betaDelta = betaFitness.score - parentFitness.score;
 
-  // Ecosystem Dimension Change Handlers
   const handleEcosystemChange = useCallback(
     <K extends keyof EcosystemConfig>(dimension: K, value: EcosystemConfig[K]) => {
-      setEcosystem((prev) => ({
+      setPersisted((prev) => ({
         ...prev,
-        [dimension]: value,
+        ecosystem: {
+          ...prev.ecosystem,
+          [dimension]: value,
+        },
       }));
     },
-    []
+    [setPersisted]
   );
 
   const handleRandomizeEcosystem = useCallback(() => {
     const newEco = createRandomEcosystem();
-    setEcosystem(newEco);
+    setPersisted((prev) => ({ ...prev, ecosystem: newEco }));
     const tObj = TERRAINS.find((t) => t.id === newEco.terrain);
     const cObj = CLIMATES.find((c) => c.id === newEco.climate);
     const thObj = THREATS.find((th) => th.id === newEco.threat);
     showToast(`New Biosphere: ${tObj?.name} + ${cObj?.name} + ${thObj?.name}`);
 
-    // If in biosphere, re-seed state with new ecosystem
     if (viewMode === 'biosphere') {
       const resetBio = createInitialBiosphere(parentGenome, newEco, 800, 500);
       biosphereRef.current = resetBio;
+      lastUiFlagsRef.current = {
+        isExtinct: resetBio.isExtinct,
+        apexDominanceAchieved: resetBio.apexDominanceAchieved,
+      };
       setBiosphere(resetBio);
     }
-  }, [showToast, viewMode, parentGenome]);
+  }, [parentGenome, setPersisted, showToast, viewMode]);
 
-  // Selection Handler: Both Alpha and Beta mutate atomically from the chosen winner
   const selectSpecimen = useCallback(
     (chosen: BiomorphGenome) => {
-      setParentGenome(chosen);
-      setLineage((prev) => [...prev, chosen]);
+      setPersisted((prev) => ({
+        ...prev,
+        parentGenome: chosen,
+        lineage: [...prev.lineage, chosen].slice(-MAX_LINEAGE_GENERATIONS),
+      }));
 
       const resA = mutateGenome(chosen);
       const resB = mutateGenome(chosen);
@@ -326,19 +339,23 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
       const chosenFit = calculateFitness(chosen, ecosystem);
       if (chosenFit.score >= 90) {
-        showToast(`🏆 Apex Organism Evolved! Selected ${chosen.name} (${chosenFit.score}% fitness)`);
+        showToast(
+          `🏆 Apex Organism Evolved! Selected ${chosen.name} (${chosenFit.score}% fitness)`
+        );
       } else {
         showToast(`Selected ${chosen.name} (${chosenFit.score}% Adapted)`);
       }
     },
-    [ecosystem, showToast]
+    [ecosystem, setPersisted, showToast]
   );
 
-  // Restart / New Genesis
   const handleNewGenesis = useCallback(() => {
     const fresh = createPrimordialGenome();
-    setParentGenome(fresh);
-    setLineage([fresh]);
+    setPersisted((prev) => ({
+      ...prev,
+      parentGenome: fresh,
+      lineage: [fresh],
+    }));
 
     const resA = mutateGenome(fresh);
     const resB = mutateGenome(fresh);
@@ -347,12 +364,11 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
 
     showToast('New Genesis initiated: Generation 0 primed.');
-  }, [showToast]);
+  }, [setPersisted, showToast]);
 
-  // Time Travel to Ancestor
   const handleTimeTravel = useCallback(
     (ancestor: BiomorphGenome) => {
-      setParentGenome(ancestor);
+      setPersisted((prev) => ({ ...prev, parentGenome: ancestor }));
 
       const resA = mutateGenome(ancestor);
       const resB = mutateGenome(ancestor);
@@ -362,13 +378,18 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
       showToast(`Rewound to Gen ${ancestor.generation} (${ancestor.name})`);
     },
-    [showToast]
+    [setPersisted, showToast]
   );
 
-  // Keyboard Navigation: ArrowLeft / ArrowRight / 1 / 2 / R / L / Space
+  // Global keyboard shortcuts (disabled while DNA modal is open or focus is in inputs)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+      if (showDnaModal) {
+        return;
+      }
+
+      const tagName = (e.target as HTMLElement | null)?.tagName;
+      if (tagName && ['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName)) {
         return;
       }
 
@@ -405,6 +426,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [
+    showDnaModal,
     viewMode,
     selectSpecimen,
     handleNewGenesis,
@@ -417,52 +439,68 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     parentGenome,
   ]);
 
-  // DNA Export & Copy
-  const handleCopyDNA = useCallback(() => {
+  const handleCopyDNA = useCallback(async () => {
     try {
-      const payload = btoa(JSON.stringify(parentGenome));
-      navigator.clipboard.writeText(payload);
-      showToast('DNA sequence copied to clipboard!');
+      const payload = encodeDnaPayload(parentGenome);
+      const ok = await copyDnaToClipboard(payload);
+      showToast(
+        ok ? 'DNA sequence copied to clipboard!' : 'Could not copy DNA payload.',
+        ok ? 'info' : 'error'
+      );
     } catch {
-      showToast('Could not copy DNA payload.');
+      showToast('Could not copy DNA payload.', 'error');
     }
-  }, [parentGenome, showToast]);
+  }, [copyDnaToClipboard, parentGenome, showToast]);
 
-  // DNA Load
+  const handleOpenDnaModal = useCallback(() => {
+    setDnaError(null);
+    setShowDnaModal(true);
+  }, []);
+
+  const handleCloseDnaModal = useCallback(() => {
+    setDnaError(null);
+    setShowDnaModal(false);
+  }, []);
+
   const handleLoadDNA = useCallback(() => {
     try {
-      const decoded = atob(dnaInput.trim());
-      const loaded: BiomorphGenome = JSON.parse(decoded);
-      if (loaded.id && Array.isArray(loaded.segments) && Array.isArray(loaded.limbPairs)) {
-        setParentGenome(loaded);
-        setLineage((prev) => [...prev, loaded]);
-
-        const resA = mutateGenome(loaded);
-        const resB = mutateGenome(loaded);
-
-        setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
-        setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
-
-        setShowDnaModal(false);
-        setDnaInput('');
-        showToast(`Loaded creature: ${loaded.name}`);
-      } else {
-        alert('Invalid genome DNA format.');
+      const loaded = decodeDnaPayload(dnaInput);
+      if (!loaded) {
+        setDnaError('Invalid genome DNA format. Ensure id, segments, and limbPairs are present.');
+        return;
       }
-    } catch {
-      alert('Failed to parse DNA string. Please ensure it is a valid base64 payload.');
-    }
-  }, [dnaInput, showToast]);
 
-  // HD PNG Export
+      setPersisted((prev) => ({
+        ...prev,
+        parentGenome: loaded,
+        lineage: [...prev.lineage, loaded].slice(-MAX_LINEAGE_GENERATIONS),
+      }));
+
+      const resA = mutateGenome(loaded);
+      const resB = mutateGenome(loaded);
+
+      setCandidateAlpha({ genome: resA.child, traits: resA.mutatedTraits });
+      setCandidateBeta({ genome: resB.child, traits: resB.mutatedTraits });
+
+      setDnaError(null);
+      setShowDnaModal(false);
+      setDnaInput('');
+      showToast(`Loaded creature: ${loaded.name}`);
+    } catch {
+      setDnaError('Failed to parse DNA string. Please ensure it is a valid base64 payload.');
+    }
+  }, [dnaInput, setPersisted, showToast]);
+
   const handleExportPNG = useCallback(() => {
     const offscreen = document.createElement('canvas');
     offscreen.width = 1024;
     offscreen.height = 1024;
     const ctx = offscreen.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      showToast('Unable to export PNG: 2D canvas unavailable.', 'error');
+      return;
+    }
 
-    // Rich cosmic background gradient
     const bg = ctx.createRadialGradient(512, 512, 50, 512, 512, 700);
     bg.addColorStop(0, '#111827');
     bg.addColorStop(0.6, '#080d1a');
@@ -470,31 +508,28 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, 1024, 1024);
 
-    // Render large high-res biomorph
     ctx.save();
     ctx.translate(512 - 200, 512 - 150);
     ctx.scale(2.4, 2.4);
     drawBiomorph(ctx, parentGenome, 1024 / 2.4, 1024 / 2.4, 0);
     ctx.restore();
 
-    // Caption
     ctx.fillStyle = '#94a3b8';
     ctx.font = '600 24px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`${parentGenome.name} · Generation ${parentGenome.generation}`, 512, 970);
 
-    const link = document.createElement('a');
-    link.download = `biomorph-gen${parentGenome.generation}.png`;
-    link.href = offscreen.toDataURL('image/png');
-    link.click();
-    showToast('Exported HD specimen snapshot!');
+    const exported = downloadCanvasPng(offscreen, `biomorph-gen${parentGenome.generation}.png`);
+    showToast(
+      exported ? 'Exported HD specimen snapshot!' : 'Failed to export HD specimen snapshot.',
+      exported ? 'success' : 'error'
+    );
   }, [parentGenome, showToast]);
 
   const activeTerrain = TERRAINS.find((t) => t.id === ecosystem.terrain) || TERRAINS[0];
   const activeClimate = CLIMATES.find((c) => c.id === ecosystem.climate) || CLIMATES[0];
   const activeThreat = THREATS.find((th) => th.id === ecosystem.threat) || THREATS[0];
 
-  // Extinction Analysis if extinct
   const extinctionData =
     biosphere?.isExtinct && biosphere.extinctionReason
       ? generateExtinctionAdvice(
@@ -512,60 +547,57 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
   return (
     <div className="biomorphs-container">
-      {/* Header & Mode Switcher */}
-      <header className="biomorphs-header">
-        <div className="biomorphs-title-group">
-          <span className="biomorphs-badge">🧬 Ecosystem Adaptation</span>
-          <h1>Biomorphs: The Evolutionary Watchmaker</h1>
-          <p className="biomorphs-subtitle">
-            Guide the morphology of generative organisms and test their survival in living autonomous biospheres.
-          </p>
-          <div className="how-to-play-guide" data-testid="how-to-play-guide">
-            <span className="guide-title">💡 How to Play:</span>
-            <div className="guide-steps">
-              <span>1. Study the <strong>Active Biosphere</strong> pressures (Terrain, Climate, Threat).</span>
-              <span>2. Compare candidate offspring and select the one with adaptive strengths (<code>+pros</code>) that counter these hazards.</span>
-              <span>3. Breed through generations to maximize fitness, then click <strong>🚀 Launch</strong> (or press <strong>L</strong>) to watch it hunt and survive!</span>
-            </div>
+      <div className="biomorphs-header-wrap">
+        <ToolHeader
+          onBack={onBack}
+          title="Biomorphs: The Evolutionary Watchmaker"
+          badge="🧬 Ecosystem Adaptation"
+          subtitle="Guide the morphology of generative organisms and test their survival in living autonomous biospheres."
+          className="biomorphs-header"
+          actions={
+            <SegmentedControl<'lab' | 'biosphere'>
+              mode="tablist"
+              ariaLabel="Simulation Mode"
+              value={viewMode}
+              onChange={(mode) => {
+                if (mode === 'lab') {
+                  handleReturnToLab();
+                } else {
+                  handleLaunchBiosphere(parentGenome);
+                }
+              }}
+              options={MODE_OPTIONS}
+              className="biomorph-mode-switcher"
+            />
+          }
+        />
+
+        <div className="how-to-play-guide" data-testid="how-to-play-guide">
+          <span className="guide-title">💡 How to Play:</span>
+          <div className="guide-steps">
+            <span>
+              1. Study the <strong>Active Biosphere</strong> pressures (Terrain, Climate, Threat).
+            </span>
+            <span>
+              2. Compare candidate offspring and select the one with adaptive strengths (
+              <code>+pros</code>) that counter these hazards.
+            </span>
+            <span>
+              3. Breed through generations to maximize fitness, then click <strong>🚀 Launch</strong>{' '}
+              (or press <strong>L</strong>) to watch it hunt and survive!
+            </span>
           </div>
         </div>
-
-        <div className="biomorphs-top-actions">
-          {/* Mode Switcher Tabs */}
-          <div className="biomorph-mode-switcher" role="tablist" aria-label="Simulation Mode">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={viewMode === 'lab'}
-              className={`mode-tab-btn ${viewMode === 'lab' ? 'active' : ''}`}
-              onClick={handleReturnToLab}
-              data-testid="tab-breeding-lab"
-            >
-              🧬 Breeding Lab
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={viewMode === 'biosphere'}
-              className={`mode-tab-btn ${viewMode === 'biosphere' ? 'active' : ''}`}
-              onClick={() => handleLaunchBiosphere(parentGenome)}
-              data-testid="tab-living-biosphere"
-            >
-              🌍 Living Biosphere
-            </button>
-          </div>
-
-          <button className="bio-btn btn-back" onClick={onBack} aria-label="Back to Tools Hub">
-            ← Hub
-          </button>
-        </div>
-      </header>
+      </div>
 
       {/* VIEW MODE 1: BREEDING LAB */}
       {viewMode === 'lab' && (
         <>
-          {/* Combinable Ecosystem Environmental Pressures Bar */}
-          <section className="ecosystem-bar" aria-label="Ecosystem & Environmental Pressures" data-testid="ecosystem-bar">
+          <section
+            className="ecosystem-bar"
+            aria-label="Ecosystem & Environmental Pressures"
+            data-testid="ecosystem-bar"
+          >
             <div className="ecosystem-controls-row">
               <div className="ecosystem-select-group">
                 <label htmlFor="terrain-select" className="ecosystem-label">
@@ -625,6 +657,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </div>
 
               <button
+                type="button"
                 className="bio-btn btn-random-ecosystem"
                 onClick={handleRandomizeEcosystem}
                 title="Roll random new biosphere"
@@ -634,12 +667,12 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </button>
             </div>
 
-            {/* Dynamic Biome Narrative & Pressure Guidance */}
             <div className="ecosystem-narrative-bar">
               <div className="narrative-headline">
                 <span className="narrative-tag">Active Biosphere:</span>
                 <span className="narrative-title">
-                  {activeTerrain.icon} {activeTerrain.name} · {activeClimate.icon} {activeClimate.name} · {activeThreat.icon} {activeThreat.name}
+                  {activeTerrain.icon} {activeTerrain.name} · {activeClimate.icon}{' '}
+                  {activeClimate.name} · {activeThreat.icon} {activeThreat.name}
                 </span>
               </div>
               <p className="narrative-desc">
@@ -650,199 +683,31 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
           {/* 2-Way Comparative Duel Arena */}
           <main className="duel-arena">
-            {/* Specimen Offspring 1 (Left) */}
-            <div
-              className={`specimen-card ${alphaFitness.score >= 90 ? 'apex-specimen' : ''}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => selectSpecimen(specimenAlpha)}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectSpecimen(specimenAlpha)}
-              data-testid="specimen-alpha-card"
-              aria-label={`Select Offspring 1: ${specimenAlpha.name}`}
-            >
-              {alphaFitness.score >= 90 && (
-                <div className="apex-banner">🏆 APEX ORGANISM</div>
-              )}
+            <SpecimenCard
+              offspringLabel="OFFSPRING 1"
+              specimen={specimenAlpha}
+              traits={alphaTraits}
+              fitness={alphaFitness}
+              delta={alphaDelta}
+              canvasRef={canvasRefAlpha}
+              cardTestId="specimen-alpha-card"
+              fitnessTestId="alpha-fitness-val"
+              onSelect={selectSpecimen}
+              onLaunch={handleLaunchBiosphere}
+            />
 
-              <div className="card-header-bar">
-                <div className="specimen-tag">
-                  <span className="tag-badge">OFFSPRING 1</span>
-                  <span className="specimen-name">{specimenAlpha.name}</span>
-                </div>
-                <button
-                  type="button"
-                  className="btn-select-champion"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectSpecimen(specimenAlpha);
-                  }}
-                  title="Select Offspring 1 as Champion to breed next generation"
-                  aria-label={`Select Offspring 1: ${specimenAlpha.name} as Champion`}
-                >
-                  👑 Select as Champion
-                </button>
-              </div>
-
-              {/* Fitness & Adaptation Metrics Bar */}
-              <div className="specimen-fitness-badge-row">
-                <div className={`fitness-score-tag ${alphaFitness.score >= 90 ? 'apex-score' : ''}`}>
-                  <span className="fitness-icon">🌿</span>
-                  <span className="fitness-val" data-testid="alpha-fitness-val">{alphaFitness.score}% Adapted</span>
-                </div>
-                <span
-                  className={`adaptive-delta-badge ${alphaDelta > 0 ? 'delta-pos' : alphaDelta < 0 ? 'delta-neg' : 'delta-neu'}`}
-                  title="Adaptive shift relative to parent champion"
-                >
-                  {alphaDelta > 0 ? `+${alphaDelta}% vs Parent` : alphaDelta < 0 ? `${alphaDelta}% vs Parent` : '0% vs Parent'}
-                </span>
-              </div>
-
-              {/* Environmental Adaptation Diagnostics (ABOVE Canvas) */}
-              <div className="adaptation-diagnostics-section">
-                <span className="trait-section-label">Active Biosphere Adaptation:</span>
-                <div className="adaptation-diagnostics">
-                  {alphaFitness.pros.map((p, idx) => (
-                    <span key={`alpha-pro-${idx}`} className="diagnostic-tag tag-pro">
-                      {p}
-                    </span>
-                  ))}
-                  {alphaFitness.cons.map((c, idx) => (
-                    <span key={`alpha-con-${idx}`} className="diagnostic-tag tag-con">
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="canvas-wrapper">
-                <canvas ref={canvasRefAlpha} width={400} height={300} className="specimen-canvas" />
-              </div>
-
-              {/* Mutated Traits Bar (BELOW Canvas) */}
-              <div className="mutations-section">
-                <span className="trait-section-label">✦ Next-Gen Mutations:</span>
-                <div className="card-traits-bar">
-                  {alphaTraits.map((t, idx) => (
-                    <span key={idx} className="trait-pill">
-                      ✦ {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="card-action-footer">
-                <span className="card-click-hint">Click card to select</span>
-                <button
-                  type="button"
-                  className="btn-launch-specimen"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleLaunchBiosphere(specimenAlpha);
-                  }}
-                  title="Launch Offspring 1 into living biosphere"
-                  aria-label={`Launch Offspring 1: ${specimenAlpha.name}`}
-                >
-                  🚀 Launch
-                </button>
-              </div>
-            </div>
-
-            {/* Specimen Offspring 2 (Right) */}
-            <div
-              className={`specimen-card ${betaFitness.score >= 90 ? 'apex-specimen' : ''}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => selectSpecimen(specimenBeta)}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && selectSpecimen(specimenBeta)}
-              data-testid="specimen-beta-card"
-              aria-label={`Select Offspring 2: ${specimenBeta.name}`}
-            >
-              {betaFitness.score >= 90 && (
-                <div className="apex-banner">🏆 APEX ORGANISM</div>
-              )}
-
-              <div className="card-header-bar">
-                <div className="specimen-tag">
-                  <span className="tag-badge">OFFSPRING 2</span>
-                  <span className="specimen-name">{specimenBeta.name}</span>
-                </div>
-                <button
-                  type="button"
-                  className="btn-select-champion"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectSpecimen(specimenBeta);
-                  }}
-                  title="Select Offspring 2 as Champion to breed next generation"
-                  aria-label={`Select Offspring 2: ${specimenBeta.name} as Champion`}
-                >
-                  👑 Select as Champion
-                </button>
-              </div>
-
-              {/* Fitness & Adaptation Metrics Bar */}
-              <div className="specimen-fitness-badge-row">
-                <div className={`fitness-score-tag ${betaFitness.score >= 90 ? 'apex-score' : ''}`}>
-                  <span className="fitness-icon">🌿</span>
-                  <span className="fitness-val" data-testid="beta-fitness-val">{betaFitness.score}% Adapted</span>
-                </div>
-                <span
-                  className={`adaptive-delta-badge ${betaDelta > 0 ? 'delta-pos' : betaDelta < 0 ? 'delta-neg' : 'delta-neu'}`}
-                  title="Adaptive shift relative to parent champion"
-                >
-                  {betaDelta > 0 ? `+${betaDelta}% vs Parent` : betaDelta < 0 ? `${betaDelta}% vs Parent` : '0% vs Parent'}
-                </span>
-              </div>
-
-              {/* Environmental Adaptation Diagnostics (ABOVE Canvas) */}
-              <div className="adaptation-diagnostics-section">
-                <span className="trait-section-label">Active Biosphere Adaptation:</span>
-                <div className="adaptation-diagnostics">
-                  {betaFitness.pros.map((p, idx) => (
-                    <span key={`beta-pro-${idx}`} className="diagnostic-tag tag-pro">
-                      {p}
-                    </span>
-                  ))}
-                  {betaFitness.cons.map((c, idx) => (
-                    <span key={`beta-con-${idx}`} className="diagnostic-tag tag-con">
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="canvas-wrapper">
-                <canvas ref={canvasRefBeta} width={400} height={300} className="specimen-canvas" />
-              </div>
-
-              {/* Mutated Traits Bar (BELOW Canvas) */}
-              <div className="mutations-section">
-                <span className="trait-section-label">✦ Next-Gen Mutations:</span>
-                <div className="card-traits-bar">
-                  {betaTraits.map((t, idx) => (
-                    <span key={idx} className="trait-pill">
-                      ✦ {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="card-action-footer">
-                <span className="card-click-hint">Click card to select</span>
-                <button
-                  type="button"
-                  className="btn-launch-specimen"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleLaunchBiosphere(specimenBeta);
-                  }}
-                  title="Launch Offspring 2 into living biosphere"
-                  aria-label={`Launch Offspring 2: ${specimenBeta.name}`}
-                >
-                  🚀 Launch
-                </button>
-              </div>
-            </div>
+            <SpecimenCard
+              offspringLabel="OFFSPRING 2"
+              specimen={specimenBeta}
+              traits={betaTraits}
+              fitness={betaFitness}
+              delta={betaDelta}
+              canvasRef={canvasRefBeta}
+              cardTestId="specimen-beta-card"
+              fitnessTestId="beta-fitness-val"
+              onSelect={selectSpecimen}
+              onLaunch={handleLaunchBiosphere}
+            />
           </main>
 
           {/* Ancestor Lineage Scrubber */}
@@ -886,6 +751,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
             <div className="dock-actions">
               <button
+                type="button"
                 className="bio-btn btn-primary"
                 onClick={() => handleLaunchBiosphere(parentGenome)}
                 title="Launch champion organism into autonomous living biosphere (L)"
@@ -893,19 +759,44 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               >
                 🚀 Launch (L)
               </button>
-              <button className="bio-btn" onClick={handleCopyDNA} title="Copy DNA sequence payload">
+              <button
+                type="button"
+                className="bio-btn"
+                onClick={() => void handleCopyDNA()}
+                title="Copy DNA sequence payload"
+              >
                 📋 Copy DNA
               </button>
-              <button className="bio-btn" onClick={() => setShowDnaModal(true)} title="Load DNA from sequence payload">
+              <button
+                type="button"
+                className="bio-btn"
+                onClick={handleOpenDnaModal}
+                title="Load DNA from sequence payload"
+              >
                 🧬 Import DNA
               </button>
-              <button className="bio-btn" onClick={handleExportPNG} title="Export off-screen HD specimen image">
+              <button
+                type="button"
+                className="bio-btn"
+                onClick={handleExportPNG}
+                title="Export off-screen HD specimen image"
+              >
                 🖼️ Export HD PNG
               </button>
-              <button className="bio-btn" onClick={handleRandomizeEcosystem} title="Migrate species to a new random biosphere">
+              <button
+                type="button"
+                className="bio-btn"
+                onClick={handleRandomizeEcosystem}
+                title="Migrate species to a new random biosphere"
+              >
                 🌍 Migrate Biome
               </button>
-              <button className="bio-btn" onClick={handleNewGenesis} title="Restart simulation from Gen 0">
+              <button
+                type="button"
+                className="bio-btn"
+                onClick={handleNewGenesis}
+                title="Restart simulation from Gen 0"
+              >
                 🌱 New Genesis (R)
               </button>
             </div>
@@ -916,58 +807,65 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       {/* VIEW MODE 2: LIVING AUTONOMOUS BIOSPHERE */}
       {viewMode === 'biosphere' && (
         <section className="biosphere-stage-section" data-testid="biosphere-section">
-          {/* Apex Dominance Announcement */}
           {biosphere?.apexDominanceAchieved && (
             <div className="apex-dominance-banner" data-testid="apex-dominance-banner">
-              🏆 APEX DOMINANCE ACHIEVED: {parentGenome.name} is the supreme adapted ruler of this biosphere!
+              🏆 APEX DOMINANCE ACHIEVED: {parentGenome.name} is the supreme adapted ruler of this
+              biosphere!
             </div>
           )}
 
-          {/* Biosphere Top HUD Bar */}
           <div className="biosphere-hud-bar">
             <div className="hud-biome-badge">
-              <span>{activeTerrain.icon} {activeTerrain.name}</span>
+              <span>
+                {activeTerrain.icon} {activeTerrain.name}
+              </span>
               <span>·</span>
-              <span>{activeClimate.icon} {activeClimate.name}</span>
+              <span>
+                {activeClimate.icon} {activeClimate.name}
+              </span>
               <span>·</span>
-              <span>{activeThreat.icon} {activeThreat.name}</span>
+              <span>
+                {activeThreat.icon} {activeThreat.name}
+              </span>
             </div>
 
             <div className="hud-vitals-group">
-              {/* Energy Bar */}
-              <div className="energy-bar-wrap" title="Organism Energy / Stamina">
+              <div className="bio-energy-bar-wrap" title="Organism Energy / Stamina">
                 <span className="hud-vital-item">
-                  ⚡ Energy: <span className="hud-vital-val" data-testid="player-energy-val">{Math.round(playerEnergy)}%</span>
+                  ⚡ Energy:{' '}
+                  <span className="hud-vital-val" data-testid="player-energy-val">
+                    {Math.round(playerEnergy)}%
+                  </span>
                 </span>
-                <div className="energy-track">
+                <div className="bio-energy-track">
                   <div
-                    className={`energy-fill ${energyClass}`}
+                    className={`bio-energy-fill ${energyClass}`}
                     style={{ width: `${Math.max(0, Math.min(100, playerEnergy))}%` }}
                   />
                 </div>
               </div>
 
-              {/* Fitness */}
               <div className="hud-vital-item">
                 🌿 Fitness: <span className="hud-vital-val">{parentFitness.score}%</span>
               </div>
 
-              {/* Survival Time */}
               <div className="hud-vital-item">
-                ⏱️ Survived: <span className="hud-vital-val" data-testid="survival-timer">{formattedTime}</span>
+                ⏱️ Survived:{' '}
+                <span className="hud-vital-val" data-testid="survival-timer">
+                  {formattedTime}
+                </span>
               </div>
 
-              {/* Prey & Threats */}
               <div className="hud-vital-item">
                 🌱 Eaten: <span className="hud-vital-val">{biosphere?.preyEaten ?? 0}</span>
               </div>
               <div className="hud-vital-item">
-                🛡️ Repelled: <span className="hud-vital-val">{biosphere?.predatorsRepelled ?? 0}</span>
+                🛡️ Repelled:{' '}
+                <span className="hud-vital-val">{biosphere?.predatorsRepelled ?? 0}</span>
               </div>
             </div>
           </div>
 
-          {/* Living Biosphere Canvas Card */}
           <div className="biosphere-canvas-card">
             <canvas
               ref={canvasRefBiosphere}
@@ -979,7 +877,6 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
             />
             <div className="biosphere-canvas-hint">Click canvas to attract organism</div>
 
-            {/* Extinction Debrief Overlay */}
             {biosphere?.isExtinct && extinctionData && (
               <div className="extinction-overlay" data-testid="extinction-overlay">
                 <div className="extinction-card">
@@ -1011,6 +908,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
                   <div className="extinction-actions">
                     <button
+                      type="button"
                       className="bio-btn"
                       onClick={handleRespawn}
                       title="Respawn current creature with full energy"
@@ -1018,6 +916,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                       🔄 Respawn
                     </button>
                     <button
+                      type="button"
                       className="bio-btn btn-primary"
                       onClick={handleReturnToLab}
                       title="Return to Breeding Lab to evolve counter-adaptations"
@@ -1030,7 +929,6 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
               </div>
             )}
 
-            {/* Biosphere Action Ticker */}
             <div className="biosphere-action-ticker" data-testid="biosphere-action-ticker">
               <span className="ticker-label">Action Log:</span>
               <span className="ticker-msg">
@@ -1039,10 +937,10 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
             </div>
           </div>
 
-          {/* Biosphere Interactive Controls Bar */}
           <div className="biosphere-controls-bar">
             <div className="controls-group">
               <button
+                type="button"
                 className="bio-btn"
                 onClick={handleTogglePause}
                 title="Pause / Resume simulation (Space)"
@@ -1051,21 +949,17 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 {biosphere?.isPaused ? '▶️ Resume (Space)' : '⏸️ Pause (Space)'}
               </button>
 
-              <div className="speed-btn-group" role="group" aria-label="Simulation Speed">
-                {[1, 2, 3].map((spd) => (
-                  <button
-                    key={spd}
-                    type="button"
-                    className={`speed-btn ${biosphere?.simSpeed === spd ? 'active' : ''}`}
-                    onClick={() => handleChangeSimSpeed(spd)}
-                    title={`Run at ${spd}x speed`}
-                  >
-                    {spd}x
-                  </button>
-                ))}
-              </div>
+              <SegmentedControl<'1' | '2' | '3'>
+                mode="group"
+                ariaLabel="Simulation Speed"
+                value={String(biosphere?.simSpeed ?? 1) as '1' | '2' | '3'}
+                onChange={(spd) => handleChangeSimSpeed(Number(spd))}
+                options={SPEED_OPTIONS}
+                className="speed-btn-group"
+              />
 
               <button
+                type="button"
                 className="bio-btn"
                 onClick={handleAddPrey}
                 title="Introduce new bio-spore prey to the biome"
@@ -1073,6 +967,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 🌱 +Prey
               </button>
               <button
+                type="button"
                 className="bio-btn"
                 onClick={handleAddPredator}
                 title="Spawn a hostile native predator"
@@ -1083,6 +978,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
 
             <div className="controls-group">
               <button
+                type="button"
                 className="bio-btn"
                 onClick={handleRespawn}
                 title="Respawn organism with full health (R)"
@@ -1090,6 +986,7 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
                 🔄 Respawn (R)
               </button>
               <button
+                type="button"
                 className="bio-btn btn-primary"
                 onClick={handleReturnToLab}
                 title="Return to Breeding Lab to mutate new generations (L)"
@@ -1103,66 +1000,54 @@ export default function Biomorphs({ onBack }: BiomorphsProps) {
       )}
 
       {/* DNA Load Modal */}
-      {showDnaModal && (
-        <div className="dna-modal-backdrop" onClick={() => setShowDnaModal(false)}>
-          <div className="dna-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>🧬 Import Creature DNA</h3>
-            <p>Paste a base64 encoded genome string to reconstruct an ancestor organism.</p>
-            <textarea
-              className="dna-textarea"
-              placeholder="Paste base64 DNA sequence here..."
-              value={dnaInput}
-              onChange={(e) => setDnaInput(e.target.value)}
-            />
-            <div className="dna-modal-actions">
-              <button className="bio-btn" onClick={() => setShowDnaModal(false)}>
-                Cancel
-              </button>
-              <button className="bio-btn btn-primary" onClick={handleLoadDNA} disabled={!dnaInput.trim()}>
-                Load DNA
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={showDnaModal}
+        onClose={handleCloseDnaModal}
+        title="🧬 Import Creature DNA"
+        closeLabel="Close DNA import modal"
+        maxWidth="520px"
+        className="dna-modal"
+      >
+        <p className="dna-modal-desc">
+          Paste a base64 encoded genome string to reconstruct an ancestor organism.
+        </p>
+
+        {dnaError ? (
+          <InlineAlert variant="error" message={dnaError} onDismiss={() => setDnaError(null)} />
+        ) : null}
+
+        <textarea
+          className="dna-textarea"
+          placeholder="Paste base64 DNA sequence here..."
+          aria-label="Base64 DNA sequence"
+          value={dnaInput}
+          onChange={(e) => {
+            setDnaInput(e.target.value);
+            if (dnaError) setDnaError(null);
+          }}
+        />
+        <div className="dna-modal-actions">
+          <button type="button" className="bio-btn" onClick={handleCloseDnaModal}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="bio-btn btn-primary"
+            onClick={handleLoadDNA}
+            disabled={!dnaInput.trim()}
+          >
+            Load DNA
+          </button>
         </div>
-      )}
+      </Modal>
 
-      {/* Temporary Toast */}
-      {toastMessage && <div className="bio-toast">{toastMessage}</div>}
-    </div>
-  );
-}
-
-// Lineage Thumbnail Component
-interface LineageThumbnailProps {
-  ancestor: BiomorphGenome;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-function LineageThumbnail({ ancestor, isActive, onClick }: LineageThumbnailProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) {
-        drawBiomorph(ctx, ancestor, 76, 60, 0);
-      }
-    }
-  }, [ancestor]);
-
-  return (
-    <div
-      className={`lineage-card ${isActive ? 'active-ancestor' : ''}`}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      title={`Gen ${ancestor.generation}: ${ancestor.name}`}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick()}
-    >
-      <canvas ref={canvasRef} width={76} height={60} className="lineage-thumb-canvas" />
-      <span className="lineage-gen-label">Gen {ancestor.generation}</span>
-      <span className="lineage-name-label">{ancestor.name.split(' ')[0]}</span>
+      <Toast
+        visible={toast !== null}
+        message={toast?.message ?? ''}
+        variant={toast?.variant ?? 'info'}
+        onDismiss={dismissToast}
+        className="bio-toast"
+      />
     </div>
   );
 }

@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import Biomorphs from './Biomorphs';
+import {
+  BIOMORPHS_STORAGE_KEY,
+  decodeDnaPayload,
+  encodeDnaPayload,
+} from './biomorphPersistence';
 import {
   createPrimordialGenome,
   mutateGenome,
@@ -28,18 +33,18 @@ describe('Biomorphs Component & Engine', () => {
   const onBackMock = vi.fn();
   const originalGetContext = HTMLCanvasElement.prototype.getContext;
   const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+  const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
 
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
     // Mock navigator.clipboard
-    Object.assign(navigator, {
-      clipboard: {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
         writeText: vi.fn().mockResolvedValue(undefined),
       },
+      configurable: true,
     });
-    // Mock window.alert
-    vi.spyOn(window, 'alert').mockImplementation(() => {});
 
     // Scoped 2D context mock for Biomorphs
     const mockCtx = {
@@ -89,6 +94,11 @@ describe('Biomorphs Component & Engine', () => {
   afterEach(() => {
     HTMLCanvasElement.prototype.getContext = originalGetContext;
     HTMLCanvasElement.prototype.toDataURL = originalToDataURL;
+    if (originalClipboardDescriptor) {
+      Object.defineProperty(navigator, 'clipboard', originalClipboardDescriptor);
+    } else {
+      delete (navigator as unknown as { clipboard?: Clipboard }).clipboard;
+    }
     vi.restoreAllMocks();
   });
 
@@ -183,11 +193,13 @@ describe('Biomorphs Component & Engine', () => {
     expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
   });
 
-  it('handles DNA copy to clipboard and DNA import modal', () => {
+  it('handles DNA copy to clipboard and DNA import modal', async () => {
     render(<Biomorphs onBack={onBackMock} />);
 
     // Click Copy DNA
-    fireEvent.click(screen.getByRole('button', { name: /copy dna/i }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /copy dna/i }));
+    });
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/copied to clipboard/i)).toBeInTheDocument();
 
@@ -209,8 +221,12 @@ describe('Biomorphs Component & Engine', () => {
   });
 
   it('handles HD PNG export trigger', () => {
+    const clickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, 'click')
+      .mockImplementation(() => {});
     render(<Biomorphs onBack={onBackMock} />);
     fireEvent.click(screen.getByRole('button', { name: /export hd png/i }));
+    expect(clickSpy).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/exported hd specimen snapshot/i)).toBeInTheDocument();
   });
 
@@ -337,7 +353,7 @@ describe('Biomorphs Component & Engine', () => {
       expect(screen.queryByTestId('biosphere-section')).not.toBeInTheDocument();
 
       // Click Living Biosphere tab
-      fireEvent.click(screen.getByTestId('tab-living-biosphere'));
+      fireEvent.click(screen.getByRole('tab', { name: /living biosphere/i }));
 
       // Biosphere stage mounted
       expect(screen.getByTestId('biosphere-section')).toBeInTheDocument();
@@ -379,11 +395,11 @@ describe('Biomorphs Component & Engine', () => {
 
       const speed2Btn = screen.getByRole('button', { name: /^2x$/i });
       fireEvent.click(speed2Btn);
-      expect(speed2Btn).toHaveClass('active');
+      expect(speed2Btn).toHaveAttribute('aria-pressed', 'true');
 
       const speed3Btn = screen.getByRole('button', { name: /^3x$/i });
       fireEvent.click(speed3Btn);
-      expect(speed3Btn).toHaveClass('active');
+      expect(speed3Btn).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('adds prey and predators interactively to the biosphere', () => {
@@ -666,6 +682,164 @@ describe('Biomorphs Component & Engine', () => {
       // Hostile predator is slain
       const predatorAfter = state.agents.find((a) => a.id === predator?.id);
       expect(predatorAfter?.isAlive ?? false).toBe(false);
+    });
+  });
+
+  describe('Resilience, Accessibility, Keyboard Guards & Lifecycle', () => {
+    it('handles corrupted localStorage JSON and invalid parentGenome schema gracefully', () => {
+      localStorage.setItem(BIOMORPHS_STORAGE_KEY, '{corrupt json');
+      expect(() => render(<Biomorphs onBack={onBackMock} />)).not.toThrow();
+      expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
+
+      localStorage.setItem(
+        BIOMORPHS_STORAGE_KEY,
+        JSON.stringify({
+          parentGenome: { id: 'bad-id', name: 'Broken' },
+          lineage: [{ id: 'also-broken' }],
+          ecosystem: { terrain: 'invalid', climate: 'invalid', threat: 'invalid' },
+        })
+      );
+      expect(() => render(<Biomorphs onBack={onBackMock} />)).not.toThrow();
+    });
+
+    it('tolerates localStorage getItem and setItem exceptions without throwing', () => {
+      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+        throw new Error('SecurityError');
+      });
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('QuotaExceededError');
+      });
+
+      expect(() => {
+        render(<Biomorphs onBack={onBackMock} />);
+        fireEvent.click(screen.getByTestId('specimen-alpha-card'));
+      }).not.toThrow();
+      expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 1/i);
+    });
+
+    it('shows inline alert inside modal on invalid DNA base64, JSON, and missing schema fields', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+      fireEvent.click(screen.getByRole('button', { name: /import dna/i }));
+
+      const textarea = screen.getByPlaceholderText(/paste base64 dna sequence/i);
+      const loadBtn = screen.getByRole('button', { name: /^load dna$/i });
+
+      // Invalid base64
+      fireEvent.change(textarea, { target: { value: '!!!not-base64!!!' } });
+      fireEvent.click(loadBtn);
+      expect(screen.getByRole('alert')).toHaveTextContent(/failed to parse dna string/i);
+
+      // Valid base64 but invalid JSON
+      fireEvent.change(textarea, { target: { value: btoa('{bad json') } });
+      fireEvent.click(loadBtn);
+      expect(screen.getByRole('alert')).toHaveTextContent(/failed to parse dna string/i);
+
+      // Valid base64 JSON missing segments/limbPairs
+      fireEvent.change(textarea, {
+        target: { value: btoa(JSON.stringify({ id: 'x', name: 'Incomplete', generation: 1 })) },
+      });
+      fireEvent.click(loadBtn);
+      expect(screen.getByRole('alert')).toHaveTextContent(/invalid genome dna format/i);
+    });
+
+    it('encodes and decodes UTF-8 DNA payloads cleanly and surfaces clipboard errors', async () => {
+      const utf8Genome = createPrimordialGenome();
+      utf8Genome.name = 'Xeno🧬Rex · G3';
+      utf8Genome.generation = 3;
+
+      const encoded = encodeDnaPayload(utf8Genome);
+      const decoded = decodeDnaPayload(encoded);
+      expect(decoded?.name).toBe('Xeno🧬Rex · G3');
+
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: vi.fn().mockRejectedValue(new Error('Permission denied')) },
+        configurable: true,
+      });
+
+      render(<Biomorphs onBack={onBackMock} />);
+      await act(async () => {
+        fireEvent.click(screen.getByRole('button', { name: /copy dna/i }));
+      });
+
+      expect(screen.getByRole('alert')).toHaveTextContent(/could not copy dna payload/i);
+    });
+
+    it('closes DNA modal on Escape, restores focus, and disables global shortcuts while modal is open', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      const importBtn = screen.getByRole('button', { name: /import dna/i });
+      importBtn.focus();
+      fireEvent.click(importBtn);
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      // Global shortcuts ('1', '2', 'r', 'l') must NOT fire while DNA modal is open
+      fireEvent.keyDown(window, { key: '1' });
+      fireEvent.keyDown(window, { key: 'l' });
+      expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
+      expect(screen.queryByTestId('biosphere-section')).not.toBeInTheDocument();
+
+      // Escape closes DNA modal and restores focus to Import DNA trigger
+      fireEvent.keyDown(document, { key: 'Escape' });
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(importBtn).toHaveFocus();
+    });
+
+    it('ignores global keyboard shortcuts when focus is inside inputs or selects', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      const terrainSelect = screen.getByRole('combobox', { name: /terrain/i });
+      fireEvent.keyDown(terrainSelect, { key: '1' });
+      fireEvent.keyDown(terrainSelect, { key: 'l' });
+
+      expect(screen.getByTestId('generation-counter')).toHaveTextContent(/gen 0/i);
+      expect(screen.queryByTestId('biosphere-section')).not.toBeInTheDocument();
+    });
+
+    it('caps evolutionary lineage history at 25 generations', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      for (let i = 0; i < 28; i++) {
+        fireEvent.click(screen.getByTestId('specimen-alpha-card'));
+      }
+
+      const timeline = screen.getByTestId('lineage-timeline');
+      expect(timeline.children).toHaveLength(25);
+
+      const saved = JSON.parse(localStorage.getItem(BIOMORPHS_STORAGE_KEY) || '{}');
+      expect(Array.isArray(saved.lineage)).toBe(true);
+      expect(saved.lineage).toHaveLength(25);
+    });
+
+    it('gates RAF loop strictly to biosphere mode and cancels animation frame on unmount', () => {
+      let nextRafId = 10;
+      const rafSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {
+        nextRafId += 1;
+        return nextRafId;
+      });
+      const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {});
+
+      const { unmount } = render(<Biomorphs onBack={onBackMock} />);
+      // Lab mode must not start a continuous 60fps RAF loop
+      expect(rafSpy).not.toHaveBeenCalled();
+
+      // Switching to biosphere starts RAF
+      fireEvent.click(screen.getByTestId('btn-launch-champion'));
+      expect(rafSpy).toHaveBeenCalledTimes(1);
+
+      unmount();
+      expect(cancelSpy).toHaveBeenCalledWith(11);
+    });
+
+    it('uses non-nested accessible markup for SpecimenCard and native buttons for LineageThumbnail', () => {
+      render(<Biomorphs onBack={onBackMock} />);
+
+      const alphaCard = screen.getByTestId('specimen-alpha-card');
+      expect(alphaCard.tagName).toBe('ARTICLE');
+      expect(alphaCard).not.toHaveAttribute('role', 'button');
+
+      const timeline = screen.getByTestId('lineage-timeline');
+      expect(timeline.firstElementChild?.tagName).toBe('BUTTON');
     });
   });
 });
